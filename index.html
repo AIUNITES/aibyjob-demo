@@ -95,6 +95,70 @@
         <div class="features-grid" id="features-grid"></div>
       </section>
 
+      <!-- AI Agents Showcase -->
+      <section class="landing-agents">
+        <h2>🤖 AI Agents Hub</h2>
+        <p class="section-subtitle">Autonomous agents that work for you 24/7</p>
+        
+        <!-- Live Demo Terminal -->
+        <div class="landing-demo-container">
+          <div class="landing-demo-sidebar">
+            <div class="demo-agents-select">
+              <div class="demo-agent-btn active" data-agent="webbuilder">
+                <span class="agent-icon">🏗️</span>
+                <span>WebBuilder</span>
+                <span class="status-dot online"></span>
+              </div>
+              <div class="demo-agent-btn" data-agent="marketing">
+                <span class="agent-icon">📈</span>
+                <span>MarketingPro</span>
+                <span class="status-dot online"></span>
+              </div>
+              <div class="demo-agent-btn" data-agent="leadfinder">
+                <span class="agent-icon">🔍</span>
+                <span>LeadFinder</span>
+                <span class="status-dot online"></span>
+              </div>
+              <div class="demo-agent-btn" data-agent="ecomscout">
+                <span class="agent-icon">🛒</span>
+                <span>EcomScout</span>
+                <span class="status-dot online"></span>
+              </div>
+            </div>
+            <div class="quick-commands">
+              <h4>⚡ Quick Commands</h4>
+              <button class="quick-cmd" data-cmd="webbuilder" data-task="Build a bakery website">Build bakery site</button>
+              <button class="quick-cmd" data-cmd="marketing" data-task="Create 30-day social plan">Marketing plan</button>
+              <button class="quick-cmd" data-cmd="leadfinder" data-task="Find Austin restaurants">Find leads</button>
+              <button class="quick-cmd" data-cmd="ecomscout" data-task="Scan Denver boutiques">Scan stores</button>
+            </div>
+          </div>
+          <div class="landing-demo-main">
+            <div class="landing-terminal">
+              <div class="terminal-header">
+                <div class="terminal-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                <span class="terminal-title" id="landing-terminal-title">Agent Output — WebBuilder</span>
+              </div>
+              <div class="terminal-body" id="landing-terminal-output">
+                <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">WebBuilder Agent initialized...</span></div>
+                <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text success">Ready to accept tasks</span></div>
+                <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Click a quick command or select an agent...</span></div>
+              </div>
+            </div>
+            <div class="landing-preview">
+              <div class="preview-frame" id="landing-preview-frame">
+                <div class="preview-placeholder">
+                  <span class="preview-icon">🖼️</span>
+                  <p>Results appear here</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-primary btn-large" id="landing-agents-btn">⚡ Try AI Agents</button>
+      </section>
+
       <section class="landing-items">
         <h2 id="items-section-title">🤖 Discover AI Tools</h2>
         <p class="section-subtitle" id="items-section-subtitle">Popular tools across professions</p>
@@ -192,6 +256,7 @@
         <div class="nav-left"><div class="logo">AI<span>ByJob</span></div></div>
         <div class="nav-center">
           <button class="nav-tab active" data-view="my-items">My Tools</button>
+          <button class="nav-tab" data-view="agents">🤖 Agents</button>
           <button class="nav-tab" data-view="discover">Discover</button>
           <button class="nav-tab" data-view="favorites">Favorites</button>
         </div>
@@ -228,6 +293,101 @@
         <div id="discover-view" class="dashboard-view">
           <div class="view-header"><div><h1>Discover</h1><p class="view-subtitle">Explore popular AI tools</p></div></div>
           <div class="discover-grid" id="discover-grid"></div>
+        </div>
+        <div id="agents-view" class="dashboard-view">
+          <div class="view-header">
+            <div>
+              <h1>🤖 AI Agents</h1>
+              <p class="view-subtitle">Autonomous agents that work for you 24/7</p>
+            </div>
+          </div>
+          <div class="agents-grid" id="agents-grid">
+            <!-- WebBuilder Agent -->
+            <div class="agent-card" data-agent="webbuilder">
+              <div class="agent-header">
+                <div class="agent-avatar">
+                  <span class="agent-icon">🏗️</span>
+                  <span class="agent-status online"></span>
+                </div>
+                <div class="agent-info">
+                  <h3>WebBuilder</h3>
+                  <span class="agent-type">Website Creation</span>
+                </div>
+                <div class="agent-badge">v2.0</div>
+              </div>
+              <p class="agent-desc">Builds complete websites from a description. Handles design, code, SEO, and deployment.</p>
+              <div class="agent-capabilities">
+                <span class="cap-tag">✓ HTML/CSS/JS</span>
+                <span class="cap-tag">✓ SEO</span>
+                <span class="cap-tag">✓ Deploy</span>
+              </div>
+              <button class="btn-agent" onclick="launchAgent('webbuilder')">⚡ Launch Agent</button>
+            </div>
+            <!-- MarketingPro Agent -->
+            <div class="agent-card featured" data-agent="marketing">
+              <div class="featured-tag">Popular</div>
+              <div class="agent-header">
+                <div class="agent-avatar">
+                  <span class="agent-icon">📈</span>
+                  <span class="agent-status online"></span>
+                </div>
+                <div class="agent-info">
+                  <h3>MarketingPro</h3>
+                  <span class="agent-type">Digital Marketing</span>
+                </div>
+                <div class="agent-badge">v2.5</div>
+              </div>
+              <p class="agent-desc">Handles SEO, social media, email campaigns, content scheduling, and analytics reporting.</p>
+              <div class="agent-capabilities">
+                <span class="cap-tag">✓ SEO</span>
+                <span class="cap-tag">✓ Social</span>
+                <span class="cap-tag">✓ Email</span>
+              </div>
+              <button class="btn-agent" onclick="launchAgent('marketing')">⚡ Launch Agent</button>
+            </div>
+            <!-- LeadFinder Agent -->
+            <div class="agent-card" data-agent="leadfinder">
+              <div class="agent-header">
+                <div class="agent-avatar">
+                  <span class="agent-icon">🔍</span>
+                  <span class="agent-status online"></span>
+                </div>
+                <div class="agent-info">
+                  <h3>LeadFinder</h3>
+                  <span class="agent-type">Business Discovery</span>
+                </div>
+                <div class="agent-badge">v1.8</div>
+              </div>
+              <p class="agent-desc">Finds businesses without websites. Scans Google Maps, Yelp, and directories for leads.</p>
+              <div class="agent-capabilities">
+                <span class="cap-tag">✓ Maps</span>
+                <span class="cap-tag">✓ Yelp</span>
+                <span class="cap-tag">✓ Export</span>
+              </div>
+              <button class="btn-agent" onclick="launchAgent('leadfinder')">⚡ Launch Agent</button>
+            </div>
+            <!-- EcomScout Agent -->
+            <div class="agent-card" data-agent="ecomscout">
+              <div class="agent-header">
+                <div class="agent-avatar">
+                  <span class="agent-icon">🛒</span>
+                  <span class="agent-status online"></span>
+                </div>
+                <div class="agent-info">
+                  <h3>EcomScout</h3>
+                  <span class="agent-type">E-Commerce Opportunities</span>
+                </div>
+                <div class="agent-badge">v1.5</div>
+              </div>
+              <p class="agent-desc">Finds retail stores without e-commerce. Identifies digital transformation opportunities.</p>
+              <div class="agent-capabilities">
+                <span class="cap-tag">✓ Retail</span>
+                <span class="cap-tag">✓ Analysis</span>
+                <span class="cap-tag">✓ Revenue</span>
+              </div>
+              <button class="btn-agent" onclick="launchAgent('ecomscout')">⚡ Launch Agent</button>
+            </div>
+          </div>
         </div>
         <div id="favorites-view" class="dashboard-view">
           <div class="view-header"><div><h1>Favorites</h1><p class="view-subtitle">Your saved tools</p></div></div>
@@ -437,6 +597,46 @@
       </div>
     </div>
 
+    <!-- Agent Workspace Modal -->
+    <div id="agent-modal" class="modal">
+      <div class="modal-content modal-large">
+        <div class="modal-header">
+          <h2 id="agent-modal-title">🏗️ WebBuilder Agent</h2>
+          <button class="modal-close" id="close-agent-modal">×</button>
+        </div>
+        <div class="modal-body agent-workspace">
+          <div class="agent-workspace-grid">
+            <div class="agent-form-panel">
+              <div id="agent-form-content">
+                <!-- Form content populated by JS -->
+              </div>
+              <button class="btn-primary btn-large full-width" id="run-agent-btn">⚡ Run Agent</button>
+            </div>
+            <div class="agent-output-panel">
+              <div class="agent-terminal">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                  <span class="terminal-title">Agent Output</span>
+                </div>
+                <div class="terminal-body" id="agent-terminal-output">
+                  <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Agent ready. Configure and click Run.</span></div>
+                </div>
+              </div>
+              <div class="agent-preview">
+                <h4>Results Preview</h4>
+                <div class="preview-frame" id="agent-preview-frame">
+                  <div class="preview-placeholder">
+                    <span class="preview-icon">🖼️</span>
+                    <p>Results will appear here</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><p id="loading-message">Loading...</p></div>
     <div id="toast-container" class="toast-container"></div>
 
@@ -450,5 +650,6 @@
   <script src="js/storage.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/agents.js"></script>
 </body>
 </html>
