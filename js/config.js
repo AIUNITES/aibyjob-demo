@@ -42,9 +42,9 @@ const APP_CONFIG = {
   itemsSectionSubtitle: 'Popular picks across all professions',
   
   heroCards: [
-    { icon: '👨‍⚕️', name: 'Healthcare', subtitle: '45 AI tools', color: '#10b981' },
-    { icon: '📊', name: 'Finance', subtitle: '62 AI tools', color: '#3b82f6' },
-    { icon: '💻', name: 'Developers', subtitle: '89 AI tools', color: '#8b5cf6' }
+    { icon: '👨‍⚕️', name: 'Healthcare', subtitle: '🏥 Coming Soon', color: '#10b981' },
+    { icon: '📊', name: 'Finance', subtitle: '💰 Coming Soon', color: '#3b82f6' },
+    { icon: '💻', name: 'Developers', subtitle: '⚡ Coming Soon', color: '#8b5cf6' }
   ],
   
   features: [
@@ -156,43 +156,37 @@ const APP_CONFIG = {
       name: 'Claude', 
       icon: '🧠', 
       color: '#d97706', 
-      description: 'Advanced AI assistant for writing, analysis, and coding',
-      stats: { views: 45000, likes: 890 }
+      description: 'Advanced AI assistant for writing, analysis, and coding'
     },
     { 
       name: 'ChatGPT', 
       icon: '💬', 
       color: '#10b981', 
-      description: 'Conversational AI for brainstorming, writing, and problem-solving',
-      stats: { views: 89000, likes: 1250 }
+      description: 'Conversational AI for brainstorming, writing, and problem-solving'
     },
     { 
       name: 'Midjourney', 
       icon: '🎨', 
       color: '#8b5cf6', 
-      description: 'AI image generation from text prompts',
-      stats: { views: 67000, likes: 980 }
+      description: 'AI image generation from text prompts'
     },
     { 
       name: 'GitHub Copilot', 
       icon: '💻', 
       color: '#3b82f6', 
-      description: 'AI pair programmer for code completion and suggestions',
-      stats: { views: 34000, likes: 720 }
+      description: 'AI pair programmer for code completion and suggestions'
     },
     { 
       name: 'Notion AI', 
       icon: '📝', 
       color: '#1a1a1a', 
-      description: 'AI writing assistant built into Notion workspace',
-      stats: { views: 28000, likes: 540 }
+      description: 'AI writing assistant built into Notion workspace'
     },
     { 
       name: 'Perplexity', 
       icon: '🔍', 
       color: '#06b6d4', 
-      description: 'AI-powered search engine with cited sources',
-      stats: { views: 41000, likes: 670 }
+      description: 'AI-powered search engine with cited sources'
     }
   ],
 
