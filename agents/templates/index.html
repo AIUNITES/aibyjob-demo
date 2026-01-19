@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Templates | AIByJob</title>
+  <meta name="description" content="Production-ready AI agent templates for business automation. Deploy agents for sales, marketing, customer service, HR, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+  <style>
+    :root {
+      --primary: #ff3366;
+      --secondary: #06b6d4;
+      --accent: #6366f1;
+      --dark: #1a1a2e;
+      --black: #0a0a0f;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --gray-light: #9ca3af;
+      --gray-dark: #374151;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Syne', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    
+    /* Header */
+    .header { background: var(--dark); border-bottom: 1px solid var(--gray-dark); padding: 1rem 5%; position: sticky; top: 0; z-index: 100; }
+    .header-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-weight: 800; font-size: 1.25rem; color: var(--white); }
+    .logo span { color: var(--primary); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { color: var(--gray-light); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--white); text-decoration: none; }
+    
+    /* Hero */
+    .hero { padding: 4rem 5%; text-align: center; background: linear-gradient(180deg, var(--dark), var(--black)); }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--primary); }
+    .hero p { color: var(--gray-light); max-width: 600px; margin: 0 auto 2rem; }
+    .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 2rem; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 0.85rem; color: var(--gray); }
+    
+    /* Filter Bar */
+    .filter-bar { padding: 1.5rem 5%; background: var(--dark); border-bottom: 1px solid var(--gray-dark); }
+    .filter-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .filter-label { font-size: 0.85rem; color: var(--gray-light); }
+    .filter-btn { padding: 0.5rem 1rem; background: transparent; border: 1px solid var(--gray-dark); border-radius: 20px; color: var(--gray-light); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+    .search-box { flex: 1; min-width: 200px; padding: 0.5rem 1rem; background: var(--black); border: 1px solid var(--gray-dark); border-radius: 6px; color: var(--white); font-size: 0.9rem; }
+    .search-box:focus { outline: none; border-color: var(--primary); }
+    
+    /* Templates Grid */
+    .templates-section { padding: 3rem 5%; max-width: 1400px; margin: 0 auto; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .section-header h2 { font-size: 1.5rem; }
+    .template-count { color: var(--gray); font-size: 0.9rem; }
+    
+    .templates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+    
+    .template-card { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 12px; padding: 1.5rem; transition: all 0.3s; }
+    .template-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 10px 40px rgba(255,51,102,0.1); }
+    .template-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+    .template-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .template-info { flex: 1; }
+    .template-info h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+    .template-info .template-category { font-size: 0.8rem; color: var(--secondary); }
+    .template-badge { padding: 0.25rem 0.5rem; background: var(--accent); color: var(--white); font-size: 0.7rem; border-radius: 4px; font-weight: 600; }
+    .template-badge.new { background: var(--success); }
+    .template-badge.popular { background: var(--warning); color: var(--black); }
+    
+    .template-desc { color: var(--gray-light); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5; }
+    
+    .template-capabilities { margin-bottom: 1rem; }
+    .template-capabilities h4 { font-size: 0.8rem; color: var(--gray); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cap-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cap-tag { padding: 0.25rem 0.5rem; background: rgba(255,51,102,0.1); color: var(--primary); font-size: 0.75rem; border-radius: 4px; }
+    
+    .template-meta { display: flex; align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-dark); font-size: 0.8rem; color: var(--gray); }
+    .meta-item { display: flex; align-items: center; gap: 0.25rem; }
+    
+    .template-actions { display: flex; gap: 0.75rem; margin-top: 1rem; }
+    .btn { padding: 0.625rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: #e62e5c; }
+    .btn-secondary { background: transparent; border: 1px solid var(--gray-dark); color: var(--gray-light); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+    
+    /* Category Sections */
+    .category-section { margin-bottom: 3rem; }
+    .category-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--gray-dark); }
+    .category-icon { font-size: 1.5rem; }
+    .category-title { font-size: 1.25rem; }
+    .category-count { color: var(--gray); font-size: 0.85rem; }
+    
+    /* Footer */
+    .footer { padding: 2rem 5%; background: var(--dark); border-top: 1px solid var(--gray-dark); text-align: center; }
+    .footer p { color: var(--gray); font-size: 0.85rem; }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.75rem; }
+      .hero-stats { flex-direction: column; gap: 1rem; }
+      .templates-grid { grid-template-columns: 1fr; }
+      .filter-content { flex-direction: column; align-items: stretch; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="../../index.html" class="logo">AI<span>ByJob</span></a>
+      <nav class="nav-links">
+        <a href="../../index.html">Home</a>
+        <a href="#sales">Sales</a>
+        <a href="#marketing">Marketing</a>
+        <a href="#hr">HR</a>
+        <a href="#support">Support</a>
+        <a href="#operations">Operations</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Agent <span>Templates</span></h1>
+    <p>Production-ready AI agent configurations for common business scenarios. Deploy in minutes, customize for your needs.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">24</div>
+        <div class="stat-label">Templates</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Customizable</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="filter-bar">
+    <div class="filter-content">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" data-filter="all">All Templates</button>
+      <button class="filter-btn" data-filter="sales">Sales</button>
+      <button class="filter-btn" data-filter="marketing">Marketing</button>
+      <button class="filter-btn" data-filter="hr">HR</button>
+      <button class="filter-btn" data-filter="support">Support</button>
+      <button class="filter-btn" data-filter="operations">Operations</button>
+      <input type="text" class="search-box" placeholder="Search templates...">
+    </div>
+  </div>
+
+  <main class="templates-section">
+    <!-- Sales Agents -->
+    <section class="category-section" id="sales">
+      <div class="category-header">
+        <span class="category-icon">💰</span>
+        <h2 class="category-title">Sales Agents</h2>
+        <span class="category-count">5 templates</span>
+      </div>
+      <div class="templates-grid">
+        <!-- Lead Qualification Agent -->
+        <div class="template-card" data-category="sales">
+          <div class="template-header">
+            <span class="template-icon">🎯</span>
+            <div class="template-info">
+              <h3>Lead Qualification Agent</h3>
+              <span class="template-category">Sales Automation</span>
+            </div>
+            <span class="template-badge popular">Popular</span>
+          </div>
+          <p class="template-desc">Automatically scores and qualifies inbound leads based on company size, industry, budget signals, and engagement patterns. Routes hot leads to sales reps instantly.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Lead Scoring</span>
+              <span class="cap-tag">CRM Integration</span>
+              <span class="cap-tag">Email Parsing</span>
+              <span class="cap-tag">Company Research</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 15 min setup</span>
+            <span class="meta-item">⭐ 4.9 rating</span>
+            <span class="meta-item">📥 2.4k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('lead-qualification')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('lead-qualification')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Sales Outreach Agent -->
+        <div class="template-card" data-category="sales">
+          <div class="template-header">
+            <span class="template-icon">📧</span>
+            <div class="template-info">
+              <h3>Sales Outreach Agent</h3>
+              <span class="template-category">Prospecting</span>
+            </div>
+            <span class="template-badge new">New</span>
+          </div>
+          <p class="template-desc">Crafts personalized cold outreach sequences based on prospect data. Researches companies, finds pain points, and generates tailored messaging at scale.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Personalization</span>
+              <span class="cap-tag">LinkedIn Research</span>
+              <span class="cap-tag">Email Sequences</span>
+              <span class="cap-tag">A/B Testing</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 20 min setup</span>
+            <span class="meta-item">⭐ 4.8 rating</span>
+            <span class="meta-item">📥 1.8k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('sales-outreach')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('sales-outreach')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Proposal Generator -->
+        <div class="template-card" data-category="sales">
+          <div class="template-header">
+            <span class="template-icon">📄</span>
+            <div class="template-info">
+              <h3>Proposal Generator</h3>
+              <span class="template-category">Documentation</span>
+            </div>
+          </div>
+          <p class="template-desc">Creates customized sales proposals and quotes based on client requirements, pricing tiers, and historical deal data. Includes competitive positioning.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Template Generation</span>
+              <span class="cap-tag">Pricing Logic</span>
+              <span class="cap-tag">PDF Export</span>
+              <span class="cap-tag">Version Control</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 10 min setup</span>
+            <span class="meta-item">⭐ 4.7 rating</span>
+            <span class="meta-item">📥 1.2k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('proposal-generator')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('proposal-generator')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Deal Intelligence Agent -->
+        <div class="template-card" data-category="sales">
+          <div class="template-header">
+            <span class="template-icon">📊</span>
+            <div class="template-info">
+              <h3>Deal Intelligence Agent</h3>
+              <span class="template-category">Analytics</span>
+            </div>
+          </div>
+          <p class="template-desc">Analyzes pipeline health, predicts close probability, and identifies at-risk deals. Provides coaching suggestions based on successful deal patterns.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Win Prediction</span>
+              <span class="cap-tag">Risk Alerts</span>
+              <span class="cap-tag">Deal Coaching</span>
+              <span class="cap-tag">Forecasting</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 25 min setup</span>
+            <span class="meta-item">⭐ 4.6 rating</span>
+            <span class="meta-item">📥 890 uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('deal-intelligence')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('deal-intelligence')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Competitor Monitor -->
+        <div class="template-card" data-category="sales">
+          <div class="template-header">
+            <span class="template-icon">🔍</span>
+            <div class="template-info">
+              <h3>Competitor Monitor</h3>
+              <span class="template-category">Research</span>
+            </div>
+          </div>
+          <p class="template-desc">Tracks competitor pricing, product updates, and market positioning. Alerts sales team to competitive threats and generates battle cards automatically.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Web Monitoring</span>
+              <span class="cap-tag">Price Tracking</span>
+              <span class="cap-tag">Battle Cards</span>
+              <span class="cap-tag">Alerts</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 30 min setup</span>
+            <span class="meta-item">⭐ 4.5 rating</span>
+            <span class="meta-item">📥 670 uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('competitor-monitor')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('competitor-monitor')">View Details</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marketing Agents -->
+    <section class="category-section" id="marketing">
+      <div class="category-header">
+        <span class="category-icon">📈</span>
+        <h2 class="category-title">Marketing Agents</h2>
+        <span class="category-count">5 templates</span>
+      </div>
+      <div class="templates-grid">
+        <!-- Content Calendar Agent -->
+        <div class="template-card" data-category="marketing">
+          <div class="template-header">
+            <span class="template-icon">📅</span>
+            <div class="template-info">
+              <h3>Content Calendar Agent</h3>
+              <span class="template-category">Content Marketing</span>
+            </div>
+            <span class="template-badge popular">Popular</span>
+          </div>
+          <p class="template-desc">Plans and generates a full content calendar with blog posts, social media, and email campaigns. Aligns content with business goals and seasonal trends.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Content Planning</span>
+              <span class="cap-tag">SEO Keywords</span>
+              <span class="cap-tag">Social Posts</span>
+              <span class="cap-tag">Email Copy</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 15 min setup</span>
+            <span class="meta-item">⭐ 4.9 rating</span>
+            <span class="meta-item">📥 3.1k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('content-calendar')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('content-calendar')">View Details</button>
+          </div>
+        </div>
+
+        <!-- SEO Optimizer Agent -->
+        <div class="template-card" data-category="marketing">
+          <div class="template-header">
+            <span class="template-icon">🔎</span>
+            <div class="template-info">
+              <h3>SEO Optimizer Agent</h3>
+              <span class="template-category">Search Marketing</span>
+            </div>
+          </div>
+          <p class="template-desc">Audits website content for SEO opportunities, suggests keyword optimizations, and monitors search rankings. Generates meta descriptions and title tags.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Site Audit</span>
+              <span class="cap-tag">Keyword Research</span>
+              <span class="cap-tag">Rank Tracking</span>
+              <span class="cap-tag">Meta Generation</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 20 min setup</span>
+            <span class="meta-item">⭐ 4.7 rating</span>
+            <span class="meta-item">📥 2.2k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('seo-optimizer')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('seo-optimizer')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Social Media Manager -->
+        <div class="template-card" data-category="marketing">
+          <div class="template-header">
+            <span class="template-icon">📱</span>
+            <div class="template-info">
+              <h3>Social Media Manager</h3>
+              <span class="template-category">Social Marketing</span>
+            </div>
+            <span class="template-badge new">New</span>
+          </div>
+          <p class="template-desc">Manages multi-platform social presence. Generates posts, responds to comments, analyzes engagement, and identifies trending topics in your industry.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Multi-Platform</span>
+              <span class="cap-tag">Auto-Posting</span>
+              <span class="cap-tag">Engagement</span>
+              <span class="cap-tag">Analytics</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 25 min setup</span>
+            <span class="meta-item">⭐ 4.8 rating</span>
+            <span class="meta-item">📥 1.9k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('social-media-manager')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('social-media-manager')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Email Campaign Agent -->
+        <div class="template-card" data-category="marketing">
+          <div class="template-header">
+            <span class="template-icon">✉️</span>
+            <div class="template-info">
+              <h3>Email Campaign Agent</h3>
+              <span class="template-category">Email Marketing</span>
+            </div>
+          </div>
+          <p class="template-desc">Creates and optimizes email campaigns with personalized content, subject line testing, and send time optimization. Segments audiences automatically.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Copywriting</span>
+              <span class="cap-tag">A/B Testing</span>
+              <span class="cap-tag">Segmentation</span>
+              <span class="cap-tag">Send Optimization</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 15 min setup</span>
+            <span class="meta-item">⭐ 4.6 rating</span>
+            <span class="meta-item">📥 1.5k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('email-campaign')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('email-campaign')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Brand Monitor Agent -->
+        <div class="template-card" data-category="marketing">
+          <div class="template-header">
+            <span class="template-icon">👁️</span>
+            <div class="template-info">
+              <h3>Brand Monitor Agent</h3>
+              <span class="template-category">Brand Management</span>
+            </div>
+          </div>
+          <p class="template-desc">Tracks brand mentions across web, social, and news. Analyzes sentiment, identifies PR opportunities, and alerts on potential reputation issues.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Mention Tracking</span>
+              <span class="cap-tag">Sentiment Analysis</span>
+              <span class="cap-tag">PR Alerts</span>
+              <span class="cap-tag">Reports</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 20 min setup</span>
+            <span class="meta-item">⭐ 4.5 rating</span>
+            <span class="meta-item">📥 980 uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('brand-monitor')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('brand-monitor')">View Details</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HR Agents -->
+    <section class="category-section" id="hr">
+      <div class="category-header">
+        <span class="category-icon">👥</span>
+        <h2 class="category-title">HR & Recruiting Agents</h2>
+        <span class="category-count">4 templates</span>
+      </div>
+      <div class="templates-grid">
+        <!-- Resume Screener -->
+        <div class="template-card" data-category="hr">
+          <div class="template-header">
+            <span class="template-icon">📋</span>
+            <div class="template-info">
+              <h3>Resume Screener Agent</h3>
+              <span class="template-category">Recruiting</span>
+            </div>
+            <span class="template-badge popular">Popular</span>
+          </div>
+          <p class="template-desc">Screens resumes against job requirements, scores candidates, and identifies top matches. Reduces time-to-hire by 60% while ensuring fair evaluation.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Resume Parsing</span>
+              <span class="cap-tag">Skills Matching</span>
+              <span class="cap-tag">Bias Detection</span>
+              <span class="cap-tag">ATS Integration</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 15 min setup</span>
+            <span class="meta-item">⭐ 4.8 rating</span>
+            <span class="meta-item">📥 2.8k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('resume-screener')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('resume-screener')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Interview Scheduler -->
+        <div class="template-card" data-category="hr">
+          <div class="template-header">
+            <span class="template-icon">🗓️</span>
+            <div class="template-info">
+              <h3>Interview Scheduler</h3>
+              <span class="template-category">Recruiting</span>
+            </div>
+          </div>
+          <p class="template-desc">Automates interview scheduling across multiple calendars. Sends reminders, handles rescheduling requests, and coordinates panel interviews.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Calendar Sync</span>
+              <span class="cap-tag">Auto-Scheduling</span>
+              <span class="cap-tag">Reminders</span>
+              <span class="cap-tag">Time Zones</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 10 min setup</span>
+            <span class="meta-item">⭐ 4.7 rating</span>
+            <span class="meta-item">📥 1.6k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('interview-scheduler')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('interview-scheduler')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Employee Onboarding -->
+        <div class="template-card" data-category="hr">
+          <div class="template-header">
+            <span class="template-icon">🚀</span>
+            <div class="template-info">
+              <h3>Onboarding Assistant</h3>
+              <span class="template-category">Employee Experience</span>
+            </div>
+            <span class="template-badge new">New</span>
+          </div>
+          <p class="template-desc">Guides new hires through onboarding workflows. Assigns tasks, tracks completion, answers FAQs, and introduces team members and company culture.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Task Assignment</span>
+              <span class="cap-tag">Progress Tracking</span>
+              <span class="cap-tag">FAQ Bot</span>
+              <span class="cap-tag">IT Setup</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 30 min setup</span>
+            <span class="meta-item">⭐ 4.9 rating</span>
+            <span class="meta-item">📥 1.1k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('onboarding-assistant')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('onboarding-assistant')">View Details</button>
+          </div>
+        </div>
+
+        <!-- HR Policy Agent -->
+        <div class="template-card" data-category="hr">
+          <div class="template-header">
+            <span class="template-icon">📚</span>
+            <div class="template-info">
+              <h3>HR Policy Agent</h3>
+              <span class="template-category">Employee Support</span>
+            </div>
+          </div>
+          <p class="template-desc">Answers employee questions about policies, benefits, PTO, and procedures. Reduces HR ticket volume by 40% with instant, accurate responses.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Policy Lookup</span>
+              <span class="cap-tag">Benefits Info</span>
+              <span class="cap-tag">PTO Calculator</span>
+              <span class="cap-tag">Escalation</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 20 min setup</span>
+            <span class="meta-item">⭐ 4.6 rating</span>
+            <span class="meta-item">📥 2.1k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('hr-policy')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('hr-policy')">View Details</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customer Support Agents -->
+    <section class="category-section" id="support">
+      <div class="category-header">
+        <span class="category-icon">🎧</span>
+        <h2 class="category-title">Customer Support Agents</h2>
+        <span class="category-count">4 templates</span>
+      </div>
+      <div class="templates-grid">
+        <!-- Tier 1 Support Agent -->
+        <div class="template-card" data-category="support">
+          <div class="template-header">
+            <span class="template-icon">💬</span>
+            <div class="template-info">
+              <h3>Tier 1 Support Agent</h3>
+              <span class="template-category">Customer Service</span>
+            </div>
+            <span class="template-badge popular">Popular</span>
+          </div>
+          <p class="template-desc">Handles common customer inquiries, troubleshooting, and account questions. Resolves 70% of tickets automatically with intelligent escalation.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Chat Support</span>
+              <span class="cap-tag">Troubleshooting</span>
+              <span class="cap-tag">Account Lookup</span>
+              <span class="cap-tag">Escalation</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 20 min setup</span>
+            <span class="meta-item">⭐ 4.8 rating</span>
+            <span class="meta-item">📥 4.2k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('tier1-support')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('tier1-support')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Ticket Triage Agent -->
+        <div class="template-card" data-category="support">
+          <div class="template-header">
+            <span class="template-icon">🏷️</span>
+            <div class="template-info">
+              <h3>Ticket Triage Agent</h3>
+              <span class="template-category">Operations</span>
+            </div>
+          </div>
+          <p class="template-desc">Automatically categorizes, prioritizes, and routes support tickets to the right team. Detects urgency and customer sentiment for faster resolution.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Classification</span>
+              <span class="cap-tag">Priority Scoring</span>
+              <span class="cap-tag">Routing</span>
+              <span class="cap-tag">Sentiment</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 15 min setup</span>
+            <span class="meta-item">⭐ 4.7 rating</span>
+            <span class="meta-item">📥 1.8k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('ticket-triage')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('ticket-triage')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Knowledge Base Agent -->
+        <div class="template-card" data-category="support">
+          <div class="template-header">
+            <span class="template-icon">📖</span>
+            <div class="template-info">
+              <h3>Knowledge Base Agent</h3>
+              <span class="template-category">Self-Service</span>
+            </div>
+          </div>
+          <p class="template-desc">Creates and maintains help articles based on ticket patterns. Identifies documentation gaps and suggests content updates based on customer questions.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Article Generation</span>
+              <span class="cap-tag">Gap Analysis</span>
+              <span class="cap-tag">Search Optimization</span>
+              <span class="cap-tag">Version Control</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 25 min setup</span>
+            <span class="meta-item">⭐ 4.5 rating</span>
+            <span class="meta-item">📥 920 uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('knowledge-base')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('knowledge-base')">View Details</button>
+          </div>
+        </div>
+
+        <!-- CSAT Survey Agent -->
+        <div class="template-card" data-category="support">
+          <div class="template-header">
+            <span class="template-icon">⭐</span>
+            <div class="template-info">
+              <h3>CSAT Survey Agent</h3>
+              <span class="template-category">Feedback</span>
+            </div>
+            <span class="template-badge new">New</span>
+          </div>
+          <p class="template-desc">Sends targeted satisfaction surveys, analyzes responses, and identifies trends. Triggers follow-up actions for detractors and promoters.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Survey Design</span>
+              <span class="cap-tag">NPS Tracking</span>
+              <span class="cap-tag">Trend Analysis</span>
+              <span class="cap-tag">Follow-up</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 15 min setup</span>
+            <span class="meta-item">⭐ 4.6 rating</span>
+            <span class="meta-item">📥 780 uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('csat-survey')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('csat-survey')">View Details</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Operations Agents -->
+    <section class="category-section" id="operations">
+      <div class="category-header">
+        <span class="category-icon">⚙️</span>
+        <h2 class="category-title">Operations Agents</h2>
+        <span class="category-count">6 templates</span>
+      </div>
+      <div class="templates-grid">
+        <!-- Data Entry Agent -->
+        <div class="template-card" data-category="operations">
+          <div class="template-header">
+            <span class="template-icon">⌨️</span>
+            <div class="template-info">
+              <h3>Data Entry Agent</h3>
+              <span class="template-category">Automation</span>
+            </div>
+            <span class="template-badge popular">Popular</span>
+          </div>
+          <p class="template-desc">Extracts data from documents, emails, and forms. Validates, transforms, and loads into your systems with 99% accuracy and full audit trail.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">OCR/Extraction</span>
+              <span class="cap-tag">Validation</span>
+              <span class="cap-tag">Transformation</span>
+              <span class="cap-tag">API Integration</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 20 min setup</span>
+            <span class="meta-item">⭐ 4.9 rating</span>
+            <span class="meta-item">📥 3.5k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('data-entry')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('data-entry')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Report Generator -->
+        <div class="template-card" data-category="operations">
+          <div class="template-header">
+            <span class="template-icon">📊</span>
+            <div class="template-info">
+              <h3>Report Generator</h3>
+              <span class="template-category">Analytics</span>
+            </div>
+          </div>
+          <p class="template-desc">Creates automated reports from multiple data sources. Generates executive summaries, visualizations, and actionable insights on schedule.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Data Aggregation</span>
+              <span class="cap-tag">Visualization</span>
+              <span class="cap-tag">Scheduling</span>
+              <span class="cap-tag">Distribution</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 25 min setup</span>
+            <span class="meta-item">⭐ 4.7 rating</span>
+            <span class="meta-item">📥 2.4k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('report-generator')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('report-generator')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Meeting Notes Agent -->
+        <div class="template-card" data-category="operations">
+          <div class="template-header">
+            <span class="template-icon">📝</span>
+            <div class="template-info">
+              <h3>Meeting Notes Agent</h3>
+              <span class="template-category">Productivity</span>
+            </div>
+            <span class="template-badge new">New</span>
+          </div>
+          <p class="template-desc">Transcribes meetings, extracts action items, and distributes summaries. Tracks follow-ups and integrates with project management tools.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Transcription</span>
+              <span class="cap-tag">Action Items</span>
+              <span class="cap-tag">Summaries</span>
+              <span class="cap-tag">Task Creation</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 10 min setup</span>
+            <span class="meta-item">⭐ 4.8 rating</span>
+            <span class="meta-item">📥 2.1k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('meeting-notes')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('meeting-notes')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Invoice Processor -->
+        <div class="template-card" data-category="operations">
+          <div class="template-header">
+            <span class="template-icon">🧾</span>
+            <div class="template-info">
+              <h3>Invoice Processor</h3>
+              <span class="template-category">Finance</span>
+            </div>
+          </div>
+          <p class="template-desc">Processes invoices from email and uploads. Extracts line items, matches POs, flags exceptions, and routes for approval automatically.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Invoice OCR</span>
+              <span class="cap-tag">PO Matching</span>
+              <span class="cap-tag">Exception Handling</span>
+              <span class="cap-tag">Approval Routing</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 30 min setup</span>
+            <span class="meta-item">⭐ 4.6 rating</span>
+            <span class="meta-item">📥 1.4k uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('invoice-processor')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('invoice-processor')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Inventory Monitor -->
+        <div class="template-card" data-category="operations">
+          <div class="template-header">
+            <span class="template-icon">📦</span>
+            <div class="template-info">
+              <h3>Inventory Monitor</h3>
+              <span class="template-category">Supply Chain</span>
+            </div>
+          </div>
+          <p class="template-desc">Tracks inventory levels, predicts stockouts, and generates reorder recommendations. Alerts on anomalies and optimizes safety stock levels.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Level Tracking</span>
+              <span class="cap-tag">Demand Forecast</span>
+              <span class="cap-tag">Reorder Alerts</span>
+              <span class="cap-tag">Optimization</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 25 min setup</span>
+            <span class="meta-item">⭐ 4.5 rating</span>
+            <span class="meta-item">📥 890 uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('inventory-monitor')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('inventory-monitor')">View Details</button>
+          </div>
+        </div>
+
+        <!-- Compliance Checker -->
+        <div class="template-card" data-category="operations">
+          <div class="template-header">
+            <span class="template-icon">✅</span>
+            <div class="template-info">
+              <h3>Compliance Checker</h3>
+              <span class="template-category">Risk Management</span>
+            </div>
+          </div>
+          <p class="template-desc">Monitors processes and documents for compliance requirements. Flags violations, tracks remediation, and generates audit-ready reports.</p>
+          <div class="template-capabilities">
+            <h4>Capabilities</h4>
+            <div class="cap-list">
+              <span class="cap-tag">Policy Monitoring</span>
+              <span class="cap-tag">Violation Alerts</span>
+              <span class="cap-tag">Audit Trail</span>
+              <span class="cap-tag">Reporting</span>
+            </div>
+          </div>
+          <div class="template-meta">
+            <span class="meta-item">⏱️ 35 min setup</span>
+            <span class="meta-item">⭐ 4.7 rating</span>
+            <span class="meta-item">📥 650 uses</span>
+          </div>
+          <div class="template-actions">
+            <button class="btn btn-primary" onclick="deployTemplate('compliance-checker')">Deploy Agent</button>
+            <button class="btn btn-secondary" onclick="viewTemplate('compliance-checker')">View Details</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/">AIUNITES</a></p>
+    <p style="margin-top: 0.5rem; color: var(--warning);">⚠️ Demo/Pre-Launch Preview - Templates shown are in development</p>
+  </footer>
+
+  <script>
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        
+        document.querySelectorAll('.category-section').forEach(section => {
+          if (filter === 'all' || section.id === filter) {
+            section.style.display = 'block';
+          } else {
+            section.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Search functionality
+    document.querySelector('.search-box').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.template-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(query) ? 'block' : 'none';
+      });
+    });
+
+    // Deploy template
+    function deployTemplate(templateId) {
+      alert(`🚀 Deploying ${templateId} agent...\n\nThis would launch the agent configuration wizard in the full product.`);
+    }
+
+    // View template details
+    function viewTemplate(templateId) {
+      window.location.href = `${templateId}.html`;
+    }
+  </script>
+</body>
+</html>

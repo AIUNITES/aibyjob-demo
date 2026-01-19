@@ -1,0 +1,361 @@
+{
+  "templates": [
+    {
+      "id": "lead-qualification",
+      "name": "Lead Qualification Agent",
+      "category": "sales",
+      "version": "2.1.0",
+      "icon": "🎯",
+      "description": "Automatically scores and qualifies inbound leads based on company size, industry, budget signals, and engagement patterns.",
+      "capabilities": ["Lead Scoring", "CRM Integration", "Email Parsing", "Company Research"],
+      "setupTime": "15 min",
+      "rating": 4.9,
+      "deployments": 2400,
+      "config": {
+        "sources": {
+          "webForms": ["contact", "demo-request", "pricing"],
+          "emailInbox": "leads@yourcompany.com",
+          "crm": "hubspot"
+        },
+        "scoring": {
+          "weights": {
+            "companyFit": 0.35,
+            "intentSignals": 0.30,
+            "engagement": 0.20,
+            "timing": 0.15
+          },
+          "thresholds": {
+            "hot": 80,
+            "warm": 50,
+            "cold": 0
+          }
+        },
+        "routing": {
+          "hot": { "action": "slack-alert", "channel": "#sales-alerts" },
+          "warm": { "action": "add-to-queue", "queue": "sdr-outbound" },
+          "cold": { "action": "nurture-sequence", "sequence": "awareness-drip" }
+        }
+      },
+      "integrations": ["salesforce", "hubspot", "pipedrive", "slack", "clearbit"]
+    },
+    {
+      "id": "sales-outreach",
+      "name": "Sales Outreach Agent",
+      "category": "sales",
+      "version": "1.8.0",
+      "icon": "📧",
+      "description": "Crafts personalized cold outreach sequences based on prospect data. Researches companies and generates tailored messaging at scale.",
+      "capabilities": ["Personalization", "LinkedIn Research", "Email Sequences", "A/B Testing"],
+      "setupTime": "20 min",
+      "rating": 4.8,
+      "deployments": 1800,
+      "config": {
+        "prospecting": {
+          "sources": ["linkedin", "company-website", "news"],
+          "dataPoints": ["role", "company-news", "tech-stack", "funding"]
+        },
+        "sequences": {
+          "initial": {
+            "delay": 0,
+            "template": "personalized-intro",
+            "personalization": ["company-news", "mutual-connections"]
+          },
+          "followUp1": {
+            "delay": "3 days",
+            "template": "value-prop",
+            "condition": "no-reply"
+          },
+          "followUp2": {
+            "delay": "7 days",
+            "template": "case-study",
+            "condition": "no-reply"
+          }
+        },
+        "abTesting": {
+          "enabled": true,
+          "variants": ["subject-line", "cta"]
+        }
+      },
+      "integrations": ["outreach", "salesloft", "linkedin", "gmail"]
+    },
+    {
+      "id": "content-calendar",
+      "name": "Content Calendar Agent",
+      "category": "marketing",
+      "version": "2.3.0",
+      "icon": "📅",
+      "description": "Plans and generates a full content calendar with blog posts, social media, and email campaigns aligned with business goals.",
+      "capabilities": ["Content Planning", "SEO Keywords", "Social Posts", "Email Copy"],
+      "setupTime": "15 min",
+      "rating": 4.9,
+      "deployments": 3100,
+      "config": {
+        "planning": {
+          "horizon": "30 days",
+          "themes": ["product", "thought-leadership", "customer-stories", "industry-news"],
+          "frequency": {
+            "blog": "2 per week",
+            "social": "daily",
+            "email": "weekly"
+          }
+        },
+        "channels": {
+          "blog": {
+            "platform": "wordpress",
+            "categories": ["how-to", "comparison", "news"],
+            "seoOptimized": true
+          },
+          "social": {
+            "platforms": ["linkedin", "twitter", "instagram"],
+            "hashtagStrategy": "auto"
+          },
+          "email": {
+            "provider": "mailchimp",
+            "segments": ["prospects", "customers", "partners"]
+          }
+        },
+        "automation": {
+          "drafts": true,
+          "scheduling": true,
+          "approvalWorkflow": ["marketing-manager"]
+        }
+      },
+      "integrations": ["wordpress", "mailchimp", "buffer", "hootsuite", "semrush"]
+    },
+    {
+      "id": "tier1-support",
+      "name": "Tier 1 Support Agent",
+      "category": "support",
+      "version": "3.0.0",
+      "icon": "💬",
+      "description": "Handles common customer inquiries, troubleshooting, and account questions. Resolves 70% of tickets automatically.",
+      "capabilities": ["Chat Support", "Troubleshooting", "Account Lookup", "Escalation"],
+      "setupTime": "20 min",
+      "rating": 4.8,
+      "deployments": 4200,
+      "config": {
+        "channels": {
+          "chat": { "enabled": true, "widget": "intercom" },
+          "email": { "enabled": true, "inbox": "support@company.com" },
+          "slack": { "enabled": false }
+        },
+        "knowledgeBase": {
+          "source": "zendesk",
+          "autoSuggest": true,
+          "fallbackToHuman": true
+        },
+        "capabilities": {
+          "accountLookup": {
+            "enabled": true,
+            "fields": ["subscription", "billing", "usage"]
+          },
+          "troubleshooting": {
+            "enabled": true,
+            "guides": ["login-issues", "billing", "feature-questions"]
+          },
+          "actions": {
+            "passwordReset": true,
+            "planChange": false,
+            "refund": false
+          }
+        },
+        "escalation": {
+          "triggers": ["angry-customer", "technical-complex", "billing-dispute"],
+          "routing": {
+            "technical": "engineering-support",
+            "billing": "finance-team",
+            "default": "support-queue"
+          },
+          "sla": {
+            "response": "5 minutes",
+            "resolution": "4 hours"
+          }
+        }
+      },
+      "integrations": ["intercom", "zendesk", "freshdesk", "helpscout", "stripe"]
+    },
+    {
+      "id": "resume-screener",
+      "name": "Resume Screener Agent",
+      "category": "hr",
+      "version": "2.0.0",
+      "icon": "📋",
+      "description": "Screens resumes against job requirements, scores candidates, and identifies top matches while ensuring fair evaluation.",
+      "capabilities": ["Resume Parsing", "Skills Matching", "Bias Detection", "ATS Integration"],
+      "setupTime": "15 min",
+      "rating": 4.8,
+      "deployments": 2800,
+      "config": {
+        "parsing": {
+          "formats": ["pdf", "docx", "txt"],
+          "extractFields": ["contact", "experience", "education", "skills", "certifications"]
+        },
+        "matching": {
+          "weights": {
+            "requiredSkills": 0.40,
+            "experience": 0.30,
+            "education": 0.15,
+            "certifications": 0.15
+          },
+          "skillSynonyms": true,
+          "experienceEquivalents": true
+        },
+        "fairness": {
+          "blindScreening": true,
+          "removeFields": ["name", "photo", "age", "gender"],
+          "diversityFlags": false
+        },
+        "output": {
+          "scoreCard": true,
+          "topCandidates": 10,
+          "rejectReasons": true,
+          "exportFormat": "csv"
+        }
+      },
+      "integrations": ["greenhouse", "lever", "workday", "bamboohr"]
+    },
+    {
+      "id": "data-entry",
+      "name": "Data Entry Agent",
+      "category": "operations",
+      "version": "2.5.0",
+      "icon": "⌨️",
+      "description": "Extracts data from documents, emails, and forms. Validates, transforms, and loads into your systems with 99% accuracy.",
+      "capabilities": ["OCR/Extraction", "Validation", "Transformation", "API Integration"],
+      "setupTime": "20 min",
+      "rating": 4.9,
+      "deployments": 3500,
+      "config": {
+        "sources": {
+          "email": { "enabled": true, "inbox": "documents@company.com" },
+          "uploads": { "enabled": true, "folder": "/incoming" },
+          "api": { "enabled": true, "webhook": "/api/documents" }
+        },
+        "extraction": {
+          "ocr": {
+            "provider": "google-vision",
+            "languages": ["en", "es"]
+          },
+          "templates": {
+            "invoice": ["vendor", "amount", "date", "lineItems"],
+            "receipt": ["merchant", "total", "date", "category"],
+            "form": ["dynamic"]
+          }
+        },
+        "validation": {
+          "rules": [
+            { "field": "amount", "type": "number", "min": 0 },
+            { "field": "date", "type": "date", "format": "YYYY-MM-DD" },
+            { "field": "email", "type": "email" }
+          ],
+          "humanReview": {
+            "confidence": 0.85,
+            "queue": "review-queue"
+          }
+        },
+        "destination": {
+          "type": "api",
+          "endpoint": "https://api.company.com/data",
+          "format": "json",
+          "batch": false
+        }
+      },
+      "integrations": ["google-vision", "aws-textract", "airtable", "google-sheets", "zapier"]
+    },
+    {
+      "id": "meeting-notes",
+      "name": "Meeting Notes Agent",
+      "category": "operations",
+      "version": "1.5.0",
+      "icon": "📝",
+      "description": "Transcribes meetings, extracts action items, and distributes summaries. Tracks follow-ups and integrates with project management.",
+      "capabilities": ["Transcription", "Action Items", "Summaries", "Task Creation"],
+      "setupTime": "10 min",
+      "rating": 4.8,
+      "deployments": 2100,
+      "config": {
+        "transcription": {
+          "provider": "assembly-ai",
+          "speakerDiarization": true,
+          "languages": ["en"]
+        },
+        "analysis": {
+          "actionItems": {
+            "enabled": true,
+            "assigneeDetection": true,
+            "deadlineDetection": true
+          },
+          "decisions": true,
+          "keyTopics": true,
+          "sentiment": false
+        },
+        "output": {
+          "summary": {
+            "length": "medium",
+            "format": "bullet-points"
+          },
+          "distribution": {
+            "email": true,
+            "slack": true,
+            "confluence": false
+          }
+        },
+        "taskIntegration": {
+          "provider": "asana",
+          "autoCreate": true,
+          "project": "meeting-actions"
+        }
+      },
+      "integrations": ["zoom", "google-meet", "teams", "asana", "jira", "slack"]
+    },
+    {
+      "id": "seo-optimizer",
+      "name": "SEO Optimizer Agent",
+      "category": "marketing",
+      "version": "2.0.0",
+      "icon": "🔎",
+      "description": "Audits website content for SEO opportunities, suggests keyword optimizations, and monitors search rankings.",
+      "capabilities": ["Site Audit", "Keyword Research", "Rank Tracking", "Meta Generation"],
+      "setupTime": "20 min",
+      "rating": 4.7,
+      "deployments": 2200,
+      "config": {
+        "audit": {
+          "schedule": "weekly",
+          "checks": ["meta-tags", "headings", "images", "links", "speed", "mobile"],
+          "depth": "full-site"
+        },
+        "keywords": {
+          "tracking": {
+            "keywords": [],
+            "competitors": [],
+            "locations": ["us"]
+          },
+          "research": {
+            "seedKeywords": [],
+            "difficulty": "medium",
+            "volume": 100
+          }
+        },
+        "optimization": {
+          "autoSuggest": true,
+          "metaGeneration": true,
+          "contentBriefs": true
+        },
+        "reporting": {
+          "frequency": "weekly",
+          "recipients": ["marketing@company.com"],
+          "metrics": ["rankings", "traffic", "opportunities"]
+        }
+      },
+      "integrations": ["google-search-console", "semrush", "ahrefs", "wordpress"]
+    }
+  ],
+  "categories": [
+    { "id": "sales", "name": "Sales", "icon": "💰", "count": 5 },
+    { "id": "marketing", "name": "Marketing", "icon": "📈", "count": 5 },
+    { "id": "hr", "name": "HR & Recruiting", "icon": "👥", "count": 4 },
+    { "id": "support", "name": "Customer Support", "icon": "🎧", "count": 4 },
+    { "id": "operations", "name": "Operations", "icon": "⚙️", "count": 6 }
+  ]
+}

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lead Qualification Agent | AIByJob Templates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <style>
+    :root {
+      --primary: #ff3366;
+      --secondary: #06b6d4;
+      --accent: #6366f1;
+      --dark: #1a1a2e;
+      --black: #0a0a0f;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --gray-light: #9ca3af;
+      --gray-dark: #374151;
+      --success: #10b981;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Syne', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; }
+    a { color: var(--primary); text-decoration: none; }
+    code { font-family: 'Space Mono', monospace; background: rgba(255,255,255,0.1); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+    pre { font-family: 'Space Mono', monospace; background: var(--dark); padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; line-height: 1.5; border: 1px solid var(--gray-dark); }
+    
+    .header { background: var(--dark); border-bottom: 1px solid var(--gray-dark); padding: 1rem 5%; }
+    .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; }
+    .logo { font-weight: 800; font-size: 1.25rem; color: var(--white); }
+    .logo span { color: var(--primary); }
+    .breadcrumb { color: var(--gray); font-size: 0.9rem; }
+    .breadcrumb a { color: var(--gray-light); }
+    
+    .hero { padding: 4rem 5%; background: linear-gradient(180deg, var(--dark), var(--black)); }
+    .hero-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 3rem; align-items: start; }
+    .hero-main h1 { font-size: 2.5rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 1rem; }
+    .hero-main h1 .icon { font-size: 3rem; }
+    .hero-category { color: var(--secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+    .hero-desc { color: var(--gray-light); font-size: 1.1rem; margin-bottom: 2rem; }
+    .hero-stats { display: flex; gap: 2rem; }
+    .stat { text-align: center; padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 0.8rem; color: var(--gray); }
+    
+    .deploy-card { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 12px; padding: 1.5rem; }
+    .deploy-card h3 { margin-bottom: 1rem; }
+    .btn { display: inline-block; padding: 0.875rem 1.5rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none; text-align: center; transition: all 0.2s; }
+    .btn-primary { background: var(--primary); color: var(--white); width: 100%; }
+    .btn-primary:hover { background: #e62e5c; text-decoration: none; }
+    .btn-secondary { background: transparent; border: 1px solid var(--gray-dark); color: var(--gray-light); width: 100%; margin-top: 0.75rem; }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); text-decoration: none; }
+    .deploy-meta { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--gray-dark); }
+    .deploy-meta-item { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; }
+    .deploy-meta-item span:first-child { color: var(--gray); }
+    
+    .content { max-width: 1200px; margin: 0 auto; padding: 3rem 5%; display: grid; grid-template-columns: 1fr 350px; gap: 3rem; }
+    
+    .main-content section { margin-bottom: 3rem; }
+    .main-content h2 { font-size: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gray-dark); }
+    .main-content h3 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; color: var(--secondary); }
+    .main-content p { color: var(--gray-light); margin-bottom: 1rem; }
+    .main-content ul { margin-left: 1.5rem; color: var(--gray-light); }
+    .main-content li { margin-bottom: 0.5rem; }
+    
+    .capability-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
+    .capability-item { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 8px; padding: 1rem; }
+    .capability-item h4 { font-size: 0.95rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .capability-item p { font-size: 0.85rem; color: var(--gray); margin: 0; }
+    
+    .config-example { margin: 1.5rem 0; }
+    .config-tabs { display: flex; gap: 0.5rem; margin-bottom: -1px; }
+    .config-tab { padding: 0.5rem 1rem; background: var(--dark); border: 1px solid var(--gray-dark); border-bottom: none; border-radius: 6px 6px 0 0; font-size: 0.85rem; color: var(--gray-light); cursor: pointer; }
+    .config-tab.active { background: var(--dark); border-color: var(--primary); color: var(--primary); }
+    
+    .sidebar { position: sticky; top: 2rem; }
+    .sidebar-card { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .sidebar-card h4 { font-size: 1rem; margin-bottom: 1rem; }
+    .integration-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .integration-tag { padding: 0.375rem 0.75rem; background: rgba(99,102,241,0.1); color: var(--accent); font-size: 0.8rem; border-radius: 4px; }
+    
+    .related-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+    .related-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(255,255,255,0.02); border-radius: 8px; transition: background 0.2s; }
+    .related-item:hover { background: rgba(255,255,255,0.05); text-decoration: none; }
+    .related-icon { font-size: 1.5rem; }
+    .related-info h5 { font-size: 0.9rem; color: var(--white); margin-bottom: 0.125rem; }
+    .related-info span { font-size: 0.75rem; color: var(--gray); }
+    
+    .footer { padding: 2rem 5%; background: var(--dark); border-top: 1px solid var(--gray-dark); text-align: center; }
+    .footer p { color: var(--gray); font-size: 0.85rem; }
+    
+    @media (max-width: 900px) {
+      .hero-content, .content { grid-template-columns: 1fr; }
+      .capability-grid { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="../../index.html" class="logo">AI<span>ByJob</span></a>
+      <nav class="breadcrumb">
+        <a href="index.html">Templates</a> / <span>Lead Qualification Agent</span>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-main">
+        <h1><span class="icon">🎯</span> Lead Qualification Agent</h1>
+        <div class="hero-category">Sales Automation</div>
+        <p class="hero-desc">Automatically scores and qualifies inbound leads based on company size, industry, budget signals, and engagement patterns. Routes hot leads to sales reps instantly while nurturing cold leads through automated sequences.</p>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-value">60%</div>
+            <div class="stat-label">Time Saved</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">3.2x</div>
+            <div class="stat-label">Conversion Lift</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">15min</div>
+            <div class="stat-label">Setup Time</div>
+          </div>
+        </div>
+      </div>
+      <div class="deploy-card">
+        <h3>Deploy This Agent</h3>
+        <button class="btn btn-primary" onclick="alert('🚀 Launching deployment wizard...')">⚡ Deploy Now</button>
+        <button class="btn btn-secondary" onclick="downloadConfig()">📥 Download Config</button>
+        <div class="deploy-meta">
+          <div class="deploy-meta-item">
+            <span>Version</span>
+            <span>2.1.0</span>
+          </div>
+          <div class="deploy-meta-item">
+            <span>Last Updated</span>
+            <span>Jan 2026</span>
+          </div>
+          <div class="deploy-meta-item">
+            <span>Deployments</span>
+            <span>2,400+</span>
+          </div>
+          <div class="deploy-meta-item">
+            <span>Rating</span>
+            <span>⭐ 4.9/5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="content">
+    <main class="main-content">
+      <section>
+        <h2>Overview</h2>
+        <p>The Lead Qualification Agent automates the tedious process of evaluating inbound leads, allowing your sales team to focus on high-value conversations. Using AI-powered analysis, it examines multiple data points to determine lead quality and intent.</p>
+        <p>Unlike simple lead scoring rules, this agent understands context. It can identify a startup CEO requesting a demo as high-priority even if the company is small, while flagging a large enterprise contact as lower priority if they're just doing research.</p>
+      </section>
+
+      <section>
+        <h2>Capabilities</h2>
+        <div class="capability-grid">
+          <div class="capability-item">
+            <h4>🔍 Lead Scoring</h4>
+            <p>Multi-factor scoring based on firmographic, behavioral, and intent signals with customizable weights.</p>
+          </div>
+          <div class="capability-item">
+            <h4>🏢 Company Research</h4>
+            <p>Automatic enrichment with company size, industry, funding, tech stack, and growth signals.</p>
+          </div>
+          <div class="capability-item">
+            <h4>📧 Email Parsing</h4>
+            <p>Extracts key information from inbound emails including budget mentions, timeline, and pain points.</p>
+          </div>
+          <div class="capability-item">
+            <h4>🔄 CRM Integration</h4>
+            <p>Bi-directional sync with Salesforce, HubSpot, Pipedrive, and other major CRMs.</p>
+          </div>
+          <div class="capability-item">
+            <h4>🎯 Smart Routing</h4>
+            <p>Routes leads to the right rep based on territory, expertise, capacity, and round-robin rules.</p>
+          </div>
+          <div class="capability-item">
+            <h4>📊 Analytics</h4>
+            <p>Dashboard showing conversion rates by source, score accuracy, and routing performance.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>How It Works</h2>
+        <h3>1. Lead Capture</h3>
+        <p>The agent monitors your configured lead sources: web forms, email inbox, chatbot conversations, and CRM entries. When a new lead arrives, it triggers the qualification workflow.</p>
+        
+        <h3>2. Data Enrichment</h3>
+        <p>Using the lead's email domain, the agent fetches company information from public sources and your connected data providers. It builds a comprehensive profile including company size, industry, funding history, and tech stack.</p>
+        
+        <h3>3. Scoring</h3>
+        <p>The lead is scored across multiple dimensions:</p>
+        <ul>
+          <li><strong>Fit Score</strong> - How well the company matches your ICP</li>
+          <li><strong>Intent Score</strong> - Signals of buying intent from their message and behavior</li>
+          <li><strong>Engagement Score</strong> - Prior interactions with your content and brand</li>
+          <li><strong>Timing Score</strong> - Budget cycle, contract renewal, and urgency signals</li>
+        </ul>
+        
+        <h3>4. Routing & Action</h3>
+        <p>Based on the composite score, the agent takes action:</p>
+        <ul>
+          <li><strong>Hot Leads (80+)</strong> - Immediate Slack alert + calendar booking link</li>
+          <li><strong>Warm Leads (50-79)</strong> - Added to SDR queue with context summary</li>
+          <li><strong>Cold Leads (&lt;50)</strong> - Enrolled in nurture sequence</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Configuration</h2>
+        <p>The agent is configured using a JSON file that defines scoring rules, routing logic, and integrations. Here's an example configuration:</p>
+        
+        <div class="config-example">
+          <pre>{
+  "agent": "lead-qualification",
+  "version": "2.1.0",
+  
+  "sources": {
+    "webForms": ["contact", "demo-request", "pricing"],
+    "emailInbox": "leads@yourcompany.com",
+    "crm": "hubspot"
+  },
+  
+  "scoring": {
+    "weights": {
+      "companyFit": 0.35,
+      "intentSignals": 0.30,
+      "engagement": 0.20,
+      "timing": 0.15
+    },
+    
+    "companyFit": {
+      "employeeCount": {
+        "1-50": 10,
+        "51-200": 25,
+        "201-1000": 35,
+        "1001+": 30
+      },
+      "industries": {
+        "technology": 30,
+        "finance": 25,
+        "healthcare": 20,
+        "other": 10
+      }
+    },
+    
+    "intentSignals": {
+      "keywords": {
+        "pricing": 20,
+        "demo": 25,
+        "compare": 15,
+        "budget": 30,
+        "timeline": 25
+      }
+    }
+  },
+  
+  "routing": {
+    "hot": {
+      "threshold": 80,
+      "action": "slack-alert",
+      "channel": "#sales-alerts",
+      "assignTo": "round-robin"
+    },
+    "warm": {
+      "threshold": 50,
+      "action": "add-to-queue",
+      "queue": "sdr-outbound"
+    },
+    "cold": {
+      "threshold": 0,
+      "action": "nurture-sequence",
+      "sequence": "awareness-drip"
+    }
+  },
+  
+  "integrations": {
+    "crm": {
+      "provider": "hubspot",
+      "syncFields": ["score", "enrichment", "routing"]
+    },
+    "slack": {
+      "workspace": "your-company",
+      "alertChannel": "#sales-alerts"
+    },
+    "enrichment": {
+      "provider": "clearbit",
+      "fields": ["company", "person"]
+    }
+  }
+}</pre>
+        </div>
+      </section>
+
+      <section>
+        <h2>Best Practices</h2>
+        <ul>
+          <li><strong>Start with defaults</strong> - Use the pre-configured scoring model first, then tune based on your data.</li>
+          <li><strong>Review weekly</strong> - Check the analytics dashboard to see which leads converted and adjust weights.</li>
+          <li><strong>Train your team</strong> - Ensure SDRs understand the score meaning and don't override routing.</li>
+          <li><strong>Connect all sources</strong> - The more data the agent has, the better it scores.</li>
+          <li><strong>Set up alerts</strong> - Configure Slack/email alerts for hot leads so response time stays under 5 minutes.</li>
+        </ul>
+      </section>
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <h4>Integrations</h4>
+        <div class="integration-list">
+          <span class="integration-tag">Salesforce</span>
+          <span class="integration-tag">HubSpot</span>
+          <span class="integration-tag">Pipedrive</span>
+          <span class="integration-tag">Slack</span>
+          <span class="integration-tag">Clearbit</span>
+          <span class="integration-tag">ZoomInfo</span>
+          <span class="integration-tag">Zapier</span>
+          <span class="integration-tag">Segment</span>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h4>Requirements</h4>
+        <ul style="margin-left: 1rem; font-size: 0.9rem; color: var(--gray-light);">
+          <li>CRM with API access</li>
+          <li>Email inbox access</li>
+          <li>Web form integration</li>
+          <li>Data enrichment provider (optional)</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <h4>Related Templates</h4>
+        <div class="related-grid">
+          <a href="sales-outreach.html" class="related-item">
+            <span class="related-icon">📧</span>
+            <div class="related-info">
+              <h5>Sales Outreach Agent</h5>
+              <span>Personalized sequences</span>
+            </div>
+          </a>
+          <a href="deal-intelligence.html" class="related-item">
+            <span class="related-icon">📊</span>
+            <div class="related-info">
+              <h5>Deal Intelligence</h5>
+              <span>Pipeline analytics</span>
+            </div>
+          </a>
+          <a href="competitor-monitor.html" class="related-item">
+            <span class="related-icon">🔍</span>
+            <div class="related-info">
+              <h5>Competitor Monitor</h5>
+              <span>Market tracking</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="footer">
+    <p>© 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/">AIUNITES</a></p>
+  </footer>
+
+  <script>
+    function downloadConfig() {
+      const config = {
+        agent: "lead-qualification",
+        version: "2.1.0",
+        sources: {
+          webForms: ["contact", "demo-request", "pricing"],
+          emailInbox: "leads@yourcompany.com",
+          crm: "hubspot"
+        },
+        scoring: {
+          weights: {
+            companyFit: 0.35,
+            intentSignals: 0.30,
+            engagement: 0.20,
+            timing: 0.15
+          }
+        },
+        routing: {
+          hot: { threshold: 80, action: "slack-alert" },
+          warm: { threshold: 50, action: "add-to-queue" },
+          cold: { threshold: 0, action: "nurture-sequence" }
+        }
+      };
+      
+      const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'lead-qualification-config.json';
+      a.click();
+    }
+  </script>
+</body>
+</html>
