@@ -1,15 +1,21 @@
 /**
  * AIUNITES Cloud Database Module
  * Shared Google Forms-based cloud storage for all AIUNITES sites
- * Usage: <script src="js/cloud-database.js"></script> then CloudDB.init({ siteName: 'MySite' });
+ * 
+ * Usage:
+ *   <script src="js/cloud-database.js"></script>
+ *   CloudDB.init({ siteName: 'MySite' });
  */
+
 const CloudDB = {
   config: {
     siteName: 'AIUNITES',
     formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/formResponse',
     entryIds: { email: 'entry.904300305', source: 'entry.2053726945', message: 'entry.1759393763' },
-    apiUrl: null, storagePrefix: 'aiunites_clouddb_'
+    apiUrl: null,
+    storagePrefix: 'aiunites_clouddb_'
   },
+
   init(options = {}) {
     Object.assign(this.config, options);
     const savedApiUrl = localStorage.getItem(this.config.storagePrefix + 'apiUrl');
@@ -17,10 +23,12 @@ const CloudDB = {
     console.log(`☁️ CloudDB initialized for ${this.config.siteName}`);
     return this;
   },
+
   isEnabled() { return localStorage.getItem(this.config.storagePrefix + 'enabled') === 'true'; },
   setEnabled(enabled) { localStorage.setItem(this.config.storagePrefix + 'enabled', enabled ? 'true' : 'false'); },
   setApiUrl(url) { this.config.apiUrl = url; localStorage.setItem(this.config.storagePrefix + 'apiUrl', url); },
   getApiUrl() { return this.config.apiUrl || localStorage.getItem(this.config.storagePrefix + 'apiUrl'); },
+
   async submit(type, data, email = '') {
     if (!this.isEnabled()) return { success: false, reason: 'disabled' };
     try {
@@ -33,6 +41,7 @@ const CloudDB = {
       return { success: true };
     } catch (err) { return { success: false, error: err.message }; }
   },
+
   packData(type, data) {
     switch (type.toUpperCase()) {
       case 'USER': return `USER|${data.username}|${data.email}|${data.password || ''}|${data.firstName || ''}|${data.lastName || ''}|${data.role || 'user'}|${data.createdAt || new Date().toISOString()}`;
@@ -43,6 +52,7 @@ const CloudDB = {
       default: return `${type.toUpperCase()}|${Object.entries(data).map(([k, v]) => `${k}:${v}`).join('|')}`;
     }
   },
+
   async fetch(type = 'users') {
     const apiUrl = this.getApiUrl();
     if (!apiUrl) return { success: false, error: 'No API URL configured' };
@@ -52,6 +62,7 @@ const CloudDB = {
       return { success: true, data: await response.json() };
     } catch (err) { return { success: false, error: err.message }; }
   },
+
   async testConnection() {
     const apiUrl = this.getApiUrl();
     if (!apiUrl) return { success: false, status: 'not_configured', message: 'No API URL configured' };
@@ -60,6 +71,7 @@ const CloudDB = {
       return Array.isArray(data) ? { success: true, status: 'connected', message: `Connected! Found ${data.length} records`, data } : { success: false, status: 'invalid', message: 'Invalid response format' };
     } catch (err) { return { success: false, status: 'error', message: err.message }; }
   },
+
   renderAdminPanel(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -69,6 +81,7 @@ const CloudDB = {
     document.getElementById('clouddb-save').addEventListener('click', () => { this.setApiUrl(document.getElementById('clouddb-apiurl').value.trim()); this.setEnabled(document.getElementById('clouddb-enabled').checked); this.updateStatusBadge(); const msg = document.getElementById('clouddb-message'); msg.textContent = '✅ Saved!'; msg.style.color = '#22c55e'; setTimeout(() => msg.textContent = '', 3000); });
     document.getElementById('clouddb-test').addEventListener('click', async () => { const msg = document.getElementById('clouddb-message'); msg.textContent = '🔄 Testing...'; msg.style.color = '#00d4ff'; const result = await this.testConnection(); msg.textContent = result.success ? `✅ ${result.message}` : `❌ ${result.message}`; msg.style.color = result.success ? '#22c55e' : '#ef4444'; });
   },
+
   updateStatusBadge() {
     const badge = document.getElementById('clouddb-status');
     if (!badge) return;
@@ -77,6 +90,7 @@ const CloudDB = {
     badge.style.color = enabled ? '#22c55e' : '#ef4444';
     badge.textContent = enabled ? '● Online' : '○ Offline';
   },
+
   renderStatusBadge(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -84,4 +98,5 @@ const CloudDB = {
     container.innerHTML = `<div style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:${enabled?'rgba(34,197,94,0.1)':'rgba(255,255,255,0.05)'};border-radius:20px;font-size:0.8rem;"><span style="width:8px;height:8px;border-radius:50%;background:${enabled?'#22c55e':'#666'};"></span><span style="color:${enabled?'#22c55e':'#888'};">${enabled?'Cloud Sync':'Offline Mode'}</span></div>`;
   }
 };
+
 document.addEventListener('DOMContentLoaded', () => { const script = document.querySelector('script[data-clouddb-site]'); if (script) CloudDB.init({ siteName: script.dataset.clouddbSite }); });
