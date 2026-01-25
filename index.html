@@ -988,6 +988,7 @@
   <script src="js/agents.js"></script>
   <script src="js/control-center.js"></script>
   <script src="js/analytics.js"></script>
+  <script src="js/datasource.js"></script>
   <script>
     // Agent Chain Builder
     function showChainBuilder() {
@@ -1068,6 +1069,18 @@
         });
       }
       
+      // Listen for cloud tab activation
+      const cloudTab = document.querySelector('[data-admin-tab="cloud"]');
+      if (cloudTab) {
+        cloudTab.addEventListener('click', () => {
+          setTimeout(() => {
+            if (typeof DataSourceManager !== 'undefined') {
+              DataSourceManager.renderAdminPanel('clouddb-admin-panel');
+            }
+          }, 100);
+        });
+      }
+      
       // Also render when admin modal opens
       const adminLink = document.getElementById('admin-link');
       if (adminLink) {
@@ -1075,6 +1088,9 @@
           setTimeout(() => {
             if (typeof Analytics !== 'undefined') {
               Analytics.renderAnalyticsPanel('analytics-panel');
+            }
+            if (typeof DataSourceManager !== 'undefined') {
+              DataSourceManager.renderAdminPanel('clouddb-admin-panel');
             }
           }, 200);
         });

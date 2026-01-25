@@ -144,6 +144,7 @@ const Analytics = {
   
   // Submit to cloud (if enabled)
   async submitToCloud(eventType, eventData) {
+    // Try CloudDB first (Google Forms)
     if (typeof CloudDB !== 'undefined' && CloudDB.isEnabled()) {
       const user = this.getCurrentUser();
       await CloudDB.submit('USAGE', {
@@ -152,6 +153,12 @@ const Analytics = {
         ...eventData,
         timestamp: new Date().toISOString()
       });
+    }
+    
+    // Also sync to DataSourceManager if configured
+    if (typeof DataSourceManager !== 'undefined' && DataSourceManager.activeSource !== 'localStorage') {
+      const data = this.getData();
+      await DataSourceManager.syncUsageData(data);
     }
   },
   
