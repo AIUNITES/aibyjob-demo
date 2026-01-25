@@ -47,7 +47,25 @@ const App = {
     if (emptyBtnText) emptyBtnText.textContent = `Add First ${APP_CONFIG.itemName.charAt(0).toUpperCase() + APP_CONFIG.itemName.slice(1)}`;
   },
 
-  checkAuth() { if (Auth.isLoggedIn()) { this.showDashboard(); } else { this.showLandingPage(); } },
+  checkAuth() {
+    if (Auth.isLoggedIn()) {
+      this.showDashboard();
+      // Handle hash-based view navigation
+      this.handleHashNavigation();
+    } else {
+      this.showLandingPage();
+    }
+    // Listen for hash changes
+    window.addEventListener('hashchange', () => this.handleHashNavigation());
+  },
+
+  handleHashNavigation() {
+    const hash = window.location.hash.replace('#', '');
+    const validViews = ['agents', 'templates', 'control', 'my-items', 'discover'];
+    if (hash && validViews.includes(hash)) {
+      this.switchDashboardView(hash);
+    }
+  },
 
   bindEvents() {
     document.getElementById('landing-login-btn')?.addEventListener('click', () => this.showAuthScreen());
