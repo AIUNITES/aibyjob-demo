@@ -1,12 +1,12 @@
 /**
  * AIByJob SQL Database Manager
- * ============================
+ * ==================================
  * Browser-based SQLite database using sql.js
  * - Create/manage databases
  * - Run SQL queries
  * - Import/export .db files
- * - Auto-save to localStorage
- * - GitHub sync for shared database
+ * - Auto-save to localStorage or IndexedDB
+ * - Multiple backend locations (browser, local server, GitHub, Supabase, Turso)
  */
 
 const SQLDatabase = {
@@ -36,15 +36,8 @@ const SQLDatabase = {
     autoSync: false
   },
   
-  // Database location types
-  LOCATIONS: {
-    browser: { name: 'Browser', icon: '💻', requiresConfig: false },
-    githubSync: { name: 'GitHub Sync', icon: '🐙', requiresConfig: true }
-  },
+  // ==================== SIMPLE TOKEN MANAGEMENT ====================
   
-  /**
-   * Set GitHub token
-   */
   setGitHubToken(token) {
     if (token) {
       localStorage.setItem('github_token', token);
@@ -56,6 +49,10 @@ const SQLDatabase = {
       console.log('[SQLDatabase] GitHub token saved');
     } else {
       localStorage.removeItem('github_token');
+      if (this.locationConfig.githubSync) {
+        this.locationConfig.githubSync.token = '';
+        this.saveLocationConfig();
+      }
     }
   },
   
@@ -66,43 +63,46 @@ const SQLDatabase = {
   
   getGitHubToken() {
     return localStorage.getItem('github_token') || 
-           (this.locationConfig.githubSync && this.locationConfig.githubSync.token) || '';
+           (this.locationConfig.githubSync && this.locationConfig.githubSync.token) || 
+           '';
   },
   
-  /**
-   * Initialize sql.js and load saved database
-   */
+  // Database location types
+  LOCATIONS: {
+    browser: { name: 'Browser', icon: '💻', requiresConfig: false },
+    localServer: { name: 'Local Server', icon: '🖥️', requiresConfig: true },
+    githubSync: { name: 'GitHub Sync', icon: '🐙', requiresConfig: true },
+    supabase: { name: 'Supabase', icon: '⚡', requiresConfig: true },
+    turso: { name: 'Turso', icon: '🚀', requiresConfig: true }
+  },
+  
   async init() {
     try {
-      // Load sql.js WebAssembly
       this.SQL = await initSqlJs({
         locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`
       });
       
       console.log('[SQLDatabase] sql.js loaded successfully');
       
-      // Load location config
       this.loadLocationConfig();
-      
-      // Try to load saved database from localStorage
       await this.loadFromStorage();
       
-      // If no local database and not on localhost, auto-load from GitHub
       if (!this.isLoaded && !this.isLocalhost()) {
-        console.log('[SQLDatabase] No local database found, attempting auto-load from GitHub...');
+        console.log('[SQLDatabase] No local database found, not on localhost - attempting auto-load from GitHub...');
         const loaded = await this.autoLoadFromGitHub();
         if (loaded) {
           console.log('[SQLDatabase] Successfully auto-loaded database from GitHub');
+        } else {
+          console.log('[SQLDatabase] Could not auto-load from GitHub, starting with empty state');
         }
+      } else if (this.isLoaded) {
+        console.log('[SQLDatabase] Loaded database from localStorage');
+      } else {
+        console.log('[SQLDatabase] On localhost - using localStorage mode');
       }
       
-      // Load query history
       this.loadHistory();
-      
-      // Bind UI events
       this.bindEvents();
-      
-      // Update UI
       this.updateStatus();
       this.refreshTables();
       this.updateLocationUI();
@@ -116,12 +116,13 @@ const SQLDatabase = {
   isLocalhost() {
     const host = window.location.hostname;
     const protocol = window.location.protocol;
-    return host === 'localhost' || host === '127.0.0.1' || protocol === 'file:';
+    return host === 'localhost' || 
+           host === '127.0.0.1' || 
+           host.startsWith('192.168.') || 
+           host.startsWith('10.') ||
+           protocol === 'file:';
   },
   
-  /**
-   * Auto-load database from GitHub
-   */
   async autoLoadFromGitHub() {
     try {
       const config = (this.locationConfig.githubSync && this.locationConfig.githubSync.owner) 
@@ -134,30 +135,45 @@ const SQLDatabase = {
       console.log('[SQLDatabase] Auto-loading from:', apiUrl);
       
       const headers = {};
-      if (config.token) headers['Authorization'] = `token ${config.token}`;
+      if (config.token) {
+        headers['Authorization'] = `token ${config.token}`;
+      }
       
       const resp = await fetch(apiUrl, { headers });
       
       if (!resp.ok) {
-        console.log('[SQLDatabase] GitHub API returned:', resp.status);
+        if (resp.status === 404) {
+          console.log('[SQLDatabase] No database file found on GitHub at:', path);
+        } else if (resp.status === 403) {
+          console.warn('[SQLDatabase] GitHub API rate limit exceeded or access denied');
+        } else {
+          console.warn('[SQLDatabase] GitHub API error:', resp.status, resp.statusText);
+        }
         return false;
       }
       
       const data = await resp.json();
       
-      // Decode base64 content
       const binary = atob(data.content.replace(/\n/g, ''));
       const bytes = new Uint8Array(binary.length);
       for (let i = 0; i < binary.length; i++) {
         bytes[i] = binary.charCodeAt(i);
       }
       
-      // Load into sql.js
       this.db = new this.SQL.Database(bytes);
       this.isLoaded = true;
       this.location = 'githubSync';
       
+      if (config !== this.DEFAULT_GITHUB_CONFIG) {
+        this.locationConfig.githubSync = config;
+        this.saveLocationConfig();
+      }
+      
       console.log('[SQLDatabase] Auto-loaded from GitHub successfully!');
+      console.log('[SQLDatabase] Database size:', bytes.length, 'bytes');
+      
+      const saveBtn = document.getElementById('sql-save-db-btn');
+      if (saveBtn) saveBtn.disabled = false;
       
       if (typeof showToast === 'function') {
         showToast('🐙 Database loaded from GitHub!', 'success');
@@ -204,148 +220,289 @@ const SQLDatabase = {
       const cardLoc = card.dataset.location;
       if (cardLoc === this.location) {
         card.classList.add('active');
+        const badge = card.querySelector('.db-loc-badge');
+        const btn = card.querySelector('.btn-tiny');
+        if (badge) badge.style.display = 'inline';
+        if (btn) btn.style.display = 'none';
       } else {
         card.classList.remove('active');
+        const badge = card.querySelector('.db-loc-badge');
+        const btn = card.querySelector('.btn-tiny');
+        if (badge) badge.style.display = 'none';
+        if (btn) btn.style.display = 'inline';
       }
     });
   },
   
   configureLocation(locationType) {
-    const config = this.locationConfig[locationType] || this.DEFAULT_GITHUB_CONFIG;
+    const modal = document.getElementById('db-location-modal');
+    const title = document.getElementById('db-location-modal-title');
     
-    const modal = document.createElement('div');
-    modal.id = 'db-location-modal';
-    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:10002;display:flex;align-items:center;justify-content:center;padding:20px;';
-    modal.innerHTML = `
-      <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:16px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;">
-        <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;">
-          <h3 style="margin:0;color:#fff;">🐙 Configure GitHub Sync</h3>
-          <button onclick="document.getElementById('db-location-modal').remove()" style="background:none;border:none;color:#6b7280;font-size:1.5rem;cursor:pointer;">&times;</button>
-        </div>
-        <div style="padding:24px;">
-          <p style="color:#9ca3af;margin-bottom:20px;">Sync your SQLite database to a GitHub repository. All AIUNITES sites can access it.</p>
-          
-          <div style="margin-bottom:16px;">
-            <label style="display:block;color:#e5e7eb;margin-bottom:6px;font-size:0.9rem;">Repository Owner</label>
-            <input type="text" id="gh-sync-owner" value="${config.owner || 'AIUNITES'}" style="width:100%;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:0.9rem;box-sizing:border-box;">
-          </div>
-          <div style="margin-bottom:16px;">
-            <label style="display:block;color:#e5e7eb;margin-bottom:6px;font-size:0.9rem;">Repository Name</label>
-            <input type="text" id="gh-sync-repo" value="${config.repo || 'AIUNITES-database-sync'}" style="width:100%;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:0.9rem;box-sizing:border-box;">
-          </div>
-          <div style="margin-bottom:16px;">
-            <label style="display:block;color:#e5e7eb;margin-bottom:6px;font-size:0.9rem;">File Path</label>
-            <input type="text" id="gh-sync-path" value="${config.path || 'data/app.db'}" style="width:100%;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:0.9rem;box-sizing:border-box;">
-          </div>
-          <div style="margin-bottom:16px;">
-            <label style="display:block;color:#e5e7eb;margin-bottom:6px;font-size:0.9rem;">GitHub Token (needs repo write access)</label>
-            <input type="password" id="gh-sync-token" value="${config.token || ''}" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:0.9rem;box-sizing:border-box;">
-            <span style="color:#6b7280;font-size:0.8rem;">Required for saving to GitHub</span>
-          </div>
-          
-          <div id="gh-test-result" style="margin-bottom:16px;"></div>
-          
-          <div style="display:flex;gap:12px;">
-            <button onclick="SQLDatabase.testGitHubConnection()" style="flex:1;padding:12px;background:rgba(99,102,241,0.2);color:#818cf8;border:1px solid rgba(99,102,241,0.3);border-radius:8px;cursor:pointer;">🔄 Test</button>
-            <button onclick="SQLDatabase.saveGitHubConfig()" style="flex:1;padding:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;">✓ Save & Activate</button>
-          </div>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+    if (!modal) return;
+    
+    document.querySelectorAll('.db-location-config-form').forEach(form => {
+      form.style.display = 'none';
+    });
+    
+    const configForm = document.getElementById(`config-${locationType}`);
+    if (configForm) {
+      configForm.style.display = 'block';
+    }
+    
+    const loc = this.LOCATIONS[locationType];
+    if (title && loc) {
+      title.textContent = `Configure ${loc.icon} ${loc.name}`;
+    }
+    
+    this.loadLocationFormValues(locationType);
+    this.configuringLocation = locationType;
+    
+    const testResult = document.getElementById('db-location-test-result');
+    if (testResult) {
+      testResult.innerHTML = '';
+    }
+    
+    modal.classList.add('active');
   },
   
-  async testGitHubConnection() {
-    const resultEl = document.getElementById('gh-test-result');
-    resultEl.innerHTML = '<span style="color:#06b6d4;">🔄 Testing...</span>';
+  closeLocationModal() {
+    const modal = document.getElementById('db-location-modal');
+    if (modal) {
+      modal.classList.remove('active');
+    }
+    this.configuringLocation = null;
+  },
+  
+  loadLocationFormValues(locationType) {
+    const config = this.locationConfig[locationType] || {};
     
-    const owner = document.getElementById('gh-sync-owner').value.trim();
-    const repo = document.getElementById('gh-sync-repo').value.trim();
-    const token = document.getElementById('gh-sync-token').value.trim();
+    switch (locationType) {
+      case 'localServer':
+        const serverUrl = document.getElementById('config-local-server-url');
+        if (serverUrl) serverUrl.value = config.serverUrl || '';
+        break;
+        
+      case 'githubSync':
+        const ghConfig = Object.keys(config).length > 0 ? config : this.DEFAULT_GITHUB_CONFIG;
+        const ghOwner = document.getElementById('config-gh-sync-owner');
+        const ghRepo = document.getElementById('config-gh-sync-repo');
+        const ghPath = document.getElementById('config-gh-sync-path');
+        const ghToken = document.getElementById('config-gh-sync-token');
+        const ghAuto = document.getElementById('config-gh-sync-auto');
+        if (ghOwner) ghOwner.value = ghConfig.owner || '';
+        if (ghRepo) ghRepo.value = ghConfig.repo || '';
+        if (ghPath) ghPath.value = ghConfig.path || 'data/app.db';
+        if (ghToken) ghToken.value = ghConfig.token || '';
+        if (ghAuto) ghAuto.checked = ghConfig.autoSync !== false;
+        break;
+        
+      case 'supabase':
+        const sbUrl = document.getElementById('config-supabase-url');
+        const sbKey = document.getElementById('config-supabase-key');
+        if (sbUrl) sbUrl.value = config.url || '';
+        if (sbKey) sbKey.value = config.key || '';
+        break;
+        
+      case 'turso':
+        const tursoUrl = document.getElementById('config-turso-url');
+        const tursoToken = document.getElementById('config-turso-token');
+        if (tursoUrl) tursoUrl.value = config.url || '';
+        if (tursoToken) tursoToken.value = config.token || '';
+        break;
+    }
+  },
+  
+  getLocationFormValues() {
+    const locationType = this.configuringLocation;
+    let config = {};
+    
+    switch (locationType) {
+      case 'localServer':
+        config = {
+          serverUrl: document.getElementById('config-local-server-url')?.value.trim() || ''
+        };
+        break;
+        
+      case 'githubSync':
+        config = {
+          owner: document.getElementById('config-gh-sync-owner')?.value.trim() || '',
+          repo: document.getElementById('config-gh-sync-repo')?.value.trim() || '',
+          path: document.getElementById('config-gh-sync-path')?.value.trim() || 'data/app.db',
+          token: document.getElementById('config-gh-sync-token')?.value.trim() || '',
+          autoSync: document.getElementById('config-gh-sync-auto')?.checked !== false
+        };
+        break;
+        
+      case 'supabase':
+        config = {
+          url: document.getElementById('config-supabase-url')?.value.trim() || '',
+          key: document.getElementById('config-supabase-key')?.value.trim() || ''
+        };
+        break;
+        
+      case 'turso':
+        config = {
+          url: document.getElementById('config-turso-url')?.value.trim() || '',
+          token: document.getElementById('config-turso-token')?.value.trim() || ''
+        };
+        break;
+        
+      case 'browser':
+        config = { enabled: true };
+        break;
+    }
+    
+    return config;
+  },
+  
+  async testLocationConnection() {
+    const locationType = this.configuringLocation;
+    const config = this.getLocationFormValues();
+    const resultEl = document.getElementById('db-location-test-result');
+    
+    if (!resultEl) return;
+    
+    resultEl.innerHTML = '<span class="testing">🔄 Testing connection...</span>';
+    resultEl.className = 'test-result';
     
     try {
-      const headers = token ? { 'Authorization': `token ${token}` } : {};
-      const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
+      let success = false;
+      let message = '';
       
-      if (resp.ok) {
-        resultEl.innerHTML = '<span style="color:#10b981;">✅ Connected to GitHub repository</span>';
-      } else {
-        resultEl.innerHTML = `<span style="color:#ef4444;">❌ Failed: ${resp.status}</span>`;
+      switch (locationType) {
+        case 'browser':
+          success = true;
+          message = 'localStorage is always available';
+          break;
+          
+        case 'localServer':
+          if (!config.serverUrl) throw new Error('Server URL is required');
+          const serverResp = await fetch(`${config.serverUrl}/health`, { method: 'GET' });
+          success = serverResp.ok;
+          message = success ? 'Connected to local server' : `Failed: ${serverResp.status}`;
+          break;
+          
+        case 'githubSync':
+          if (!config.owner || !config.repo) throw new Error('Owner and repo are required');
+          const ghResp = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}`, {
+            headers: config.token ? { 'Authorization': `token ${config.token}` } : {}
+          });
+          success = ghResp.ok;
+          message = success ? 'Connected to GitHub repository' : `Failed: ${ghResp.status}`;
+          break;
+          
+        case 'supabase':
+          if (!config.url || !config.key) throw new Error('URL and key are required');
+          const sbResp = await fetch(`${config.url}/rest/v1/`, {
+            headers: { 'apikey': config.key, 'Authorization': `Bearer ${config.key}` }
+          });
+          success = sbResp.ok || sbResp.status === 404;
+          message = success ? 'Connected to Supabase' : `Failed: ${sbResp.status}`;
+          break;
+          
+        case 'turso':
+          if (!config.url) throw new Error('Database URL is required');
+          success = config.url.startsWith('libsql://') || config.url.startsWith('https://');
+          message = success ? 'Turso URL format valid' : 'Invalid URL format';
+          break;
       }
-    } catch (e) {
-      resultEl.innerHTML = `<span style="color:#ef4444;">❌ Error: ${e.message}</span>`;
+      
+      resultEl.innerHTML = success 
+        ? `<span class="success">✅ ${message}</span>`
+        : `<span class="error">❌ ${message}</span>`;
+      resultEl.className = `test-result ${success ? 'success' : 'error'}`;
+      
+    } catch (error) {
+      resultEl.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+      resultEl.className = 'test-result error';
     }
   },
   
-  saveGitHubConfig() {
-    const config = {
-      owner: document.getElementById('gh-sync-owner').value.trim(),
-      repo: document.getElementById('gh-sync-repo').value.trim(),
-      path: document.getElementById('gh-sync-path').value.trim() || 'data/app.db',
-      token: document.getElementById('gh-sync-token').value.trim()
-    };
+  saveLocationAndActivate() {
+    const locationType = this.configuringLocation;
+    const config = this.getLocationFormValues();
     
-    this.locationConfig.githubSync = config;
-    this.location = 'githubSync';
+    this.locationConfig[locationType] = config;
+    this.location = locationType;
     this.saveLocationConfig();
     this.updateLocationUI();
-    
-    document.getElementById('db-location-modal')?.remove();
+    this.closeLocationModal();
     
     if (typeof showToast === 'function') {
-      showToast('🐙 GitHub Sync configured!', 'success');
+      const loc = this.LOCATIONS[locationType];
+      showToast(`${loc.icon} ${loc.name} is now active`, 'success');
     }
+    
+    console.log('[SQLDatabase] Location activated:', locationType);
   },
   
   bindEvents() {
-    // Browser card click
+    document.getElementById('close-db-location-modal')?.addEventListener('click', () => {
+      this.closeLocationModal();
+    });
+    
+    document.getElementById('test-db-location-btn')?.addEventListener('click', () => {
+      this.testLocationConnection();
+    });
+    
+    document.getElementById('save-db-location-btn')?.addEventListener('click', () => {
+      this.saveLocationAndActivate();
+    });
+    
     document.querySelector('.db-location-card[data-location="browser"]')?.addEventListener('click', () => {
       this.location = 'browser';
       this.saveLocationConfig();
       this.updateLocationUI();
-      if (typeof showToast === 'function') showToast('💻 Browser storage active', 'success');
+      if (typeof showToast === 'function') {
+        showToast('💻 Browser storage active', 'success');
+      }
     });
     
-    // New Database
-    document.getElementById('sql-new-db-btn')?.addEventListener('click', () => this.createNewDatabase());
+    document.getElementById('sql-new-db-btn')?.addEventListener('click', () => {
+      this.createNewDatabase();
+    });
     
-    // Load .db file
-    document.getElementById('sql-load-file')?.addEventListener('change', (e) => this.loadFromFile(e.target.files[0]));
+    document.getElementById('sql-load-file')?.addEventListener('change', (e) => {
+      this.loadFromFile(e.target.files[0]);
+    });
     
-    // Save database to file
-    document.getElementById('sql-save-db-btn')?.addEventListener('click', () => this.saveToFile());
+    document.getElementById('sql-save-db-btn')?.addEventListener('click', () => {
+      this.saveToFile();
+    });
     
-    // Save to GitHub
-    document.getElementById('sql-save-github-btn')?.addEventListener('click', () => this.saveToGitHub());
+    document.getElementById('sql-save-github-btn')?.addEventListener('click', () => {
+      this.saveToGitHub();
+    });
     
-    // Load from GitHub
-    document.getElementById('sql-load-github-btn')?.addEventListener('click', () => this.loadFromGitHub());
+    document.getElementById('sql-load-github-btn')?.addEventListener('click', () => {
+      this.loadFromGitHub();
+    });
     
-    // Run query
-    document.getElementById('sql-run-btn')?.addEventListener('click', () => this.runQuery());
+    document.getElementById('sql-run-btn')?.addEventListener('click', () => {
+      this.runQuery();
+    });
     
-    // Clear query
     document.getElementById('sql-clear-btn')?.addEventListener('click', () => {
       document.getElementById('sql-query-input').value = '';
     });
     
-    // Example queries
     document.getElementById('sql-examples-select')?.addEventListener('change', (e) => {
       this.insertExampleQuery(e.target.value);
       e.target.value = '';
     });
     
-    // Refresh tables
-    document.getElementById('sql-refresh-tables-btn')?.addEventListener('click', () => this.refreshTables());
+    document.getElementById('sql-refresh-tables-btn')?.addEventListener('click', () => {
+      this.refreshTables();
+    });
     
-    // Create table
-    document.getElementById('sql-create-table-btn')?.addEventListener('click', () => this.showCreateTableDialog());
+    document.getElementById('sql-create-table-btn')?.addEventListener('click', () => {
+      this.showCreateTableDialog();
+    });
     
-    // Clear history
-    document.getElementById('sql-clear-history-btn')?.addEventListener('click', () => this.clearHistory());
+    document.getElementById('sql-clear-history-btn')?.addEventListener('click', () => {
+      this.clearHistory();
+    });
     
-    // Keyboard shortcut: Ctrl+Enter to run query
     document.getElementById('sql-query-input')?.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
@@ -355,7 +512,9 @@ const SQLDatabase = {
   },
   
   createNewDatabase() {
-    if (this.db && !confirm('This will replace the current database. Continue?')) return;
+    if (this.db && !confirm('This will replace the current database. Continue?')) {
+      return;
+    }
     
     this.db = new this.SQL.Database();
     this.isLoaded = true;
@@ -364,9 +523,7 @@ const SQLDatabase = {
     this.refreshTables();
     this.autoSave();
     
-    const saveBtn = document.getElementById('sql-save-db-btn');
-    if (saveBtn) saveBtn.disabled = false;
-    
+    document.getElementById('sql-save-db-btn').disabled = false;
     console.log('[SQLDatabase] New database created');
   },
   
@@ -384,8 +541,8 @@ const SQLDatabase = {
       this.refreshTables();
       this.autoSave();
       
-      const saveBtn = document.getElementById('sql-save-db-btn');
-      if (saveBtn) saveBtn.disabled = false;
+      document.getElementById('sql-save-db-btn').disabled = false;
+      console.log('[SQLDatabase] Loaded from file:', file.name);
       
     } catch (error) {
       console.error('[SQLDatabase] Load error:', error);
@@ -411,28 +568,35 @@ const SQLDatabase = {
       
       URL.revokeObjectURL(url);
       
-      if (typeof showToast === 'function') showToast('💾 Database saved to file', 'success');
+      if (typeof showToast === 'function') {
+        showToast('💾 Database saved to file', 'success');
+      }
+      
+      console.log('[SQLDatabase] Saved to file');
+      
     } catch (error) {
       console.error('[SQLDatabase] Save error:', error);
       alert('Error saving database');
     }
   },
   
-  async saveToGitHub() {
+  async saveToGitHub(tokenOverride) {
     if (!this.db) {
       alert('No database to save');
       return false;
     }
     
-    let token = this.getGitHubToken();
+    let token = tokenOverride || this.getGitHubToken();
     
     if (!token) {
       token = prompt('Enter your GitHub Personal Access Token (needs repo write access):');
       if (!token) {
-        if (typeof showToast === 'function') showToast('GitHub token required', 'error');
+        if (typeof showToast === 'function') {
+          showToast('GitHub token required', 'error');
+        }
         return false;
       }
-      if (confirm('Save token for future use?')) {
+      if (confirm('Save token for future use? (stored in localStorage)')) {
         this.setGitHubToken(token);
       }
     }
@@ -442,23 +606,24 @@ const SQLDatabase = {
       const path = config.path || 'data/app.db';
       const apiUrl = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}`;
       
-      if (typeof showToast === 'function') showToast('Saving to GitHub...', 'info');
+      if (typeof showToast === 'function') {
+        showToast('Saving to GitHub...', 'info');
+      }
       
-      // Get current file SHA
       let sha = null;
       try {
-        const existingResp = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
+        const existingResp = await fetch(apiUrl, {
+          headers: { 'Authorization': `token ${token}` }
+        });
         if (existingResp.ok) {
           const existing = await existingResp.json();
           sha = existing.sha;
         }
       } catch (e) {}
       
-      // Export database to base64
       const data = this.db.export();
       const base64 = btoa(String.fromCharCode.apply(null, data));
       
-      // Create or update file
       const body = {
         message: `Update database from ${this.SITE_ID} - ${new Date().toISOString()}`,
         content: base64,
@@ -468,27 +633,39 @@ const SQLDatabase = {
       
       const resp = await fetch(apiUrl, {
         method: 'PUT',
-        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(body)
       });
       
       if (resp.ok) {
-        if (typeof showToast === 'function') showToast('🐙 Database saved to GitHub!', 'success');
+        if (typeof showToast === 'function') {
+          showToast('🐙 Database saved to GitHub!', 'success');
+        }
+        console.log('[SQLDatabase] Saved to GitHub:', path);
         return true;
       } else {
         const error = await resp.json();
         throw new Error(error.message || 'GitHub API error');
       }
+      
     } catch (error) {
       console.error('[SQLDatabase] GitHub save error:', error);
-      if (typeof showToast === 'function') showToast('Error: ' + error.message, 'error');
+      if (typeof showToast === 'function') {
+        showToast('Error saving to GitHub: ' + error.message, 'error');
+      } else {
+        alert('Error saving to GitHub: ' + error.message);
+      }
       return false;
     }
   },
   
   async loadFromGitHub() {
     let config = this.locationConfig.githubSync;
-    if (!config || !config.owner) {
+    if (!config || !config.owner || !config.repo) {
+      console.log('[SQLDatabase] No GitHub config found, using AIUNITES defaults');
       config = this.DEFAULT_GITHUB_CONFIG;
     }
     
@@ -497,7 +674,9 @@ const SQLDatabase = {
       const apiUrl = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}`;
       
       const headers = {};
-      if (config.token) headers['Authorization'] = `token ${config.token}`;
+      if (config.token) {
+        headers['Authorization'] = `token ${config.token}`;
+      }
       
       const resp = await fetch(apiUrl, { headers });
       
@@ -525,10 +704,13 @@ const SQLDatabase = {
       this.refreshTables();
       this.autoSave();
       
-      const saveBtn = document.getElementById('sql-save-db-btn');
-      if (saveBtn) saveBtn.disabled = false;
+      document.getElementById('sql-save-db-btn').disabled = false;
       
-      if (typeof showToast === 'function') showToast('🐙 Database loaded from GitHub!', 'success');
+      if (typeof showToast === 'function') {
+        showToast('🐙 Database loaded from GitHub!', 'success');
+      }
+      
+      console.log('[SQLDatabase] Loaded from GitHub:', path);
       
     } catch (error) {
       console.error('[SQLDatabase] GitHub load error:', error);
@@ -543,6 +725,7 @@ const SQLDatabase = {
       const data = this.db.export();
       const base64 = btoa(String.fromCharCode.apply(null, data));
       localStorage.setItem(this.STORAGE_KEY, base64);
+      console.log('[SQLDatabase] Auto-saved to localStorage');
     } catch (error) {
       console.error('[SQLDatabase] Auto-save error:', error);
     }
@@ -562,8 +745,8 @@ const SQLDatabase = {
       this.db = new this.SQL.Database(data);
       this.isLoaded = true;
       
-      const saveBtn = document.getElementById('sql-save-db-btn');
-      if (saveBtn) saveBtn.disabled = false;
+      document.getElementById('sql-save-db-btn').disabled = false;
+      console.log('[SQLDatabase] Loaded from localStorage');
       
     } catch (error) {
       console.error('[SQLDatabase] Load from storage error:', error);
@@ -579,7 +762,9 @@ const SQLDatabase = {
       return;
     }
     
-    if (!this.db) this.createNewDatabase();
+    if (!this.db) {
+      this.createNewDatabase();
+    }
     
     const startTime = performance.now();
     
@@ -589,13 +774,15 @@ const SQLDatabase = {
       const duration = (endTime - startTime).toFixed(2);
       
       document.getElementById('sql-query-time').textContent = `${duration}ms`;
-      
       this.displayResults(results);
       this.addToHistory(query, true);
       
-      if (this.isSchemaChange(query)) this.refreshTables();
+      if (this.isSchemaChange(query)) {
+        this.refreshTables();
+      }
       
       this.autoSave();
+      console.log('[SQLDatabase] Query executed:', query);
       
     } catch (error) {
       console.error('[SQLDatabase] Query error:', error);
@@ -615,7 +802,7 @@ const SQLDatabase = {
     const countEl = document.getElementById('sql-results-count');
     
     if (!results || results.length === 0) {
-      container.innerHTML = '<div style="color:#10b981;padding:20px;">✅ Query executed successfully (no results)</div>';
+      container.innerHTML = '<div class="results-success">✅ Query executed successfully (no results)</div>';
       countEl.textContent = '';
       return;
     }
@@ -623,26 +810,32 @@ const SQLDatabase = {
     let html = '';
     let totalRows = 0;
     
-    results.forEach((result) => {
+    results.forEach((result, idx) => {
       const { columns, values } = result;
       totalRows += values.length;
       
-      html += '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
+      html += `<div class="result-set">`;
+      if (results.length > 1) {
+        html += `<div class="result-set-header">Result Set ${idx + 1}</div>`;
+      }
+      html += `<div class="sql-table-wrapper"><table class="sql-results-table">`;
+      
       html += '<thead><tr>';
       columns.forEach(col => {
-        html += `<th style="padding:8px 12px;background:rgba(99,102,241,0.2);color:#818cf8;text-align:left;border:1px solid rgba(255,255,255,0.1);">${this.escapeHtml(col)}</th>`;
+        html += `<th>${this.escapeHtml(col)}</th>`;
       });
-      html += '</tr></thead><tbody>';
+      html += '</tr></thead>';
       
+      html += '<tbody>';
       values.forEach(row => {
         html += '<tr>';
         row.forEach(cell => {
-          const displayValue = cell === null ? '<span style="color:#6b7280;">NULL</span>' : this.escapeHtml(String(cell));
-          html += `<td style="padding:8px 12px;border:1px solid rgba(255,255,255,0.1);color:#e5e7eb;">${displayValue}</td>`;
+          const displayValue = cell === null ? '<span class="null-value">NULL</span>' : this.escapeHtml(String(cell));
+          html += `<td>${displayValue}</td>`;
         });
         html += '</tr>';
       });
-      html += '</tbody></table></div>';
+      html += '</tbody></table></div></div>';
     });
     
     container.innerHTML = html;
@@ -651,7 +844,7 @@ const SQLDatabase = {
   
   displayError(message) {
     const container = document.getElementById('sql-results-container');
-    container.innerHTML = `<div style="color:#ef4444;padding:20px;">❌ Error: ${this.escapeHtml(message)}</div>`;
+    container.innerHTML = `<div class="results-error">❌ Error: ${this.escapeHtml(message)}</div>`;
     document.getElementById('sql-results-count').textContent = '';
   },
   
@@ -666,7 +859,7 @@ const SQLDatabase = {
     if (!container) return;
     
     if (!this.db) {
-      container.innerHTML = '<div style="color:#6b7280;padding:12px;text-align:center;">No database loaded</div>';
+      container.innerHTML = '<div class="empty-tables">No database loaded</div>';
       return;
     }
     
@@ -674,7 +867,7 @@ const SQLDatabase = {
       const result = this.db.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
       
       if (!result.length || !result[0].values.length) {
-        container.innerHTML = '<div style="color:#6b7280;padding:12px;text-align:center;">No tables yet</div>';
+        container.innerHTML = '<div class="empty-tables">No tables yet</div>';
         return;
       }
       
@@ -687,15 +880,14 @@ const SQLDatabase = {
         } catch (e) {}
         
         html += `
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(30,30,40,0.6);border-radius:6px;margin-bottom:6px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span>📋</span>
-              <span style="color:#fff;">${this.escapeHtml(tableName)}</span>
-              <span style="color:#6b7280;font-size:0.8rem;">${rowCount} rows</span>
-            </div>
-            <div style="display:flex;gap:4px;">
-              <button onclick="SQLDatabase.selectAll('${tableName}')" style="padding:4px 8px;background:rgba(99,102,241,0.2);border:none;border-radius:4px;color:#818cf8;cursor:pointer;font-size:0.75rem;">SELECT</button>
-              <button onclick="SQLDatabase.dropTable('${tableName}')" style="padding:4px 8px;background:rgba(239,68,68,0.1);border:none;border-radius:4px;color:#ef4444;cursor:pointer;font-size:0.75rem;">DROP</button>
+          <div class="table-item" data-table="${tableName}">
+            <span class="table-icon">📋</span>
+            <span class="table-name">${this.escapeHtml(tableName)}</span>
+            <span class="table-count">${rowCount} rows</span>
+            <div class="table-actions">
+              <button class="btn-tiny" onclick="SQLDatabase.selectAll('${tableName}')" title="SELECT *">👁️</button>
+              <button class="btn-tiny" onclick="SQLDatabase.showTableSchema('${tableName}')" title="Schema">📄</button>
+              <button class="btn-tiny danger" onclick="SQLDatabase.dropTable('${tableName}')" title="Drop">🗑️</button>
             </div>
           </div>
         `;
@@ -704,12 +896,18 @@ const SQLDatabase = {
       container.innerHTML = html;
       
     } catch (error) {
-      container.innerHTML = '<div style="color:#6b7280;padding:12px;text-align:center;">Error loading tables</div>';
+      console.error('[SQLDatabase] Refresh tables error:', error);
+      container.innerHTML = '<div class="empty-tables">Error loading tables</div>';
     }
   },
   
   selectAll(tableName) {
     document.getElementById('sql-query-input').value = `SELECT * FROM "${tableName}" LIMIT 100;`;
+    this.runQuery();
+  },
+  
+  showTableSchema(tableName) {
+    document.getElementById('sql-query-input').value = `PRAGMA table_info("${tableName}");`;
     this.runQuery();
   },
   
@@ -733,11 +931,21 @@ const SQLDatabase = {
   
   insertExampleQuery(type) {
     const examples = {
-      select: 'SELECT * FROM users WHERE site = "AIByJob" LIMIT 10;',
-      create: `CREATE TABLE users (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  username TEXT UNIQUE NOT NULL,\n  password_hash TEXT NOT NULL,\n  display_name TEXT,\n  email TEXT,\n  role TEXT DEFAULT 'user',\n  site TEXT DEFAULT 'AIByJob',\n  created_at TEXT DEFAULT CURRENT_TIMESTAMP\n);`,
-      insert: `INSERT INTO users (username, password_hash, display_name, email, site) VALUES \n  ('demo', 'demo123', 'Demo User', 'demo@aibyjob.com', 'AIByJob');`,
-      update: `UPDATE users SET display_name = 'Updated Name' WHERE id = 1;`,
-      delete: `DELETE FROM users WHERE id = 1;`,
+      select: 'SELECT * FROM table_name WHERE condition LIMIT 10;',
+      create: `CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);`,
+      insert: `INSERT INTO users (name, email) VALUES 
+  ('John Doe', 'john@example.com'),
+  ('Jane Smith', 'jane@example.com');`,
+      update: `UPDATE users 
+SET name = 'Updated Name' 
+WHERE id = 1;`,
+      delete: `DELETE FROM users 
+WHERE id = 1;`,
       drop: 'DROP TABLE IF EXISTS table_name;'
     };
     
@@ -747,7 +955,13 @@ const SQLDatabase = {
   },
   
   addToHistory(query, success, error = null) {
-    this.history.unshift({ query, success, error, timestamp: new Date().toISOString() });
+    this.history.unshift({
+      query,
+      success,
+      error,
+      timestamp: new Date().toISOString()
+    });
+    
     this.history = this.history.slice(0, 50);
     this.saveHistory();
     this.renderHistory();
@@ -780,19 +994,19 @@ const SQLDatabase = {
     if (!container) return;
     
     if (!this.history.length) {
-      container.innerHTML = '<div style="color:#6b7280;padding:12px;text-align:center;">No queries yet</div>';
+      container.innerHTML = '<div class="empty-history">No queries yet</div>';
       return;
     }
     
     let html = '';
-    this.history.slice(0, 10).forEach((item, idx) => {
+    this.history.slice(0, 20).forEach((item, idx) => {
       const icon = item.success ? '✅' : '❌';
-      const shortQuery = item.query.substring(0, 40) + (item.query.length > 40 ? '...' : '');
+      const shortQuery = item.query.substring(0, 50) + (item.query.length > 50 ? '...' : '');
       
       html += `
-        <div onclick="SQLDatabase.useHistoryItem(${idx})" style="padding:8px;background:rgba(30,30,40,0.6);border-radius:4px;margin-bottom:4px;cursor:pointer;display:flex;align-items:center;gap:8px;">
-          <span>${icon}</span>
-          <span style="color:#9ca3af;font-size:0.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${this.escapeHtml(shortQuery)}</span>
+        <div class="history-item ${item.success ? 'success' : 'error'}" onclick="SQLDatabase.useHistoryItem(${idx})">
+          <span class="history-icon">${icon}</span>
+          <span class="history-query">${this.escapeHtml(shortQuery)}</span>
         </div>
       `;
     });
@@ -815,19 +1029,25 @@ const SQLDatabase = {
     if (message) {
       textEl.textContent = message;
     } else if (this.isLoaded) {
-      textEl.textContent = this.location === 'githubSync' ? 'Database ready (Loaded from GitHub)' : 'Database ready';
+      textEl.textContent = 'Database ready';
     } else {
       textEl.textContent = 'Database not loaded';
     }
     
     switch (type) {
-      case 'success': iconEl.textContent = '🟢'; break;
-      case 'error': iconEl.textContent = '🔴'; break;
-      default: iconEl.textContent = this.isLoaded ? '🟢' : '⚪';
+      case 'success':
+        iconEl.textContent = '🟢';
+        break;
+      case 'error':
+        iconEl.textContent = '🔴';
+        break;
+      default:
+        iconEl.textContent = this.isLoaded ? '🟢' : '⚪';
     }
   },
   
-  // ========== PASSWORD HASHING ==========
+  // ==================== PASSWORD HASHING ====================
+  
   async hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -841,7 +1061,8 @@ const SQLDatabase = {
     return hashedInput === hash || password === hash;
   },
   
-  // ========== USER METHODS ==========
+  // ==================== SHARED DATABASE USER METHODS ====================
+  
   ensureUsersTable() {
     if (!this.db) return;
     
@@ -849,6 +1070,7 @@ const SQLDatabase = {
       const tableExists = this.db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
       
       if (!tableExists.length) {
+        console.log('[SQLDatabase] Creating users table...');
         this.db.run(`
           CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -863,6 +1085,15 @@ const SQLDatabase = {
           )
         `);
         this.autoSave();
+      } else {
+        const columns = this.db.exec("PRAGMA table_info(users)");
+        const hasSiteColumn = columns[0]?.values.some(col => col[1] === 'site');
+        
+        if (!hasSiteColumn) {
+          console.log('[SQLDatabase] Adding site column to existing table...');
+          this.db.run("ALTER TABLE users ADD COLUMN site TEXT DEFAULT 'AIByJob'");
+          this.autoSave();
+        }
       }
     } catch (error) {
       console.error('[SQLDatabase] ensureUsersTable error:', error);
@@ -886,10 +1117,16 @@ const SQLDatabase = {
         stmt.free();
         
         const isValid = await this.verifyPassword(password, row.password_hash);
-        if (!isValid) return null;
+        
+        if (!isValid) {
+          console.log('[SQLDatabase] Invalid password for:', usernameOrEmail);
+          return null;
+        }
         
         this.db.run(`UPDATE users SET last_login = datetime('now') WHERE id = ?`, [row.id]);
         this.autoSave();
+        
+        console.log('[SQLDatabase] Auth successful:', row.username, '(site:', row.site, ')');
         
         return {
           id: row.id,
@@ -898,6 +1135,7 @@ const SQLDatabase = {
           email: row.email,
           role: row.role,
           createdAt: row.created_at,
+          lastLogin: row.last_login,
           site: row.site
         };
       }
@@ -926,12 +1164,15 @@ const SQLDatabase = {
           displayName: row.display_name,
           email: row.email,
           role: row.role,
+          createdAt: row.created_at,
+          lastLogin: row.last_login,
           site: row.site
         };
       }
       stmt.free();
       return null;
     } catch (error) {
+      console.error('[SQLDatabase] getUserByUsername error:', error);
       return null;
     }
   },
@@ -972,9 +1213,31 @@ const SQLDatabase = {
       ]);
       
       this.autoSave();
+      
+      console.log('[SQLDatabase] User registered:', userData.username, 'for site:', this.SITE_ID);
       return this.getUserByUsername(userData.username);
     } catch (error) {
+      console.error('[SQLDatabase] Register error:', error);
       throw new Error('Registration failed: ' + error.message);
+    }
+  },
+  
+  async updatePassword(userId, newPassword) {
+    if (!this.db) return false;
+    
+    try {
+      const passwordHash = await this.hashPassword(newPassword);
+      
+      this.db.run(`
+        UPDATE users SET password_hash = ?
+        WHERE id = ? AND site = ?
+      `, [passwordHash, userId, this.SITE_ID]);
+      
+      this.autoSave();
+      return true;
+    } catch (error) {
+      console.error('[SQLDatabase] Update password error:', error);
+      return false;
     }
   },
   
@@ -999,10 +1262,43 @@ const SQLDatabase = {
           email: user.email,
           role: user.role,
           createdAt: user.created_at,
+          lastLogin: user.last_login,
           site: user.site
         };
       });
     } catch (error) {
+      console.error('[SQLDatabase] getAllUsersForSite error:', error);
+      return [];
+    }
+  },
+  
+  getAllUsersAllSites() {
+    if (!this.db) return [];
+    
+    try {
+      const result = this.db.exec(`
+        SELECT id, username, display_name, email, role, created_at, last_login, site
+        FROM users ORDER BY site ASC, username ASC
+      `);
+      if (!result.length) return [];
+      
+      const columns = result[0].columns;
+      return result[0].values.map(row => {
+        const user = {};
+        columns.forEach((col, i) => user[col] = row[i]);
+        return {
+          id: user.id,
+          username: user.username,
+          displayName: user.display_name,
+          email: user.email,
+          role: user.role,
+          createdAt: user.created_at,
+          lastLogin: user.last_login,
+          site: user.site
+        };
+      });
+    } catch (error) {
+      console.error('[SQLDatabase] getAllUsersAllSites error:', error);
       return [];
     }
   },
@@ -1011,6 +1307,9 @@ const SQLDatabase = {
     if (!this.db) return { loaded: false, hasDatabase: false, userCount: 0, site: this.SITE_ID };
     
     try {
+      const totalResult = this.db.exec("SELECT COUNT(*) FROM users");
+      const totalCount = totalResult[0]?.values[0]?.[0] || 0;
+      
       const siteResult = this.db.exec(`SELECT COUNT(*) FROM users WHERE site = '${this.SITE_ID}'`);
       const siteCount = siteResult[0]?.values[0]?.[0] || 0;
       
@@ -1018,8 +1317,8 @@ const SQLDatabase = {
         loaded: this.isLoaded,
         hasDatabase: true,
         userCount: siteCount,
-        site: this.SITE_ID,
-        location: this.location
+        totalUsers: totalCount,
+        site: this.SITE_ID
       };
     } catch (error) {
       return { loaded: this.isLoaded, hasDatabase: !!this.db, userCount: 0, site: this.SITE_ID };
@@ -1027,5 +1326,11 @@ const SQLDatabase = {
   }
 };
 
-// Export for global access
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    SQLDatabase.init();
+  }, 100);
+});
+
 window.SQLDatabase = SQLDatabase;

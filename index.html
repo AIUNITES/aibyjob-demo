@@ -56,6 +56,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+  <!-- sql.js for browser SQLite -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
 </head>
 <body>
   <!-- AIUNITES Webring -->
@@ -808,6 +810,8 @@
             <button class="admin-tab" data-admin-tab="users">Users</button>
             <button class="admin-tab" data-admin-tab="stats">Statistics</button>
             <button class="admin-tab" data-admin-tab="analytics">📊 Analytics</button>
+            <button class="admin-tab" data-admin-tab="datasources">🗄️ Data Sources</button>
+            <button class="admin-tab" data-admin-tab="sqldb">🗃️ SQL Database</button>
             <button class="admin-tab" data-admin-tab="cloud">☁️ Cloud</button>
             <button class="admin-tab" data-admin-tab="changelog">Changelog</button>
           </div>
@@ -886,6 +890,81 @@
           </div>
           <div id="admin-analytics-tab" class="admin-tab-content">
             <div id="analytics-panel"></div>
+          </div>
+          <div id="admin-datasources-tab" class="admin-tab-content">
+            <div id="datasources-panel"></div>
+          </div>
+          <div id="admin-sqldb-tab" class="admin-tab-content">
+            <!-- SQL Database Status -->
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 16px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); border-radius: 12px;">
+              <span id="sql-status-icon" style="font-size: 1.5rem;">⚪</span>
+              <div>
+                <div style="color: #fff; font-weight: 500;">Database Status</div>
+                <div id="sql-status-text" style="color: #9ca3af; font-size: 0.85rem;">Not loaded</div>
+              </div>
+              <span id="db-location-status" style="margin-left: auto; background: rgba(99,102,241,0.2); color: #818cf8; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">💻 Browser</span>
+            </div>
+            
+            <!-- Database Actions -->
+            <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+              <button id="sql-load-github-btn" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">📥 Load from GitHub</button>
+              <button id="sql-new-db-btn" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">➕ New Database</button>
+              <button id="sql-save-github-btn" class="btn-primary" style="display: inline-flex; align-items: center; gap: 6px;">🐙 Save to GitHub</button>
+              <button id="sql-save-db-btn" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;" disabled>💾 Save to File</button>
+              <label class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">📂 Load File<input type="file" id="sql-load-file" accept=".db,.sqlite,.sqlite3" hidden></label>
+            </div>
+            
+            <!-- SQL Query Editor -->
+            <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="color: #fff; margin: 0;">SQL Query</h4>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <select id="sql-examples-select" style="padding: 6px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #9ca3af; font-size: 0.85rem;">
+                    <option value="">📝 Examples...</option>
+                    <option value="select">SELECT</option>
+                    <option value="create">CREATE TABLE</option>
+                    <option value="insert">INSERT</option>
+                    <option value="update">UPDATE</option>
+                    <option value="delete">DELETE</option>
+                  </select>
+                  <span id="sql-query-time" style="color: #6b7280; font-size: 0.8rem;"></span>
+                </div>
+              </div>
+              <textarea id="sql-query-input" placeholder="SELECT * FROM users WHERE site = 'AIByJob';" style="width: 100%; min-height: 100px; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #e5e7eb; font-family: 'Space Mono', monospace; font-size: 0.9rem; resize: vertical; box-sizing: border-box;"></textarea>
+              <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <button id="sql-run-btn" class="btn-primary" style="display: inline-flex; align-items: center; gap: 6px;">▶️ Run (Ctrl+Enter)</button>
+                <button id="sql-clear-btn" class="btn-secondary">Clear</button>
+              </div>
+            </div>
+            
+            <!-- Results -->
+            <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="color: #fff; margin: 0;">Results</h4>
+                <span id="sql-results-count" style="color: #6b7280; font-size: 0.85rem;"></span>
+              </div>
+              <div id="sql-results-container" style="max-height: 300px; overflow: auto; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px;">
+                <p style="color: #6b7280; text-align: center;">Run a query to see results</p>
+              </div>
+            </div>
+            
+            <!-- Tables & History -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <h4 style="color: #fff; margin: 0;">📋 Tables</h4>
+                  <button id="sql-refresh-tables-btn" class="btn-tiny">🔄</button>
+                </div>
+                <div id="sql-tables-list" style="max-height: 200px; overflow-y: auto;"></div>
+              </div>
+              <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <h4 style="color: #fff; margin: 0;">📜 History</h4>
+                  <button id="sql-clear-history-btn" class="btn-tiny">🗑️</button>
+                </div>
+                <div id="sql-history-list" style="max-height: 200px; overflow-y: auto;"></div>
+              </div>
+            </div>
           </div>
           <div id="admin-cloud-tab" class="admin-tab-content">
             <div id="clouddb-admin-panel"></div>
@@ -989,6 +1068,7 @@
   <script src="js/control-center.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/datasource.js"></script>
+  <script src="js/sql-database.js"></script>
   <script>
     // Agent Chain Builder
     function showChainBuilder() {
@@ -1081,6 +1161,31 @@
         });
       }
       
+      // Listen for datasources tab activation
+      const datasourcesTab = document.querySelector('[data-admin-tab="datasources"]');
+      if (datasourcesTab) {
+        datasourcesTab.addEventListener('click', () => {
+          setTimeout(() => {
+            if (typeof DataSourceManager !== 'undefined') {
+              DataSourceManager.renderAdminPanel('datasources-panel');
+            }
+          }, 100);
+        });
+      }
+      
+      // Listen for SQL Database tab activation
+      const sqldbTab = document.querySelector('[data-admin-tab="sqldb"]');
+      if (sqldbTab) {
+        sqldbTab.addEventListener('click', () => {
+          setTimeout(() => {
+            if (typeof SQLDatabase !== 'undefined') {
+              SQLDatabase.updateStatus();
+              SQLDatabase.refreshTables();
+            }
+          }, 100);
+        });
+      }
+      
       // Also render when admin modal opens
       const adminLink = document.getElementById('admin-link');
       if (adminLink) {
@@ -1091,6 +1196,7 @@
             }
             if (typeof DataSourceManager !== 'undefined') {
               DataSourceManager.renderAdminPanel('clouddb-admin-panel');
+              DataSourceManager.renderAdminPanel('datasources-panel');
             }
           }, 200);
         });
