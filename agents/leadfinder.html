@@ -5,32 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LeadFinder Agent - Find Businesses Without Websites | AIByJob</title>
   <meta name="description" content="AI agent that discovers businesses without websites. Scan directories, Google Maps, and social media to find companies that need web development services.">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+  
+  <style>
+    body { background: #0a0a0f; color: #fff; font-family: 'Syne', sans-serif; padding-top: 36px; }
+    .agent-page { padding: 120px 20px 60px; min-height: 100vh; }
+    .agent-container { max-width: 900px; margin: 0 auto; }
+    .agent-header { text-align: center; margin-bottom: 40px; }
+    .agent-icon { font-size: 64px; margin-bottom: 16px; }
+    .agent-title { font-size: 2.5rem; margin-bottom: 8px; background: linear-gradient(135deg, #06b6d4, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .agent-subtitle { color: #9ca3af; font-size: 1.1rem; }
+    .agent-status { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; margin-top: 16px; }
+    .agent-status::before { content: ''; width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    
+    .nav { position: fixed; top: 36px; left: 0; right: 0; background: rgba(10,10,15,0.95); padding: 12px 24px; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .logo span { color: #ff3366; }
+    .nav-center { display: flex; gap: 8px; }
+    .nav-tab { padding: 8px 16px; color: #9ca3af; text-decoration: none; border-radius: 6px; font-size: 14px; transition: all 0.2s; }
+    .nav-tab:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .nav-tab.active { color: #ff3366; background: rgba(255,51,102,0.1); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .user-name { color: #9ca3af; font-size: 14px; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #ff3366, #ff6b6b); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 14px; }
+    @media (max-width: 768px) { .nav-center { display: none; } }
+    
+    .search-form { background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 24px; }
+    .form-label { display: block; color: #e5e7eb; font-weight: 500; margin-bottom: 8px; }
+    .form-input, .form-select { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; box-sizing: border-box; }
+    .form-input:focus, .form-select:focus { outline: none; border-color: #06b6d4; }
+    .form-select { cursor: pointer; }
+    .form-select option { background: #1a1a2e; }
+    
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    
+    .search-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: inherit; }
+    .search-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(6, 182, 212, 0.3); }
+    .search-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    
+    .output-section { background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; }
+    .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .output-title { font-size: 1.25rem; font-weight: 600; color: #fff; }
+    .export-btn { padding: 8px 16px; background: rgba(6, 182, 212, 0.2); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-family: inherit; }
+    .export-btn:hover { background: rgba(6, 182, 212, 0.3); }
+    
+    .output-content { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 20px; min-height: 200px; font-family: 'Space Mono', monospace; line-height: 1.6; color: #e5e7eb; }
+    .terminal-line { margin-bottom: 8px; }
+    .terminal-prompt { color: #06b6d4; margin-right: 8px; }
+    .terminal-text.success { color: #10b981; }
+    .terminal-text.warning { color: #f59e0b; }
+    .terminal-text.dim { color: #6b7280; }
+    
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
+    .stat-card { background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 12px; padding: 16px; text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: #06b6d4; }
+    .stat-label { font-size: 0.85rem; color: #9ca3af; margin-top: 4px; }
+    @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+    
+    .quick-searches { margin-top: 40px; }
+    .quick-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: #fff; }
+    .quick-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .quick-card { background: rgba(30, 30, 40, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s; }
+    .quick-card:hover { border-color: #06b6d4; transform: translateY(-2px); }
+    .quick-card h4 { color: #fff; margin: 0 0 8px 0; }
+    .quick-card p { color: #9ca3af; font-size: 0.9rem; margin: 0; }
+    
+    .footer { text-align: center; padding: 40px 20px; color: #6b7280; font-size: 0.9rem; }
+    .footer a { color: #06b6d4; }
+  </style>
 </head>
 <body>
   <!-- AIUNITES Webring -->
-  <style>.aiunites-bar{position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#0a0a0f,#1a1a2e);border-bottom:1px solid rgba(99,102,241,.3);padding:8px 0;font-size:12px}.aiunites-bar-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none}.aiunites-bar-content::-webkit-scrollbar{display:none}.aiunites-bar a{color:rgba(255,255,255,.7);text-decoration:none;white-space:nowrap;transition:color .2s}.aiunites-bar a:hover{color:#fff}.aiunites-bar-brand{color:#6366f1!important;font-weight:600}.aiunites-bar-brand:hover{color:#818cf8!important}.aiunites-bar-divider{color:rgba(255,255,255,.2)}
-  .agent-nav{position:fixed;top:36px;left:0;right:0;background:rgba(10,10,15,0.95);padding:12px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.1)}
-  .agent-nav .nav-container{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-  .agent-nav .nav-center{display:flex;gap:8px}
-  .agent-nav .nav-tab{padding:8px 16px;color:#9ca3af;text-decoration:none;border-radius:6px;font-size:14px;transition:all 0.2s}
-  .agent-nav .nav-tab:hover{color:#fff;background:rgba(255,255,255,0.05)}
-  .agent-nav .nav-right{display:flex;align-items:center;gap:12px}
-  .agent-nav .user-name{color:#9ca3af;font-size:14px}
-  .agent-nav .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff3366,#ff6b6b);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px}
-  @media(max-width:768px){.agent-nav .nav-center{display:none}}
-  body{padding-top:36px!important}
-  .agent-hero{margin-top:100px!important;padding-top:40px!important}
-  </style>
+  <style>.aiunites-bar{position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#0a0a0f,#1a1a2e);border-bottom:1px solid rgba(99,102,241,.3);padding:8px 0;font-size:12px}.aiunites-bar-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none}.aiunites-bar-content::-webkit-scrollbar{display:none}.aiunites-bar a{color:rgba(255,255,255,.7);text-decoration:none;white-space:nowrap;transition:color .2s}.aiunites-bar a:hover{color:#fff}.aiunites-bar-brand{color:#6366f1!important;font-weight:600}.aiunites-bar-brand:hover{color:#818cf8!important}.aiunites-bar-divider{color:rgba(255,255,255,.2)}</style>
   <div class="aiunites-bar"><div class="aiunites-bar-content"><a href="https://aiunites.github.io/aiunites-site/" class="aiunites-bar-brand">◆ AIUNITES</a><span class="aiunites-bar-divider">|</span><a href="https://aiunites.github.io/aizines-app/">AIZines</a><a href="https://aiunites.github.io/redomy-demo/">Redomy</a><a href="https://aiunites.github.io/videobate-site/">VideoBate</a><a href="https://aiunites.github.io/furnishthings-site/">FurnishThings</a><a href="https://aiunites.github.io/bizstry-site/">BizStry</a><a href="https://aiunites.github.io/aiyhwh-site/">AI YHWH</a><a href="https://aiunites.github.io/cloudsion-site/">Cloudsion</a><a href="https://aiunites.github.io/gameatica-site/">Gameatica</a><a href="https://aiunites.github.io/uptownit-site/">UptownIT</a><a href="https://aiunites.github.io/inthisworld-site/">InThisWorld</a><a href="https://aiunites.github.io/erpise-site/">ERPise</a><a href="https://aiunites.github.io/erpize-site/">ERPize</a><a href="https://aiunites.github.io/cosmostheopera-site/">🌌 COSMOS</a></div></div>
   <script>(function(){if(location.protocol==='file:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'){document.querySelectorAll('.aiunites-bar a').forEach(a=>{a.href=a.href.replace('https://aiunites.github.io/','../../')+'index.html';});}})()</script>
 
   <!-- App Navigation -->
-  <nav class="agent-nav">
+  <nav class="nav">
     <div class="nav-container">
       <a href="../index.html" class="logo">AI<span>ByJob</span></a>
       <div class="nav-center">
@@ -47,186 +106,180 @@
     </div>
   </nav>
 
-  <!-- Agent Hero -->
-  <section class="agent-hero">
-    <div class="container">
-      <div class="agent-hero-content">
-        <div class="agent-hero-info">
-          <div class="agent-badge-large">
-            <span class="agent-icon-large">🔍</span>
-            <span class="agent-status-large online"></span>
-          </div>
-          <div>
-            <span class="agent-version">v1.8 • Online</span>
-            <h1>LeadFinder Agent</h1>
-            <p class="agent-tagline">Business Discovery & Lead Generation</p>
-          </div>
-        </div>
-        <p class="agent-hero-desc">
-          Discover businesses that don't have websites. LeadFinder scans Google Maps, Yelp, 
-          Facebook, and local directories to find companies operating without a web presence—
-          your perfect leads for web development services.
-        </p>
-        <div class="agent-hero-actions">
-          <a href="#workspace" class="btn btn-primary btn-large">
-            <span class="btn-icon">⚡</span> Start Scanning
-          </a>
-          <a href="#capabilities" class="btn btn-secondary btn-large">
-            <span class="btn-icon">📋</span> View Capabilities
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Agent Stats -->
-  <section class="agent-stats">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-icon">🎯</span>
-          <span class="stat-value">500+</span>
-          <span class="stat-label">Leads Per Day</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">✅</span>
-          <span class="stat-value">85%</span>
-          <span class="stat-label">Data Accuracy</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">📍</span>
-          <span class="stat-value">50+</span>
-          <span class="stat-label">Industries Covered</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">🌍</span>
-          <span class="stat-value">USA</span>
-          <span class="stat-label">Coverage Area</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Workspace -->
-  <section class="workspace" id="workspace">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge">Workspace</span>
-        <h2>Find Your Leads</h2>
-        <p>Configure your search parameters and let LeadFinder discover opportunities</p>
+  <main class="agent-page">
+    <div class="agent-container">
+      <!-- Header -->
+      <div class="agent-header">
+        <div class="agent-icon">🔍</div>
+        <h1 class="agent-title">LeadFinder Agent</h1>
+        <p class="agent-subtitle">Discover businesses without websites - your perfect leads</p>
+        <div class="agent-status">Online</div>
       </div>
 
-      <div class="workspace-container">
-        <div class="workspace-form">
+      <!-- Search Form -->
+      <div class="search-form">
+        <div class="form-row">
           <div class="form-group">
-            <label>Location</label>
-            <input type="text" id="location" placeholder="e.g., Tulsa, OK or 74101">
+            <label class="form-label">Location</label>
+            <input type="text" class="form-input" id="location" placeholder="e.g., Austin, TX" value="Tulsa, OK">
           </div>
-          
           <div class="form-group">
-            <label>Industry</label>
-            <select id="industry">
-              <option value="">All Industries</option>
-              <option value="restaurant">Restaurants & Cafes</option>
-              <option value="retail">Retail Stores</option>
-              <option value="services">Professional Services</option>
-              <option value="healthcare">Healthcare & Wellness</option>
-              <option value="automotive">Automotive</option>
-              <option value="beauty">Beauty & Salons</option>
-              <option value="construction">Construction & Trades</option>
+            <label class="form-label">Search Radius</label>
+            <select class="form-select" id="radius">
+              <option value="5">5 miles</option>
+              <option value="10" selected>10 miles</option>
+              <option value="25">25 miles</option>
+              <option value="50">50 miles</option>
             </select>
           </div>
-
-          <div class="form-group">
-            <label>Max Results</label>
-            <select id="maxResults">
-              <option value="25">25 leads</option>
-              <option value="50" selected>50 leads</option>
-              <option value="100">100 leads</option>
-            </select>
-          </div>
-
-          <button class="btn btn-primary btn-large btn-full" onclick="startScan()">
-            <span class="btn-icon">🔍</span> Start Scanning
-          </button>
         </div>
 
-        <div class="workspace-output">
-          <div class="output-terminal">
-            <div class="terminal-header">
-              <div class="terminal-dots">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
-              </div>
-              <span class="terminal-title">LeadFinder Output</span>
-            </div>
-            <div class="terminal-body" id="scanOutput">
-              <div class="terminal-line">
-                <span class="terminal-prompt">▶</span>
-                <span class="terminal-text">LeadFinder Agent ready...</span>
-              </div>
-              <div class="terminal-line">
-                <span class="terminal-prompt">▶</span>
-                <span class="terminal-text dim">Configure search parameters and click "Start Scanning"</span>
-              </div>
-            </div>
+        <div class="form-group">
+          <label class="form-label">Industry</label>
+          <select class="form-select" id="industry">
+            <option value="restaurants">🍽️ Restaurants & Cafes</option>
+            <option value="retail">🛍️ Retail Stores</option>
+            <option value="services">🔧 Home Services</option>
+            <option value="beauty">💇 Beauty & Wellness</option>
+            <option value="auto">🚗 Auto Services</option>
+            <option value="fitness">💪 Fitness & Health</option>
+            <option value="professional">💼 Professional Services</option>
+            <option value="all">📋 All Industries</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Data Sources</label>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;">
+            <label style="display: flex; align-items: center; gap: 8px; color: #9ca3af; cursor: pointer;">
+              <input type="checkbox" checked style="accent-color: #06b6d4;"> Google Maps
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; color: #9ca3af; cursor: pointer;">
+              <input type="checkbox" checked style="accent-color: #06b6d4;"> Yelp
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; color: #9ca3af; cursor: pointer;">
+              <input type="checkbox" style="accent-color: #06b6d4;"> Facebook
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; color: #9ca3af; cursor: pointer;">
+              <input type="checkbox" style="accent-color: #06b6d4;"> Yellow Pages
+            </label>
+          </div>
+        </div>
+
+        <button class="search-btn" id="search-btn">🔍 Start Scanning</button>
+      </div>
+
+      <!-- Output Section -->
+      <div class="output-section">
+        <div class="output-header">
+          <h3 class="output-title">Scan Results</h3>
+          <button class="export-btn" id="export-btn">📥 Export CSV</button>
+        </div>
+        <div class="output-content" id="output">
+          <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">LeadFinder Agent ready...</span></div>
+          <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Click "Start Scanning" to find businesses without websites</span></div>
+        </div>
+        
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-scanned">0</div>
+            <div class="stat-label">Businesses Scanned</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-found">0</div>
+            <div class="stat-label">Leads Found</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-verified">0</div>
+            <div class="stat-label">Verified</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-exported">0</div>
+            <div class="stat-label">Exported</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Searches -->
+      <div class="quick-searches">
+        <h3 class="quick-title">Quick Searches</h3>
+        <div class="quick-cards">
+          <div class="quick-card" data-location="Austin, TX" data-industry="restaurants">
+            <h4>🍽️ Austin Restaurants</h4>
+            <p>Find eateries without websites</p>
+          </div>
+          <div class="quick-card" data-location="Denver, CO" data-industry="retail">
+            <h4>🛍️ Denver Retail</h4>
+            <p>Local shops needing web presence</p>
+          </div>
+          <div class="quick-card" data-location="Miami, FL" data-industry="beauty">
+            <h4>💇 Miami Salons</h4>
+            <p>Beauty businesses to contact</p>
+          </div>
+          <div class="quick-card" data-location="Seattle, WA" data-industry="services">
+            <h4>🔧 Seattle Services</h4>
+            <p>Home service providers</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </main>
 
-  <!-- CTA -->
-  <section class="cta">
-    <div class="container">
-      <div class="cta-content">
-        <h2>Ready to Find Your Next Clients?</h2>
-        <p>Join the waitlist for early access to LeadFinder Agent</p>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob" target="_blank" class="btn btn-primary btn-large">
-          <span class="btn-icon">🚀</span> Join Waitlist
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer-bottom">
-        <p>⚠️ This is a demo/pre-launch preview. Features shown are in development.</p>
-        <p>&copy; 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/" target="_blank">AIUNITES</a></p>
-      </div>
-    </div>
+    <p>⚠️ Demo/pre-launch preview</p>
+    <p>© 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/">AIUNITES</a></p>
   </footer>
 
   <script>
-    function startScan() {
-      const output = document.getElementById('scanOutput');
-      const location = document.getElementById('location').value || 'Tulsa, OK';
-      const industry = document.getElementById('industry').value || 'all industries';
+    // Quick search cards
+    document.querySelectorAll('.quick-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.getElementById('location').value = card.dataset.location;
+        document.getElementById('industry').value = card.dataset.industry;
+        runScan();
+      });
+    });
+
+    document.getElementById('search-btn').addEventListener('click', runScan);
+
+    function runScan() {
+      const location = document.getElementById('location').value;
+      const industry = document.getElementById('industry').value;
+      const btn = document.getElementById('search-btn');
+      const output = document.getElementById('output');
       
-      output.innerHTML = `
-        <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing LeadFinder Agent...</span></div>
-        <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Target: ${location}</span></div>
-        <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Industry: ${industry}</span></div>
-      `;
+      btn.disabled = true;
+      btn.textContent = '⏳ Scanning...';
       
+      output.innerHTML = `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing scan for ${industry} in ${location}...</span></div>`;
+      
+      // Simulate scanning
       setTimeout(() => {
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Scanning Google Maps...</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text success">Connected to Google Maps API</span></div>`;
+        document.getElementById('stat-scanned').textContent = '47';
       }, 500);
       
       setTimeout(() => {
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Checking Yelp listings...</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text success">Checking Yelp listings...</span></div>`;
+        document.getElementById('stat-scanned').textContent = '123';
       }, 1200);
       
       setTimeout(() => {
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#f59e0b;">Found 23 businesses without websites</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text warning">Found 23 businesses without websites</span></div>`;
+        document.getElementById('stat-found').textContent = '23';
       }, 2000);
       
       setTimeout(() => {
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">✓ Scan complete! Demo shows sample results.</span></div>`;
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Join waitlist for full access.</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Verifying contact information...</span></div>`;
+        document.getElementById('stat-verified').textContent = '19';
+      }, 2500);
+      
+      setTimeout(() => {
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text success">✓ Scan complete!</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Demo shows sample results. Join waitlist for full access.</span></div>`;
+        
+        btn.disabled = false;
+        btn.textContent = '🔍 Start Scanning';
         
         // Log task to Control Center
         if (typeof logAgentTask === 'function') {
@@ -237,8 +290,18 @@
             { output: `Found 23 businesses without websites in ${location}`, leadsCount: 23, location: location, industry: industry }
           );
         }
-      }, 2800);
+      }, 3000);
     }
+
+    document.getElementById('export-btn').addEventListener('click', () => {
+      const found = document.getElementById('stat-found').textContent;
+      if (found === '0') {
+        alert('Run a scan first to export results.');
+        return;
+      }
+      document.getElementById('stat-exported').textContent = found;
+      alert('📥 CSV exported! (Demo - actual file would download in full product)');
+    });
   </script>
   <script src="../js/control-center.js"></script>
   <script>

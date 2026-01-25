@@ -24,9 +24,33 @@
       --warning: #f59e0b;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Syne', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; }
+    body { font-family: 'Syne', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; padding-top: 36px; }
     a { color: var(--primary); text-decoration: none; }
     a:hover { text-decoration: underline; }
+    
+    /* AIUNITES Webring */
+    .aiunites-bar{position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#0a0a0f,#1a1a2e);border-bottom:1px solid rgba(99,102,241,.3);padding:8px 0;font-size:12px}
+    .aiunites-bar-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none}
+    .aiunites-bar-content::-webkit-scrollbar{display:none}
+    .aiunites-bar a{color:rgba(255,255,255,.7);text-decoration:none;white-space:nowrap;transition:color .2s}
+    .aiunites-bar a:hover{color:#fff;text-decoration:none}
+    .aiunites-bar-brand{color:#6366f1!important;font-weight:600}
+    .aiunites-bar-brand:hover{color:#818cf8!important}
+    .aiunites-bar-divider{color:rgba(255,255,255,.2)}
+    
+    /* App Navigation */
+    .app-nav{position:fixed;top:36px;left:0;right:0;background:rgba(10,10,15,0.95);padding:12px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.1)}
+    .app-nav .nav-container{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+    .app-nav .logo{font-size:1.5rem;font-weight:700;color:#fff;text-decoration:none}
+    .app-nav .logo span{color:#ff3366}
+    .app-nav .nav-center{display:flex;gap:8px}
+    .app-nav .nav-tab{padding:8px 16px;color:#9ca3af;text-decoration:none;border-radius:6px;font-size:14px;transition:all 0.2s}
+    .app-nav .nav-tab:hover{color:#fff;background:rgba(255,255,255,0.05);text-decoration:none}
+    .app-nav .nav-tab.active{color:#ff3366;background:rgba(255,51,102,0.1)}
+    .app-nav .nav-right{display:flex;align-items:center;gap:12px}
+    .app-nav .user-name{color:#9ca3af;font-size:14px}
+    .app-nav .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff3366,#ff6b6b);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px}
+    @media(max-width:768px){.app-nav .nav-center{display:none}}
     
     /* Header */
     .header { background: var(--dark); border-bottom: 1px solid var(--gray-dark); padding: 1rem 5%; position: sticky; top: 0; z-index: 100; }
@@ -114,21 +138,29 @@
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-content">
-      <a href="../../index.html" class="logo">AI<span>ByJob</span></a>
-      <nav class="nav-links">
-        <a href="../../index.html">Home</a>
-        <a href="#sales">Sales</a>
-        <a href="#marketing">Marketing</a>
-        <a href="#hr">HR</a>
-        <a href="#support">Support</a>
-        <a href="#operations">Operations</a>
-      </nav>
-    </div>
-  </header>
+  <!-- AIUNITES Webring -->
+  <div class="aiunites-bar"><div class="aiunites-bar-content"><a href="https://aiunites.github.io/aiunites-site/" class="aiunites-bar-brand">◆ AIUNITES</a><span class="aiunites-bar-divider">|</span><a href="https://aiunites.github.io/aizines-app/">AIZines</a><a href="https://aiunites.github.io/redomy-demo/">Redomy</a><a href="https://aiunites.github.io/videobate-site/">VideoBate</a><a href="https://aiunites.github.io/furnishthings-site/">FurnishThings</a><a href="https://aiunites.github.io/bizstry-site/">BizStry</a><a href="https://aiunites.github.io/aiyhwh-site/">AI YHWH</a><a href="https://aiunites.github.io/cloudsion-site/">Cloudsion</a><a href="https://aiunites.github.io/gameatica-site/">Gameatica</a><a href="https://aiunites.github.io/uptownit-site/">UptownIT</a><a href="https://aiunites.github.io/inthisworld-site/">InThisWorld</a><a href="https://aiunites.github.io/erpise-site/">ERPise</a><a href="https://aiunites.github.io/erpize-site/">ERPize</a><a href="https://aiunites.github.io/cosmostheopera-site/">🌌 COSMOS</a></div></div>
+  <script>(function(){if(location.protocol==='file:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'){document.querySelectorAll('.aiunites-bar a').forEach(a=>{a.href=a.href.replace('https://aiunites.github.io/','../../../')+'index.html';});}})()</script>
 
-  <section class="hero">
+  <!-- App Navigation -->
+  <nav class="app-nav">
+    <div class="nav-container">
+      <a href="../../index.html" class="logo">AI<span>ByJob</span></a>
+      <div class="nav-center">
+        <a href="../../index.html#agents" class="nav-tab">🤖 Agents</a>
+        <a href="index.html" class="nav-tab active">📋 Templates</a>
+        <a href="../../index.html" class="nav-tab">🏛️ Control</a>
+        <a href="../../index.html#my-tools" class="nav-tab">My Tools</a>
+        <a href="../../index.html#discover" class="nav-tab">Discover</a>
+      </div>
+      <div class="nav-right">
+        <span class="user-name" id="user-display-name">Demo User</span>
+        <div class="user-avatar" id="user-avatar">D</div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" style="margin-top: 60px;">
     <h1>Agent <span>Templates</span></h1>
     <p>Production-ready AI agent configurations for common business scenarios. Deploy in minutes, customize for your needs.</p>
     <div class="hero-stats">
@@ -988,5 +1020,18 @@
   <!-- Floating Help Button -->
   <style>.help-fab{position:fixed;bottom:24px;right:24px;width:auto;padding:0 16px;height:48px;background:linear-gradient(135deg,#ff3366,#ff6b35);border-radius:24px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;box-shadow:0 4px 20px rgba(255,51,102,0.4);transition:all 0.3s;z-index:9999;}.help-fab:hover{transform:scale(1.05);box-shadow:0 6px 30px rgba(255,51,102,0.5);}</style>
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob+Templates" target="_blank" class="help-fab">💬 Help / Feedback</a>
+  
+  <script>
+    // Load user info if logged in
+    (function() {
+      const currentUser = JSON.parse(localStorage.getItem('aibyjob_currentUser') || 'null');
+      if (currentUser) {
+        const displayName = document.getElementById('user-display-name');
+        const avatar = document.getElementById('user-avatar');
+        if (displayName) displayName.textContent = currentUser.name || currentUser.username;
+        if (avatar) avatar.textContent = (currentUser.name || currentUser.username || 'U').charAt(0).toUpperCase();
+      }
+    })();
+  </script>
 </body>
 </html>
