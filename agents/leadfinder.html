@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadFinder Agent - Find Businesses Without Websites | AIByJob</title>
+  <meta name="description" content="AI agent that discovers businesses without websites. Scan directories, Google Maps, and social media to find companies that need web development services.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/agent.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" style="top:0">
+    <div class="nav-container">
+      <a href="../index.html" class="logo">AI<span>ByJob</span></a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="promotion.html">Promotion</a>
+        <a href="../index.html" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Agent Hero -->
+  <section class="agent-hero">
+    <div class="container">
+      <div class="agent-hero-content">
+        <div class="agent-hero-info">
+          <div class="agent-badge-large">
+            <span class="agent-icon-large">🔍</span>
+            <span class="agent-status-large online"></span>
+          </div>
+          <div>
+            <span class="agent-version">v1.8 • Online</span>
+            <h1>LeadFinder Agent</h1>
+            <p class="agent-tagline">Business Discovery & Lead Generation</p>
+          </div>
+        </div>
+        <p class="agent-hero-desc">
+          Discover businesses that don't have websites. LeadFinder scans Google Maps, Yelp, 
+          Facebook, and local directories to find companies operating without a web presence—
+          your perfect leads for web development services.
+        </p>
+        <div class="agent-hero-actions">
+          <a href="#workspace" class="btn btn-primary btn-large">
+            <span class="btn-icon">⚡</span> Start Scanning
+          </a>
+          <a href="#capabilities" class="btn btn-secondary btn-large">
+            <span class="btn-icon">📋</span> View Capabilities
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agent Stats -->
+  <section class="agent-stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-icon">🎯</span>
+          <span class="stat-value">500+</span>
+          <span class="stat-label">Leads Per Day</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">✅</span>
+          <span class="stat-value">85%</span>
+          <span class="stat-label">Data Accuracy</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📍</span>
+          <span class="stat-value">50+</span>
+          <span class="stat-label">Industries Covered</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🌍</span>
+          <span class="stat-value">USA</span>
+          <span class="stat-label">Coverage Area</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workspace -->
+  <section class="workspace" id="workspace">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Workspace</span>
+        <h2>Find Your Leads</h2>
+        <p>Configure your search parameters and let LeadFinder discover opportunities</p>
+      </div>
+
+      <div class="workspace-container">
+        <div class="workspace-form">
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="location" placeholder="e.g., Tulsa, OK or 74101">
+          </div>
+          
+          <div class="form-group">
+            <label>Industry</label>
+            <select id="industry">
+              <option value="">All Industries</option>
+              <option value="restaurant">Restaurants & Cafes</option>
+              <option value="retail">Retail Stores</option>
+              <option value="services">Professional Services</option>
+              <option value="healthcare">Healthcare & Wellness</option>
+              <option value="automotive">Automotive</option>
+              <option value="beauty">Beauty & Salons</option>
+              <option value="construction">Construction & Trades</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Max Results</label>
+            <select id="maxResults">
+              <option value="25">25 leads</option>
+              <option value="50" selected>50 leads</option>
+              <option value="100">100 leads</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary btn-large btn-full" onclick="startScan()">
+            <span class="btn-icon">🔍</span> Start Scanning
+          </button>
+        </div>
+
+        <div class="workspace-output">
+          <div class="output-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <span class="terminal-title">LeadFinder Output</span>
+            </div>
+            <div class="terminal-body" id="scanOutput">
+              <div class="terminal-line">
+                <span class="terminal-prompt">▶</span>
+                <span class="terminal-text">LeadFinder Agent ready...</span>
+              </div>
+              <div class="terminal-line">
+                <span class="terminal-prompt">▶</span>
+                <span class="terminal-text dim">Configure search parameters and click "Start Scanning"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Find Your Next Clients?</h2>
+        <p>Join the waitlist for early access to LeadFinder Agent</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob" target="_blank" class="btn btn-primary btn-large">
+          <span class="btn-icon">🚀</span> Join Waitlist
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>⚠️ This is a demo/pre-launch preview. Features shown are in development.</p>
+        <p>&copy; 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/" target="_blank">AIUNITES</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function startScan() {
+      const output = document.getElementById('scanOutput');
+      const location = document.getElementById('location').value || 'Tulsa, OK';
+      const industry = document.getElementById('industry').value || 'all industries';
+      
+      output.innerHTML = `
+        <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing LeadFinder Agent...</span></div>
+        <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Target: ${location}</span></div>
+        <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Industry: ${industry}</span></div>
+      `;
+      
+      setTimeout(() => {
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Scanning Google Maps...</span></div>`;
+      }, 500);
+      
+      setTimeout(() => {
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Checking Yelp listings...</span></div>`;
+      }, 1200);
+      
+      setTimeout(() => {
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#f59e0b;">Found 23 businesses without websites</span></div>`;
+      }, 2000);
+      
+      setTimeout(() => {
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">✓ Scan complete! Demo shows sample results.</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Join waitlist for full access.</span></div>`;
+      }, 2800);
+    }
+  </script>
+</body>
+</html>
