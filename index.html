@@ -71,7 +71,7 @@
         <div class="nav-links-landing">
           <a href="#agents-section">🤖 Agents</a>
           <a href="#templates-section">📋 Templates</a>
-          <a href="#control-section">🎯 Command</a>
+          <a href="#control-section">🎬 Director</a>
         </div>
         <button class="btn-primary" id="landing-login-btn">Log In</button>
       </nav>
@@ -207,7 +207,7 @@
 
       <!-- Control Center Section -->
       <section class="landing-control" id="control-section" style="padding: 60px 20px;">
-        <h2>🎯 Command Center</h2>
+        <h2>🎬 AI Director</h2>
         <p class="section-subtitle">Manage all your AI agents from one dashboard</p>
         
         <!-- Features List -->
@@ -250,7 +250,7 @@
             <span style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%;"></span>
             <span style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%;"></span>
             <span style="width: 12px; height: 12px; background: #10b981; border-radius: 50%;"></span>
-            <span style="color: #6b7280; margin-left: 12px;">AIByJob Command Center Preview</span>
+            <span style="color: #6b7280; margin-left: 12px;">AIByJob AI Director</span>
           </div>
           <div style="padding: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
             <div style="text-align: center; padding: 20px;">
@@ -275,7 +275,7 @@
             </div>
           </div>
         </div>
-        <p style="text-align: center; margin-top: 20px;"><button class="btn-primary" onclick="document.getElementById('landing-login-btn').click()">🎯 Open Command Center</button></p>
+        <p style="text-align: center; margin-top: 20px;"><button class="btn-primary" onclick="document.getElementById('landing-login-btn').click()">🎬 Open AI Director</button></p>
       </section>
 
       <section class="landing-cta">
@@ -370,7 +370,7 @@
         <div class="nav-center">
           <button class="nav-tab active" data-view="agents">🤖 Agents</button>
           <button class="nav-tab" data-view="templates">📋 Templates</button>
-          <button class="nav-tab" data-view="control">🎯 Command</button>
+          <button class="nav-tab" data-view="control">🎬 Director</button>
           <button class="nav-tab" data-view="my-items">My Tools</button>
           <button class="nav-tab" data-view="discover">Discover</button>
         </div>
@@ -566,7 +566,7 @@
         <!-- Control Center Dashboard View -->
         <div id="control-view" class="dashboard-view">
           <div class="view-header">
-            <div><h1>🎯 Command Center</h1><p class="view-subtitle">Manage all your AI agents</p></div>
+            <div><h1>🎬 AI Director</h1><p class="view-subtitle">Manage all your AI agents</p></div>
             <div style="display: flex; gap: 8px;">
               <button class="btn-secondary" onclick="exportAgentHistoryCSV()" style="display: inline-flex; align-items: center; gap: 6px;">📄 CSV</button>
               <button class="btn-secondary" onclick="exportAgentHistory()" style="display: inline-flex; align-items: center; gap: 6px;">💾 JSON</button>
@@ -807,6 +807,8 @@
             <button class="admin-tab active" data-admin-tab="settings">System Settings</button>
             <button class="admin-tab" data-admin-tab="users">Users</button>
             <button class="admin-tab" data-admin-tab="stats">Statistics</button>
+            <button class="admin-tab" data-admin-tab="analytics">📊 Analytics</button>
+            <button class="admin-tab" data-admin-tab="cloud">☁️ Cloud</button>
             <button class="admin-tab" data-admin-tab="changelog">Changelog</button>
           </div>
           <div id="admin-settings-tab" class="admin-tab-content active">
@@ -881,6 +883,12 @@
               <button class="btn-secondary" id="export-all-data-btn">📤 Export All Data</button>
               <button class="btn-secondary danger" id="reset-all-data-btn">🗑️ Reset All Data</button>
             </div>
+          </div>
+          <div id="admin-analytics-tab" class="admin-tab-content">
+            <div id="analytics-panel"></div>
+          </div>
+          <div id="admin-cloud-tab" class="admin-tab-content">
+            <div id="clouddb-admin-panel"></div>
           </div>
           <div id="admin-changelog-tab" class="admin-tab-content">
             <div class="changelog-content" id="changelog-content"></div>
@@ -979,6 +987,7 @@
   <script src="js/app.js"></script>
   <script src="js/agents.js"></script>
   <script src="js/control-center.js"></script>
+  <script src="js/analytics.js"></script>
   <script>
     // Agent Chain Builder
     function showChainBuilder() {
@@ -1044,6 +1053,33 @@
       document.body.appendChild(modal);
       modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     }
+    
+    // Render analytics when admin panel opens
+    document.addEventListener('DOMContentLoaded', () => {
+      // Listen for analytics tab activation
+      const analyticsTab = document.querySelector('[data-admin-tab="analytics"]');
+      if (analyticsTab) {
+        analyticsTab.addEventListener('click', () => {
+          setTimeout(() => {
+            if (typeof Analytics !== 'undefined') {
+              Analytics.renderAnalyticsPanel('analytics-panel');
+            }
+          }, 100);
+        });
+      }
+      
+      // Also render when admin modal opens
+      const adminLink = document.getElementById('admin-link');
+      if (adminLink) {
+        adminLink.addEventListener('click', () => {
+          setTimeout(() => {
+            if (typeof Analytics !== 'undefined') {
+              Analytics.renderAnalyticsPanel('analytics-panel');
+            }
+          }, 200);
+        });
+      }
+    });
   </script>
 </body>
 </html>

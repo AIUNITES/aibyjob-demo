@@ -95,7 +95,7 @@
       <div class="nav-center">
         <a href="../index.html#agents" class="nav-tab">🤖 Agents</a>
         <a href="templates/index.html" class="nav-tab">📋 Templates</a>
-        <a href="../index.html" class="nav-tab" onclick="sessionStorage.setItem('aibyjob_view','control')">🎯 Command</a>
+        <a href="../index.html" class="nav-tab" onclick="sessionStorage.setItem('aibyjob_view','control')">🎬 Director</a>
         <a href="../index.html#my-tools" class="nav-tab">My Tools</a>
         <a href="../index.html#discover" class="nav-tab">Discover</a>
       </div>
@@ -290,6 +290,15 @@
             { output: `Found 23 businesses without websites in ${location}`, leadsCount: 23, location: location, industry: industry }
           );
         }
+        
+        // Track in Analytics
+        if (typeof Analytics !== 'undefined') {
+          Analytics.trackTaskComplete('leadfinder', 'leads_found', {
+            count: 23,
+            location: location,
+            industry: industry
+          });
+        }
       }, 3000);
     }
 
@@ -304,7 +313,13 @@
     });
   </script>
   <script src="../js/control-center.js"></script>
+  <script src="../js/analytics.js"></script>
   <script>
+    // Track agent launch
+    if (typeof Analytics !== 'undefined') {
+      Analytics.trackAgentLaunch('leadfinder', 'LeadFinder Agent');
+    }
+    
     // Load user info if logged in
     (function() {
       const currentUser = JSON.parse(localStorage.getItem('aibyjob_currentUser') || 'null');
