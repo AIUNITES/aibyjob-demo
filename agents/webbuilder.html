@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebBuilder Agent - AI Website Creation | AIByJob</title>
+  <meta name="description" content="AI agent that builds complete websites from a description. SEO-optimized, mobile-ready.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/agent.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
+</head>
+<body>
+  <nav class="nav" style="top:0">
+    <div class="nav-container">
+      <a href="../index.html" class="logo">AI<span>ByJob</span></a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="promotion.html">Promotion</a>
+        <a href="leadfinder.html">LeadFinder</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="agent-hero">
+    <div class="container">
+      <div class="agent-hero-content">
+        <div class="agent-hero-info">
+          <div class="agent-badge-large">
+            <span class="agent-icon-large">🏗️</span>
+            <span class="agent-status-large online"></span>
+          </div>
+          <div>
+            <span class="agent-version">v2.0 • Online</span>
+            <h1>WebBuilder Agent</h1>
+            <p class="agent-tagline">Autonomous Website Creation</p>
+          </div>
+        </div>
+        <p class="agent-hero-desc">
+          Transform your ideas into fully-functional websites. WebBuilder analyzes your requirements, 
+          designs layouts, writes code, optimizes for SEO, and deploys—all autonomously.
+        </p>
+        <div class="agent-hero-actions">
+          <a href="#workspace" class="btn btn-primary btn-large">⚡ Launch Agent</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="agent-stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-icon">⚡</span><span class="stat-value">~2 hrs</span><span class="stat-label">Build Time</span></div>
+        <div class="stat-card"><span class="stat-icon">✅</span><span class="stat-value">98%</span><span class="stat-label">Success Rate</span></div>
+        <div class="stat-card"><span class="stat-icon">📱</span><span class="stat-value">100%</span><span class="stat-label">Mobile Ready</span></div>
+        <div class="stat-card"><span class="stat-icon">🔍</span><span class="stat-value">90+</span><span class="stat-label">SEO Score</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="workspace" id="workspace">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Workspace</span>
+        <h2>Build Your Website</h2>
+        <p>Describe your business and let WebBuilder create your site</p>
+      </div>
+
+      <div class="workspace-container">
+        <div class="workspace-form">
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="businessName" placeholder="e.g., Joe's Plumbing">
+          </div>
+          <div class="form-group">
+            <label>Industry</label>
+            <select id="industry">
+              <option value="restaurant">Restaurant / Cafe</option>
+              <option value="retail">Retail Store</option>
+              <option value="services" selected>Professional Services</option>
+              <option value="healthcare">Healthcare</option>
+              <option value="construction">Construction / Trades</option>
+              <option value="beauty">Beauty / Salon</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="description" placeholder="Tell us about your business, services, and target customers..."></textarea>
+          </div>
+          <button class="btn btn-primary btn-large btn-full" onclick="buildSite()">🏗️ Build Website</button>
+        </div>
+
+        <div class="workspace-output">
+          <div class="output-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span class="terminal-title">WebBuilder Output</span>
+            </div>
+            <div class="terminal-body" id="buildOutput">
+              <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">WebBuilder Agent ready...</span></div>
+              <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Enter your business details and click "Build Website"</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready for Your New Website?</h2>
+        <p>Join the waitlist for early access</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob" target="_blank" class="btn btn-primary btn-large">🚀 Join Waitlist</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>⚠️ Demo/pre-launch preview</p>
+      <p>© 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/">AIUNITES</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function buildSite() {
+      const output = document.getElementById('buildOutput');
+      const name = document.getElementById('businessName').value || 'Your Business';
+      const industry = document.getElementById('industry').value;
+      
+      output.innerHTML = `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing WebBuilder Agent...</span></div>`;
+      
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Business: ${name}</span></div>`; }, 300);
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Analyzing industry requirements...</span></div>`; }, 800);
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Generating design layout...</span></div>`; }, 1500);
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Writing HTML/CSS/JS...</span></div>`; }, 2200);
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#f59e0b;">Optimizing for SEO...</span></div>`; }, 2900);
+      setTimeout(() => { 
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">✓ Website ready! (Demo)</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Join waitlist for full access.</span></div>`;
+      }, 3600);
+    }
+  </script>
+</body>
+</html>

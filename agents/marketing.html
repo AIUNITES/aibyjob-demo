@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing Agent - AI Digital Marketing | AIByJob</title>
+  <meta name="description" content="AI agent that handles SEO, social media, email campaigns, and marketing automation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/agent.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+</head>
+<body>
+  <nav class="nav" style="top:0">
+    <div class="nav-container">
+      <a href="../index.html" class="logo">AI<span>ByJob</span></a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="promotion.html">Promotion</a>
+        <a href="webbuilder.html">WebBuilder</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="agent-hero">
+    <div class="container">
+      <div class="agent-hero-content">
+        <div class="agent-hero-info">
+          <div class="agent-badge-large">
+            <span class="agent-icon-large">📈</span>
+            <span class="agent-status-large online"></span>
+          </div>
+          <div>
+            <span class="agent-version">v2.5 • Online</span>
+            <h1>Marketing Agent</h1>
+            <p class="agent-tagline">Digital Marketing Automation</p>
+          </div>
+        </div>
+        <p class="agent-hero-desc">
+          Your autonomous marketing team. Handles SEO optimization, social media scheduling, 
+          email campaigns, content creation, and analytics reporting—all on autopilot.
+        </p>
+        <div class="agent-hero-actions">
+          <a href="#workspace" class="btn btn-primary btn-large">⚡ Launch Agent</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="agent-stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-icon">📧</span><span class="stat-value">1000+</span><span class="stat-label">Emails/Day</span></div>
+        <div class="stat-card"><span class="stat-icon">📱</span><span class="stat-value">30</span><span class="stat-label">Posts/Week</span></div>
+        <div class="stat-card"><span class="stat-icon">🎯</span><span class="stat-value">35%</span><span class="stat-label">Open Rate</span></div>
+        <div class="stat-card"><span class="stat-icon">⏰</span><span class="stat-value">24/7</span><span class="stat-label">Active</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="workspace" id="workspace">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Workspace</span>
+        <h2>Create Marketing Campaign</h2>
+        <p>Set your goals and let Marketing Agent handle the rest</p>
+      </div>
+
+      <div class="workspace-container">
+        <div class="workspace-form">
+          <div class="form-group">
+            <label>Campaign Type</label>
+            <select id="campaignType">
+              <option value="social">Social Media Campaign</option>
+              <option value="email">Email Sequence</option>
+              <option value="seo">SEO Optimization</option>
+              <option value="content">Content Calendar</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Target Audience</label>
+            <input type="text" id="audience" placeholder="e.g., Small business owners in Texas">
+          </div>
+          <div class="form-group">
+            <label>Campaign Goal</label>
+            <textarea id="goal" placeholder="What do you want to achieve? More leads, brand awareness, sales..."></textarea>
+          </div>
+          <button class="btn btn-primary btn-large btn-full" onclick="createCampaign()">📈 Create Campaign</button>
+        </div>
+
+        <div class="workspace-output">
+          <div class="output-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span class="terminal-title">Marketing Agent Output</span>
+            </div>
+            <div class="terminal-body" id="campaignOutput">
+              <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Marketing Agent ready...</span></div>
+              <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Configure campaign and click "Create Campaign"</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Automate Your Marketing?</h2>
+        <p>Join the waitlist for early access</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob" target="_blank" class="btn btn-primary btn-large">🚀 Join Waitlist</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>⚠️ Demo/pre-launch preview</p>
+      <p>© 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/">AIUNITES</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function createCampaign() {
+      const output = document.getElementById('campaignOutput');
+      const type = document.getElementById('campaignType').value;
+      const audience = document.getElementById('audience').value || 'your target audience';
+      
+      output.innerHTML = `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing Marketing Agent...</span></div>`;
+      
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Campaign: ${type}</span></div>`; }, 300);
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Analyzing ${audience}...</span></div>`; }, 800);
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Generating content strategy...</span></div>`; }, 1500);
+      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#f59e0b;">Creating 30-day calendar...</span></div>`; }, 2200);
+      setTimeout(() => { 
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">✓ Campaign ready! (Demo)</span></div>`;
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Join waitlist for full access.</span></div>`;
+      }, 2900);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promotion Agent - Generate Social Media Content | AIByJob</title>
+  <meta name="description" content="AI agent that generates promotional content for LinkedIn, Twitter, and social media campaigns.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📣</text></svg>">
+  
+  <style>
+    body { background: #0a0a0f; color: #fff; font-family: 'Syne', sans-serif; }
+    .agent-page { padding: 80px 20px 60px; min-height: 100vh; }
+    .agent-container { max-width: 900px; margin: 0 auto; }
+    .agent-header { text-align: center; margin-bottom: 40px; }
+    .agent-icon { font-size: 64px; margin-bottom: 16px; }
+    .agent-title { font-size: 2.5rem; margin-bottom: 8px; background: linear-gradient(135deg, #ff3366, #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .agent-subtitle { color: #9ca3af; font-size: 1.1rem; }
+    .agent-status { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; margin-top: 16px; }
+    .agent-status::before { content: ''; width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    
+    .nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(10,10,15,0.95); padding: 16px 24px; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; }
+    .logo span { color: #ff3366; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { color: #9ca3af; text-decoration: none; }
+    .nav-links a:hover { color: #fff; }
+    
+    .promo-form { background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 24px; }
+    .form-label { display: block; color: #e5e7eb; font-weight: 500; margin-bottom: 8px; }
+    .form-input, .form-select, .form-textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; box-sizing: border-box; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: #ff3366; }
+    .form-textarea { min-height: 100px; resize: vertical; }
+    .form-select { cursor: pointer; }
+    .form-select option { background: #1a1a2e; }
+    
+    .platform-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+    .platform-btn { padding: 10px 20px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #9ca3af; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; font-family: inherit; }
+    .platform-btn:hover { border-color: #ff3366; color: #fff; }
+    .platform-btn.active { background: rgba(255, 51, 102, 0.2); border-color: #ff3366; color: #ff3366; }
+    
+    .generate-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #ff3366, #ff6b6b); color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: inherit; }
+    .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255, 51, 102, 0.3); }
+    .generate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    
+    .output-section { background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; }
+    .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .output-title { font-size: 1.25rem; font-weight: 600; color: #fff; }
+    .copy-btn { padding: 8px 16px; background: rgba(255, 51, 102, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 51, 102, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-family: inherit; }
+    .copy-btn:hover { background: rgba(255, 51, 102, 0.3); }
+    
+    .output-content { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 20px; min-height: 150px; white-space: pre-wrap; font-family: 'Space Mono', monospace; line-height: 1.6; color: #e5e7eb; }
+    .output-content.loading { color: #9ca3af; font-style: italic; }
+    
+    .hashtags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .hashtag { background: rgba(255, 51, 102, 0.1); color: #ff6b6b; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; }
+    
+    .templates-section { margin-top: 40px; }
+    .templates-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; color: #fff; }
+    .template-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .template-card { background: rgba(30, 30, 40, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s; }
+    .template-card:hover { border-color: #ff3366; transform: translateY(-2px); }
+    .template-card h4 { color: #fff; margin: 0 0 8px 0; }
+    .template-card p { color: #9ca3af; font-size: 0.9rem; margin: 0; }
+    
+    .sites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 8px; }
+    .site-chip { padding: 8px 12px; background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.2); border-radius: 6px; color: #ff9999; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .site-chip:hover, .site-chip.selected { background: rgba(255, 51, 102, 0.2); border-color: #ff3366; color: #fff; }
+    
+    .footer { text-align: center; padding: 40px 20px; color: #6b7280; font-size: 0.9rem; }
+    .footer a { color: #ff3366; }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="../index.html" class="logo">AI<span>ByJob</span></a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="leadfinder.html">LeadFinder</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="agent-page">
+    <div class="agent-container">
+      <!-- Header -->
+      <div class="agent-header">
+        <div class="agent-icon">📣</div>
+        <h1 class="agent-title">Promotion Agent</h1>
+        <p class="agent-subtitle">Generate compelling social media content for AIUNITES products</p>
+        <div class="agent-status">Online</div>
+      </div>
+
+      <!-- Input Form -->
+      <div class="promo-form">
+        <div class="form-group">
+          <label class="form-label">Select Site to Promote</label>
+          <div class="sites-grid" id="sites-grid">
+            <div class="site-chip selected" data-site="AIUNITES">◆ AIUNITES</div>
+            <div class="site-chip" data-site="AIByJob">💼 AIByJob</div>
+            <div class="site-chip" data-site="AIZines">📰 AIZines</div>
+            <div class="site-chip" data-site="Redomy">🏠 Redomy</div>
+            <div class="site-chip" data-site="VideoBate">🎯 VideoBate</div>
+            <div class="site-chip" data-site="Gameatica">🎮 Gameatica</div>
+            <div class="site-chip" data-site="FurnishThings">🛋️ FurnishThings</div>
+            <div class="site-chip" data-site="BizStry">📖 BizStry</div>
+            <div class="site-chip" data-site="Cloudsion">☁️ Cloudsion</div>
+            <div class="site-chip" data-site="UptownIT">💻 UptownIT</div>
+            <div class="site-chip" data-site="ERPise">📊 ERPise</div>
+            <div class="site-chip" data-site="ERPize">⚡ ERPize</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Platform</label>
+          <div class="platform-buttons">
+            <button class="platform-btn active" data-platform="linkedin">🔗 LinkedIn</button>
+            <button class="platform-btn" data-platform="twitter">🐦 Twitter/X</button>
+            <button class="platform-btn" data-platform="facebook">📘 Facebook</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Content Type</label>
+          <select class="form-select" id="content-type">
+            <option value="launch">🚀 Product Launch</option>
+            <option value="feature">✨ Feature Highlight</option>
+            <option value="benefit">💡 Key Benefit</option>
+            <option value="tip">📝 Industry Tip</option>
+            <option value="question">❓ Engagement Question</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Additional Context (optional)</label>
+          <textarea class="form-textarea" id="context" placeholder="Add specific details or tone preferences..."></textarea>
+        </div>
+
+        <button class="generate-btn" id="generate-btn">📣 Generate Content</button>
+      </div>
+
+      <!-- Output Section -->
+      <div class="output-section">
+        <div class="output-header">
+          <h3 class="output-title">Generated Content</h3>
+          <button class="copy-btn" id="copy-btn">📋 Copy</button>
+        </div>
+        <div class="output-content" id="output">Select a site and click "Generate" to create promotional content...</div>
+        <div class="hashtags" id="hashtags"></div>
+      </div>
+
+      <!-- Quick Templates -->
+      <div class="templates-section">
+        <h3 class="templates-title">Quick Templates</h3>
+        <div class="template-cards">
+          <div class="template-card" data-template="launch"><h4>🚀 Launch Post</h4><p>Announce new products</p></div>
+          <div class="template-card" data-template="value"><h4>💎 Value Prop</h4><p>Highlight benefits</p></div>
+          <div class="template-card" data-template="cta"><h4>📢 Call to Action</h4><p>Drive sign-ups</p></div>
+          <div class="template-card" data-template="story"><h4>📖 Story</h4><p>Share your journey</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>⚠️ Demo/pre-launch preview</p>
+    <p>© 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site/">AIUNITES</a></p>
+  </footer>
+
+  <script>
+    const siteData = {
+      'AIUNITES': { url: 'https://aiunites.com', tagline: 'AI-Powered Business Solutions', features: ['AI Consulting', 'Custom Development', 'Integration Services'] },
+      'AIByJob': { url: 'https://aibyjob.com', tagline: 'AI Agents for Your Profession', features: ['AI Agents', 'Job-Specific Tools', 'Automation'] },
+      'AIZines': { url: 'https://aizines.com', tagline: 'Create AI-Powered Digital Magazines', features: ['AI Content', 'Templates', 'Publishing'] },
+      'Redomy': { url: 'https://redomy.com', tagline: 'Track Home Renovation Projects', features: ['Project Tracking', 'Budget Management', 'Progress Photos'] },
+      'VideoBate': { url: 'https://videobate.com', tagline: 'Master Logical Fallacies', features: ['Interactive Quizzes', 'Critical Thinking', 'Leaderboards'] },
+      'Gameatica': { url: 'https://gameatica.com', tagline: 'Classic Games Reimagined', features: ['Classic Games', 'Modern UI', 'Leaderboards'] },
+      'FurnishThings': { url: 'https://furnishthings.com', tagline: 'AI-Powered Interior Design', features: ['AI Room Design', 'Style Matching', 'Visualization'] },
+      'BizStry': { url: 'https://bizstry.com', tagline: 'Your Business Story, Told Right', features: ['Brand Storytelling', 'Content Strategy', 'Narrative Design'] },
+      'Cloudsion': { url: 'https://cloudsion.com', tagline: 'Cloud Solutions Made Simple', features: ['Cloud Migration', 'Infrastructure', 'Security'] },
+      'UptownIT': { url: 'https://uptownit.com', tagline: 'Premium IT Services', features: ['IT Support', 'Security', 'Consulting'] },
+      'ERPise': { url: 'https://erpise.com', tagline: 'Enterprise Resource Planning', features: ['ERP Implementation', 'Integration', 'Training'] },
+      'ERPize': { url: 'https://erpize.com', tagline: 'Modernize Your ERP', features: ['ERP Modernization', 'Cloud ERP', 'Migration'] },
+    };
+
+    let selectedSite = 'AIUNITES';
+    let selectedPlatform = 'linkedin';
+
+    document.getElementById('sites-grid').addEventListener('click', (e) => {
+      const chip = e.target.closest('.site-chip');
+      if (chip) {
+        document.querySelectorAll('.site-chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        selectedSite = chip.dataset.site;
+      }
+    });
+
+    document.querySelectorAll('.platform-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedPlatform = btn.dataset.platform;
+      });
+    });
+
+    document.querySelectorAll('.template-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const t = card.dataset.template;
+        document.getElementById('content-type').value = t === 'value' ? 'benefit' : t === 'cta' ? 'feature' : t === 'story' ? 'tip' : 'launch';
+        generateContent();
+      });
+    });
+
+    document.getElementById('generate-btn').addEventListener('click', generateContent);
+
+    function generateContent() {
+      const site = siteData[selectedSite];
+      const type = document.getElementById('content-type').value;
+      const context = document.getElementById('context').value;
+      const btn = document.getElementById('generate-btn');
+      const output = document.getElementById('output');
+      const hashtags = document.getElementById('hashtags');
+      
+      btn.disabled = true;
+      btn.textContent = '⏳ Generating...';
+      output.textContent = 'Generating...';
+      
+      setTimeout(() => {
+        let text = '';
+        let tags = ['#AI', '#Tech', '#' + selectedSite];
+        
+        if (type === 'launch') {
+          text = selectedPlatform === 'linkedin' 
+            ? `🚀 Exciting News!\n\nIntroducing ${selectedSite} - ${site.tagline}.\n\n✨ What makes it special:\n• ${site.features[0]}\n• ${site.features[1]}\n• ${site.features[2]}\n\n🔗 ${site.url}\n\nWhat challenges could AI help you solve? 👇`
+            : `🚀 Just launched: ${selectedSite}!\n\n${site.tagline}\n\n${site.url}`;
+        } else if (type === 'feature') {
+          text = `✨ Feature spotlight: ${site.features[0]}\n\n${selectedSite} makes it easy to ${site.tagline.toLowerCase()}.\n\n🔗 ${site.url}`;
+        } else if (type === 'benefit') {
+          text = `💡 Stop wasting time on manual tasks.\n\n${selectedSite} helps you:\n• Save hours weekly\n• Work smarter\n• Get results\n\n${site.tagline}\n\n🔗 ${site.url}`;
+        } else if (type === 'tip') {
+          text = `📝 Pro tip: Automate what AI can handle.\n\n${selectedSite} - ${site.tagline}\n\nKey features:\n• ${site.features[0]}\n• ${site.features[1]}\n\n🔗 ${site.url}`;
+        } else {
+          text = `🤔 Question: How are you using AI in your work?\n\nI've been exploring ${selectedSite} (${site.tagline.toLowerCase()}).\n\nWhat's working for you? 👇\n\n🔗 ${site.url}`;
+        }
+        
+        output.textContent = text;
+        hashtags.innerHTML = tags.map(t => `<span class="hashtag">${t}</span>`).join('');
+        btn.disabled = false;
+        btn.textContent = '📣 Generate Content';
+      }, 600);
+    }
+
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      const text = document.getElementById('output').textContent;
+      const tags = Array.from(document.querySelectorAll('.hashtag')).map(h => h.textContent).join(' ');
+      navigator.clipboard.writeText(text + '\n\n' + tags).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => btn.textContent = '📋 Copy', 2000);
+      });
+    });
+  </script>
+</body>
+</html>
