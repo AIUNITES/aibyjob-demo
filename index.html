@@ -59,7 +59,7 @@
 </head>
 <body>
   <!-- AIUNITES Webring -->
-  <style>.aiunites-bar{position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#0a0a0f,#1a1a2e);border-bottom:1px solid rgba(99,102,241,.3);padding:8px 0;font-size:12px}.aiunites-bar-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none}.aiunites-bar-content::-webkit-scrollbar{display:none}.aiunites-bar a{color:rgba(255,255,255,.7);text-decoration:none;white-space:nowrap;transition:color .2s}.aiunites-bar a:hover{color:#fff}.aiunites-bar-brand{color:#6366f1!important;font-weight:600}.aiunites-bar-brand:hover{color:#818cf8!important}.aiunites-bar-divider{color:rgba(255,255,255,.2)}body{padding-top:36px!important}</style>
+  <style>.aiunites-bar{position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#0a0a0f,#1a1a2e);border-bottom:1px solid rgba(99,102,241,.3);padding:8px 0;font-size:12px}.aiunites-bar-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none}.aiunites-bar-content::-webkit-scrollbar{display:none}.aiunites-bar a{color:rgba(255,255,255,.7);text-decoration:none;white-space:nowrap;transition:color .2s}.aiunites-bar a:hover{color:#fff}.aiunites-bar-brand{color:#6366f1!important;font-weight:600}.aiunites-bar-brand:hover{color:#818cf8!important}.aiunites-bar-divider{color:rgba(255,255,255,.2)}body{padding-top:36px!important}.nav-links-landing{display:flex;gap:24px}.nav-links-landing a{color:rgba(255,255,255,.7);text-decoration:none;font-size:14px;transition:color .2s}.nav-links-landing a:hover{color:#ff3366}@media(max-width:768px){.nav-links-landing{display:none}}</style>
   <div class="aiunites-bar"><div class="aiunites-bar-content"><a href="https://aiunites.github.io/aiunites-site/" class="aiunites-bar-brand">◆ AIUNITES</a><span class="aiunites-bar-divider">|</span><a href="https://aiunites.github.io/aizines-app/">AIZines</a><a href="https://aiunites.github.io/redomy-demo/">Redomy</a><a href="https://aiunites.github.io/videobate-site/">VideoBate</a><a href="https://aiunites.github.io/furnishthings-site/">FurnishThings</a><a href="https://aiunites.github.io/bizstry-site/">BizStry</a><a href="https://aiunites.github.io/aiyhwh-site/">AI YHWH</a><a href="https://aiunites.github.io/cloudsion-site/">Cloudsion</a><a href="https://aiunites.github.io/gameatica-site/">Gameatica</a><a href="https://aiunites.github.io/uptownit-site/">UptownIT</a><a href="https://aiunites.github.io/inthisworld-site/">InThisWorld</a><a href="https://aiunites.github.io/erpise-site/">ERPise</a><a href="https://aiunites.github.io/erpize-site/">ERPize</a><a href="https://aiunites.github.io/cosmostheopera-site/">🌌 COSMOS</a></div></div>
   <script>(function(){if(location.protocol==='file:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'){document.querySelectorAll('.aiunites-bar a').forEach(a=>{a.href=a.href.replace('https://aiunites.github.io/','../')+'index.html';});}})()</script>
 
@@ -68,15 +68,20 @@
     <div id="landing-screen" class="screen active">
       <nav class="landing-nav">
         <a href="#" class="logo">AI<span>ByJob</span></a>
+        <div class="nav-links-landing">
+          <a href="#agents-section">🤖 Agents</a>
+          <a href="#templates-section">📋 Templates</a>
+          <a href="#control-section">🏛️ Control Center</a>
+        </div>
         <button class="btn-primary" id="landing-login-btn">Log In</button>
       </nav>
 
       <section class="landing-hero">
         <div class="hero-content">
           <div class="demo-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 12px;">🚧 Demo / Pre-Launch Preview</div>
-          <div class="hero-slogan">THE RIGHT AI FOR YOUR JOB</div>
-          <h1>Find AI Tools<br><span class="gradient-text">For Your Profession.</span></h1>
-          <p class="hero-subtitle">Discover and track AI tools curated for your specific job role and industry.</p>
+          <div class="hero-slogan">AI AGENTS FOR YOUR JOB</div>
+          <h1>Deploy AI Agents<br><span class="gradient-text">For Your Profession.</span></h1>
+          <p class="hero-subtitle">Autonomous AI agents, templates, and tools curated for your specific job role.</p>
           <div class="hero-cta">
             <div class="btn-row">
               <button class="btn-primary btn-large" id="landing-start-btn">Get Started Free</button>
@@ -96,7 +101,7 @@
       </section>
 
       <!-- AI Agents Showcase -->
-      <section class="landing-agents">
+      <section class="landing-agents" id="agents-section">
         <h2>🤖 AI Agents Hub</h2>
         <p class="section-subtitle">Autonomous agents that work for you 24/7</p>
         
@@ -157,7 +162,8 @@
         </div>
         
         <button class="btn-primary btn-large" id="landing-agents-btn">⚡ Try AI Agents</button>
-        <a href="agents/templates/index.html" class="btn-secondary btn-large" style="margin-left: 1rem; display: inline-block; padding: 0.875rem 1.5rem; border: 1px solid var(--gray-dark); border-radius: 8px; color: var(--gray-light); text-decoration: none;">📋 Browse Templates</a>
+        <a href="agents/promotion.html" class="btn-secondary btn-large" style="margin-left: 1rem; display: inline-block; padding: 0.875rem 1.5rem; border: 1px solid var(--gray-dark); border-radius: 8px; color: var(--gray-light); text-decoration: none;">📣 Promotion Agent</a>
+        <a href="agents/leadfinder.html" class="btn-secondary btn-large" style="margin-left: 1rem; display: inline-block; padding: 0.875rem 1.5rem; border: 1px solid var(--gray-dark); border-radius: 8px; color: var(--gray-light); text-decoration: none;">🔍 LeadFinder</a>
       </section>
 
       <section class="landing-items">
@@ -166,8 +172,83 @@
         <div class="items-grid" id="landing-items-grid"></div>
       </section>
 
+      <!-- Templates Section -->
+      <section class="landing-templates" id="templates-section" style="padding: 60px 20px; background: rgba(255,51,102,0.03);">
+        <h2>📋 AI Templates</h2>
+        <p class="section-subtitle">Pre-built prompts & workflows by profession</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 40px auto 0;">
+          <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">💼</div>
+            <h3 style="color: #fff; margin-bottom: 8px;">Sales Templates</h3>
+            <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 16px;">Cold emails, proposals, follow-ups, objection handling</p>
+            <span style="color: #ff3366; font-size: 0.85rem;">12 templates →</span>
+          </div>
+          <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">📝</div>
+            <h3 style="color: #fff; margin-bottom: 8px;">Marketing Templates</h3>
+            <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 16px;">Social posts, ad copy, email campaigns, content calendars</p>
+            <span style="color: #ff3366; font-size: 0.85rem;">18 templates →</span>
+          </div>
+          <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">👨‍💻</div>
+            <h3 style="color: #fff; margin-bottom: 8px;">Developer Templates</h3>
+            <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 16px;">Code reviews, documentation, API specs, debugging</p>
+            <span style="color: #ff3366; font-size: 0.85rem;">15 templates →</span>
+          </div>
+          <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;">
+            <div style="font-size: 2rem; margin-bottom: 12px;">👥</div>
+            <h3 style="color: #fff; margin-bottom: 8px;">HR Templates</h3>
+            <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 16px;">Job descriptions, interview questions, onboarding, reviews</p>
+            <span style="color: #ff3366; font-size: 0.85rem;">10 templates →</span>
+          </div>
+        </div>
+        <p style="text-align: center; margin-top: 30px; color: #6b7280;">Coming soon • Join waitlist for early access</p>
+      </section>
+
+      <!-- Control Center Section -->
+      <section class="landing-control" id="control-section" style="padding: 60px 20px;">
+        <h2>🏛️ Control Center</h2>
+        <p class="section-subtitle">Manage all your AI agents from one dashboard</p>
+        <div style="max-width: 900px; margin: 40px auto 0; background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden;">
+          <div style="background: rgba(0,0,0,0.3); padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px;">
+            <span style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%;"></span>
+            <span style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%;"></span>
+            <span style="width: 12px; height: 12px; background: #10b981; border-radius: 50%;"></span>
+            <span style="color: #6b7280; margin-left: 12px;">AIByJob Control Center</span>
+          </div>
+          <div style="padding: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="text-align: center; padding: 20px;">
+              <div style="font-size: 2.5rem; margin-bottom: 8px;">🤖</div>
+              <div style="font-size: 2rem; font-weight: bold; color: #fff;">5</div>
+              <div style="color: #9ca3af;">Active Agents</div>
+            </div>
+            <div style="text-align: center; padding: 20px;">
+              <div style="font-size: 2.5rem; margin-bottom: 8px;">✅</div>
+              <div style="font-size: 2rem; font-weight: bold; color: #10b981;">47</div>
+              <div style="color: #9ca3af;">Tasks Completed</div>
+            </div>
+            <div style="text-align: center; padding: 20px;">
+              <div style="font-size: 2.5rem; margin-bottom: 8px;">⏰</div>
+              <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;">3</div>
+              <div style="color: #9ca3af;">Scheduled Tasks</div>
+            </div>
+            <div style="text-align: center; padding: 20px;">
+              <div style="font-size: 2.5rem; margin-bottom: 8px;">📊</div>
+              <div style="font-size: 2rem; font-weight: bold; color: #8b5cf6;">89%</div>
+              <div style="color: #9ca3af;">Success Rate</div>
+            </div>
+          </div>
+          <div style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 12px; flex-wrap: wrap;">
+            <span style="background: rgba(16,185,129,0.1); color: #10b981; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem;">● Promotion Agent: Running</span>
+            <span style="background: rgba(99,102,241,0.1); color: #818cf8; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem;">○ LeadFinder: Idle</span>
+            <span style="background: rgba(99,102,241,0.1); color: #818cf8; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem;">○ WebBuilder: Idle</span>
+          </div>
+        </div>
+        <p style="text-align: center; margin-top: 30px; color: #6b7280;">Full dashboard coming soon</p>
+      </section>
+
       <section class="landing-cta">
-        <h2>Ready to find AI tools for your job?</h2>
+        <h2>Ready to deploy AI agents for your job?</h2>
         <p>Be the first to know when AIByJob launches.</p>
         <button class="btn-primary btn-large" id="landing-start-btn-2">Join Waitlist</button>
       </section>
@@ -256,10 +337,11 @@
       <nav class="app-nav">
         <div class="nav-left"><div class="logo">AI<span>ByJob</span></div></div>
         <div class="nav-center">
-          <button class="nav-tab active" data-view="my-items">My Tools</button>
-          <button class="nav-tab" data-view="agents">🤖 Agents</button>
+          <button class="nav-tab active" data-view="agents">🤖 Agents</button>
+          <button class="nav-tab" data-view="templates">📋 Templates</button>
+          <button class="nav-tab" data-view="control">🏛️ Control</button>
+          <button class="nav-tab" data-view="my-items">My Tools</button>
           <button class="nav-tab" data-view="discover">Discover</button>
-          <button class="nav-tab" data-view="favorites">Favorites</button>
         </div>
         <div class="nav-right">
           <div class="user-menu">
@@ -388,6 +470,28 @@
                 <span class="cap-tag">✓ Revenue</span>
               </div>
               <button class="btn-agent" onclick="launchAgent('ecomscout')">⚡ Launch Agent</button>
+            </div>
+            <!-- Promotion Agent - LIVE -->
+            <div class="agent-card featured" data-agent="promotion">
+              <div class="featured-tag">✓ Live</div>
+              <div class="agent-header">
+                <div class="agent-avatar">
+                  <span class="agent-icon">📣</span>
+                  <span class="agent-status online"></span>
+                </div>
+                <div class="agent-info">
+                  <h3>Promotion</h3>
+                  <span class="agent-type">Social Media Content</span>
+                </div>
+                <div class="agent-badge">v1.0</div>
+              </div>
+              <p class="agent-desc">Generate LinkedIn, Twitter, and Facebook posts for any AIUNITES product.</p>
+              <div class="agent-capabilities">
+                <span class="cap-tag">✓ LinkedIn</span>
+                <span class="cap-tag">✓ Twitter</span>
+                <span class="cap-tag">✓ Copy</span>
+              </div>
+              <a href="agents/promotion.html" class="btn-agent">🚀 Open Agent</a>
             </div>
           </div>
         </div>
