@@ -567,7 +567,10 @@
         <div id="control-view" class="dashboard-view">
           <div class="view-header">
             <div><h1>🏛️ Control Center</h1><p class="view-subtitle">Manage all your AI agents</p></div>
-            <button class="btn-secondary" onclick="exportAgentHistory()">💾 Export History</button>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-secondary" onclick="exportAgentHistoryCSV()" style="display: inline-flex; align-items: center; gap: 6px;">📄 CSV</button>
+              <button class="btn-secondary" onclick="exportAgentHistory()" style="display: inline-flex; align-items: center; gap: 6px;">💾 JSON</button>
+            </div>
           </div>
           
           <!-- Stats Row -->
@@ -915,5 +918,6 @@
   <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script src="js/agents.js"></script>
+  <script src="js/control-center.js"></script>
 </body>
 </html>

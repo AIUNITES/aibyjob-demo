@@ -261,12 +261,25 @@
     document.getElementById('copy-btn').addEventListener('click', () => {
       const text = document.getElementById('output').textContent;
       const tags = Array.from(document.querySelectorAll('.hashtag')).map(h => h.textContent).join(' ');
-      navigator.clipboard.writeText(text + '\n\n' + tags).then(() => {
+      const fullText = text + '\n\n' + tags;
+      navigator.clipboard.writeText(fullText).then(() => {
         const btn = document.getElementById('copy-btn');
         btn.textContent = '✓ Copied!';
         setTimeout(() => btn.textContent = '📋 Copy', 2000);
+        
+        // Log task to Control Center
+        if (typeof logAgentTask === 'function') {
+          const type = document.getElementById('content-type').value;
+          logAgentTask(
+            'Promotion',
+            selectedPlatform.charAt(0).toUpperCase() + selectedPlatform.slice(1) + ' Post',
+            `${type} for ${selectedSite}`,
+            { output: fullText, platform: selectedPlatform, site: selectedSite }
+          );
+        }
       });
     });
   </script>
+  <script src="../js/control-center.js"></script>
 </body>
 </html>

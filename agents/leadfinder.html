@@ -205,8 +205,19 @@
       setTimeout(() => {
         output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">✓ Scan complete! Demo shows sample results.</span></div>`;
         output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Join waitlist for full access.</span></div>`;
+        
+        // Log task to Control Center
+        if (typeof logAgentTask === 'function') {
+          logAgentTask(
+            'LeadFinder',
+            'Lead Scan',
+            `${industry} in ${location}`,
+            { output: `Found 23 businesses without websites in ${location}`, leadsCount: 23, location: location, industry: industry }
+          );
+        }
       }, 2800);
     }
   </script>
+  <script src="../js/control-center.js"></script>
 </body>
 </html>
