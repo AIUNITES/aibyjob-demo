@@ -85,20 +85,25 @@ const SQLDatabase = {
       console.log('[SQLDatabase] sql.js loaded successfully');
       
       this.loadLocationConfig();
-      await this.loadFromStorage();
       
-      if (!this.isLoaded && !this.isLocalhost()) {
-        console.log('[SQLDatabase] No local database found, not on localhost - attempting auto-load from GitHub...');
+      // When online (not localhost), ALWAYS try GitHub first for shared database
+      if (!this.isLocalhost()) {
+        console.log('[SQLDatabase] Online mode - loading shared database from GitHub...');
         const loaded = await this.autoLoadFromGitHub();
-        if (loaded) {
-          console.log('[SQLDatabase] Successfully auto-loaded database from GitHub');
-        } else {
-          console.log('[SQLDatabase] Could not auto-load from GitHub, starting with empty state');
+        if (!loaded) {
+          // Fallback to localStorage if GitHub fails
+          console.log('[SQLDatabase] GitHub load failed, trying localStorage...');
+          await this.loadFromStorage();
         }
-      } else if (this.isLoaded) {
-        console.log('[SQLDatabase] Loaded database from localStorage');
       } else {
-        console.log('[SQLDatabase] On localhost - using localStorage mode');
+        // Localhost: use localStorage (development mode)
+        console.log('[SQLDatabase] Localhost mode - using local database');
+        await this.loadFromStorage();
+      }
+      
+      // Ensure required tables exist
+      if (this.isLoaded) {
+        this.ensureTables();
       }
       
       this.loadHistory();
@@ -1238,6 +1243,56 @@ WHERE id = 1;`,
     } catch (error) {
       console.error('[SQLDatabase] Update password error:', error);
       return false;
+    }
+  },
+  
+  /**
+   * Ensure required tables exist (called after database load)
+   */
+  ensureTables() {
+    if (!this.db) return;
+    this.ensureUsersTable();
+    console.log('[SQLDatabase] Tables ensured');
+  },
+  
+  /**
+   * Ensure users table exists with site column
+   */
+  ensureUsersTable() {
+    if (!this.db) return;
+    
+    try {
+      const tableExists = this.db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+      
+      if (!tableExists.length) {
+        console.log('[SQLDatabase] Creating users table...');
+        this.db.run(`
+          CREATE TABLE users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password_hash TEXT NOT NULL,
+            display_name TEXT,
+            email TEXT,
+            role TEXT DEFAULT 'user',
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            last_login TEXT,
+            site TEXT DEFAULT 'AIByJob'
+          )
+        `);
+        this.autoSave();
+      } else {
+        // Check if site column exists
+        const columns = this.db.exec("PRAGMA table_info(users)");
+        const hasSiteColumn = columns[0]?.values.some(col => col[1] === 'site');
+        
+        if (!hasSiteColumn) {
+          console.log('[SQLDatabase] Adding site column to existing table...');
+          this.db.run("ALTER TABLE users ADD COLUMN site TEXT DEFAULT 'AIByJob'");
+          this.autoSave();
+        }
+      }
+    } catch (error) {
+      console.error('[SQLDatabase] ensureUsersTable error:', error);
     }
   },
   
