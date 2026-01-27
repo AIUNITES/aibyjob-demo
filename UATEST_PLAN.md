@@ -8,7 +8,7 @@
 | **Live URL** | https://aiunites.github.io/aibyjob-demo/ |
 | **Local Path** | C:/Users/Tom/Documents/GitHub/aibyjob-demo |
 | **Last Updated** | January 26, 2026 |
-| **Version** | 1.1.0 |
+| **Version** | 1.2.0 |
 | **Based On** | DemoTemplate |
 | **Tagline** | The Right AI for Your Job |
 
@@ -172,16 +172,26 @@
 | Stats Row | ✅ | Agents, Tasks, Posts, Leads counts |
 | Quick Launch Buttons | ✅ | Promotion, LeadFinder, WebBuilder, Marketing |
 | **Agent Chain Visualizer** | ✅ | Interactive animated demo |
-| Chain Selector | ✅ | 3 demo chains to choose from |
+| Chain Selector | ✅ | 5 working chains to choose from |
 | Visual Chain Flow | ✅ | Animated agent nodes with progress |
-| Data Packet Animation | ✅ | Shows data flowing between agents |
+| Data Packet Animation | ✅ | Flying papers between agents |
+| Input Forms | ✅ | Dynamic forms per chain type |
 | Output Log | ✅ | Real-time status updates |
-| Run Demo Button | ✅ | Triggers animation sequence |
+| Results Panel | ✅ | Tabbed output with copy buttons |
 | New Chain Builder | ✅ | Modal to create custom chains |
 | Agent Status Grid | ✅ | Online/Offline status for all agents |
 | Task History | ✅ | List of completed tasks |
 | Export CSV | ✅ | Download history as CSV |
 | Export JSON | ✅ | Download history as JSON |
+
+### 🔗 Working Agent Chains
+| Chain | Description | Status |
+|-------|-------------|--------|
+| 📱 Social Media Blitz | One input → LinkedIn + Twitter + Facebook | ✅ |
+| 🚀 AIUNITES Site Launcher | Generate social kit for any AIUNITES site | ✅ |
+| 📧 Lead-to-Email Pipeline | Find leads → Score → Generate emails | ✅ |
+| ♻️ Content Repurposer | Article → Summary + Social + Newsletter | ✅ |
+| 🎯 Product Launch Kit | Brief → Landing + Social + Press + Email | ✅ |
 
 ---
 
@@ -216,6 +226,7 @@
 | agents.js | AI agents logic | ✅ |
 | control-center.js | AI Director logic | ✅ |
 | chain-visualizer.js | Animated chain demo | ✅ |
+| chain-runner.js | Chain execution engine | ✅ |
 | analytics.js | Analytics panel | ✅ |
 | datasource.js | Data source manager | ✅ |
 | sql-database.js | SQL database panel | ✅ |
@@ -279,11 +290,21 @@
 - [ ] Stats row displays counts
 - [ ] Quick launch buttons work
 - [ ] Chain visualizer renders
-- [ ] Chain selector switches chains
-- [ ] Run Demo animates agents sequentially
-- [ ] Data packets animate between agents
+- [ ] Chain selector switches chains (5 chains)
+- [ ] Input forms update per chain type
+- [ ] Run Chain executes with animations
+- [ ] Flying papers animate between agents
 - [ ] Progress bars fill during agent work
 - [ ] Output log shows status updates
+- [ ] Results panel appears after completion
+- [ ] Tabbed results display correctly
+- [ ] Copy buttons work for each section
+- [ ] Copy All exports complete results
+- [ ] Social Media Blitz generates 3 platform posts
+- [ ] Site Launcher generates social kit + press kit
+- [ ] Lead-to-Email generates leads + personalized emails
+- [ ] Content Repurposer creates 4 content formats
+- [ ] Product Launch Kit creates full launch materials
 - [ ] Agent status grid shows online/offline
 - [ ] New Chain button opens builder modal
 
@@ -306,6 +327,7 @@
 | 1.0.0 | Jan 2026 | Initial release with agents |
 | 1.0.1 | Jan 24, 2026 | Added CloudDB module |
 | 1.1.0 | Jan 26, 2026 | Added Agent Chain Visualizer with animated demos |
+| 1.2.0 | Jan 26, 2026 | Added 5 working agent chains with real outputs |
 
 ---
 
