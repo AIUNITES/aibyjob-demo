@@ -610,64 +610,15 @@
             </div>
           </div>
 
-          <!-- Agent Chains -->
+          <!-- Agent Chains - Interactive Visualizer -->
           <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
               <h3 style="color: #fff; margin: 0;">🔗 Agent Chains</h3>
               <button onclick="showChainBuilder()" style="padding: 8px 16px; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">+ New Chain</button>
             </div>
             
-            <!-- Example Chain 1 -->
-            <div style="background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                <span style="color: #a78bfa; font-weight: 600; font-size: 0.9rem;">Lead-to-Outreach Pipeline</span>
-                <span style="background: rgba(16,185,129,0.2); color: #10b981; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem;">Active</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(6,182,212,0.2); padding: 8px 12px; border-radius: 8px;">
-                  <span style="font-size: 1.25rem;">🔍</span>
-                  <span style="color: #06b6d4; font-size: 0.85rem;">LeadFinder</span>
-                </div>
-                <span style="color: #6b7280; font-size: 1.25rem;">→</span>
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(255,51,102,0.2); padding: 8px 12px; border-radius: 8px;">
-                  <span style="font-size: 1.25rem;">📣</span>
-                  <span style="color: #ff3366; font-size: 0.85rem;">Promotion</span>
-                </div>
-                <span style="color: #6b7280; font-size: 1.25rem;">→</span>
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(16,185,129,0.2); padding: 8px 12px; border-radius: 8px;">
-                  <span style="font-size: 1.25rem;">📧</span>
-                  <span style="color: #10b981; font-size: 0.85rem;">Email</span>
-                </div>
-              </div>
-              <p style="color: #9ca3af; font-size: 0.8rem; margin: 12px 0 0;">Finds leads → Creates social posts → Sends outreach emails</p>
-            </div>
-            
-            <!-- Example Chain 2 -->
-            <div style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                <span style="color: #818cf8; font-weight: 600; font-size: 0.9rem;">Website Launch Workflow</span>
-                <span style="background: rgba(107,114,128,0.2); color: #9ca3af; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem;">Draft</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(245,158,11,0.2); padding: 8px 12px; border-radius: 8px;">
-                  <span style="font-size: 1.25rem;">🏗️</span>
-                  <span style="color: #f59e0b; font-size: 0.85rem;">WebBuilder</span>
-                </div>
-                <span style="color: #6b7280; font-size: 1.25rem;">→</span>
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(34,197,94,0.2); padding: 8px 12px; border-radius: 8px;">
-                  <span style="font-size: 1.25rem;">📈</span>
-                  <span style="color: #22c55e; font-size: 0.85rem;">SEO Setup</span>
-                </div>
-                <span style="color: #6b7280; font-size: 1.25rem;">→</span>
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(255,51,102,0.2); padding: 8px 12px; border-radius: 8px;">
-                  <span style="font-size: 1.25rem;">📣</span>
-                  <span style="color: #ff3366; font-size: 0.85rem;">Promotion</span>
-                </div>
-              </div>
-              <p style="color: #9ca3af; font-size: 0.8rem; margin: 12px 0 0;">Builds site → Optimizes SEO → Creates launch announcements</p>
-            </div>
-            
-            <p style="color: #6b7280; font-size: 0.85rem; text-align: center; margin-top: 16px;">Chain agents together to automate multi-step workflows</p>
+            <!-- Interactive Chain Visualizer Container -->
+            <div id="chain-visualizer-container"></div>
           </div>
 
           <!-- Agent Status -->
@@ -1069,6 +1020,7 @@
   <script src="js/analytics.js"></script>
   <script src="js/datasource.js"></script>
   <script src="js/sql-database.js"></script>
+  <script src="js/chain-visualizer.js"></script>
   <script>
     // Agent Chain Builder
     function showChainBuilder() {
@@ -1181,6 +1133,18 @@
             if (typeof SQLDatabase !== 'undefined') {
               SQLDatabase.updateStatus();
               SQLDatabase.refreshTables();
+            }
+          }, 100);
+        });
+      }
+      
+      // Initialize Chain Visualizer when Director tab is clicked
+      const controlTab = document.querySelector('[data-view="control"]');
+      if (controlTab) {
+        controlTab.addEventListener('click', () => {
+          setTimeout(() => {
+            if (typeof ChainVisualizer !== 'undefined') {
+              ChainVisualizer.render('chain-visualizer-container');
             }
           }, 100);
         });

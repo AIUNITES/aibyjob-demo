@@ -7,8 +7,8 @@
 | **Repository** | aibyjob-demo |
 | **Live URL** | https://aiunites.github.io/aibyjob-demo/ |
 | **Local Path** | C:/Users/Tom/Documents/GitHub/aibyjob-demo |
-| **Last Updated** | January 24, 2026 |
-| **Version** | 1.0.0 |
+| **Last Updated** | January 26, 2026 |
+| **Version** | 1.1.0 |
 | **Based On** | DemoTemplate |
 | **Tagline** | The Right AI for Your Job |
 
@@ -160,10 +160,28 @@
 
 | Tab | View ID | Status |
 |-----|---------|--------|
-| My Tools | my-items-view | ✅ |
 | 🤖 Agents | agents-view | ✅ |
+| 📋 Templates | templates-view | ✅ |
+| 🎬 Director | control-view | ✅ |
+| My Tools | my-items-view | ✅ |
 | Discover | discover-view | ✅ |
-| Favorites | favorites-view | ✅ |
+
+### 🎬 AI Director (Control Center)
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Stats Row | ✅ | Agents, Tasks, Posts, Leads counts |
+| Quick Launch Buttons | ✅ | Promotion, LeadFinder, WebBuilder, Marketing |
+| **Agent Chain Visualizer** | ✅ | Interactive animated demo |
+| Chain Selector | ✅ | 3 demo chains to choose from |
+| Visual Chain Flow | ✅ | Animated agent nodes with progress |
+| Data Packet Animation | ✅ | Shows data flowing between agents |
+| Output Log | ✅ | Real-time status updates |
+| Run Demo Button | ✅ | Triggers animation sequence |
+| New Chain Builder | ✅ | Modal to create custom chains |
+| Agent Status Grid | ✅ | Online/Offline status for all agents |
+| Task History | ✅ | List of completed tasks |
+| Export CSV | ✅ | Download history as CSV |
+| Export JSON | ✅ | Download history as JSON |
 
 ---
 
@@ -196,6 +214,11 @@
 | auth.js | Authentication logic | ✅ |
 | app.js | Main app logic | ✅ |
 | agents.js | AI agents logic | ✅ |
+| control-center.js | AI Director logic | ✅ |
+| chain-visualizer.js | Animated chain demo | ✅ |
+| analytics.js | Analytics panel | ✅ |
+| datasource.js | Data source manager | ✅ |
+| sql-database.js | SQL database panel | ✅ |
 | cloud-database.js | Cloud sync module | ✅ |
 
 ---
@@ -251,6 +274,19 @@
 - [ ] Agent workspace modal works
 - [ ] Create/Edit tool modal works
 
+### AI Director Tests
+- [ ] Director tab shows control view
+- [ ] Stats row displays counts
+- [ ] Quick launch buttons work
+- [ ] Chain visualizer renders
+- [ ] Chain selector switches chains
+- [ ] Run Demo animates agents sequentially
+- [ ] Data packets animate between agents
+- [ ] Progress bars fill during agent work
+- [ ] Output log shows status updates
+- [ ] Agent status grid shows online/offline
+- [ ] New Chain button opens builder modal
+
 ---
 
 ## Known Issues / TODO
@@ -269,7 +305,8 @@
 |---------|------|---------|
 | 1.0.0 | Jan 2026 | Initial release with agents |
 | 1.0.1 | Jan 24, 2026 | Added CloudDB module |
+| 1.1.0 | Jan 26, 2026 | Added Agent Chain Visualizer with animated demos |
 
 ---
 
-*Last tested: January 24, 2026*
+*Last tested: January 26, 2026*
