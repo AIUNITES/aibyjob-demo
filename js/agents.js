@@ -10,6 +10,7 @@ const AGENTS = {
     icon: '🏗️',
     title: '🏗️ WebBuilder Agent',
     description: 'Builds complete websites from a description',
+    fullPage: 'agents/webbuilder.html',
     steps: [
       'Analyzing business requirements...',
       'Designing layout structure...',
@@ -42,19 +43,50 @@ const AGENTS = {
         <textarea id="agent-input-3" rows="3" placeholder="Describe what you want..."></textarea>
       </div>
     `,
+    getPreview: function(inputs) {
+      const name = inputs[0] || 'Your Business';
+      const industry = inputs[1] || 'business';
+      const icons = {
+        'restaurant': '🍽️',
+        'retail': '🛍️',
+        'professional': '💼',
+        'healthcare': '🏥',
+        'technology': '💻',
+        '': '🏢'
+      };
+      const icon = icons[industry] || '🏢';
+      return `
+        <div style="padding: 15px; width: 100%;">
+          <div style="background: linear-gradient(135deg, #ff3366, #ff6b35); padding: 20px; border-radius: 8px; margin-bottom: 10px;">
+            <h4 style="color: white; margin: 0;">${icon} ${name}</h4>
+            <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 12px;">Your professional website</p>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 11px;">
+            <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Home</div>
+            <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Services</div>
+            <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">About</div>
+            <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Contact</div>
+          </div>
+          <p style="color: #10b981; font-size: 11px; margin: 10px 0 0;">✓ 4 pages • SEO optimized • Mobile-ready</p>
+          <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" style="display: block; margin-top: 10px; padding: 8px 12px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); color: #fff; text-align: center; border-radius: 6px; text-decoration: none; font-size: 11px;">☁️ Deploy to Cloudsion</a>
+        </div>
+      `;
+    },
+    // Static fallback preview
     preview: `
       <div style="padding: 15px; width: 100%;">
         <div style="background: linear-gradient(135deg, #ff3366, #ff6b35); padding: 20px; border-radius: 8px; margin-bottom: 10px;">
-          <h4 style="color: white; margin: 0;">🎂 Sweet Dreams Bakery</h4>
-          <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 12px;">Fresh baked happiness daily</p>
+          <h4 style="color: white; margin: 0;">🏢 Your Business</h4>
+          <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 12px;">Your professional website</p>
         </div>
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 11px;">
           <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Home</div>
-          <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Menu</div>
+          <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Services</div>
           <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">About</div>
           <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Contact</div>
         </div>
         <p style="color: #10b981; font-size: 11px; margin: 10px 0 0;">✓ 4 pages • SEO optimized • Mobile-ready</p>
+        <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" style="display: block; margin-top: 10px; padding: 8px 12px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); color: #fff; text-align: center; border-radius: 6px; text-decoration: none; font-size: 11px;">☁️ Deploy to Cloudsion</a>
       </div>
     `
   },
@@ -96,6 +128,25 @@ const AGENTS = {
         </select>
       </div>
     `,
+    getPreview: function(inputs) {
+      const brand = inputs[0] || 'Your Brand';
+      const duration = inputs[3] || '30';
+      return `
+        <div style="padding: 15px; width: 100%;">
+          <h4 style="color: #ff3366; margin: 0 0 12px;">📅 ${duration}-Day Content Calendar</h4>
+          <p style="font-size: 12px; color: #888; margin-bottom: 12px;">for <strong style="color: #fff;">${brand}</strong></p>
+          <div style="font-size: 11px;">
+            <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; margin-bottom: 6px;">
+              <strong>Week 1-2:</strong> Brand awareness, engagement
+            </div>
+            <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; margin-bottom: 6px;">
+              <strong>Week 3-4:</strong> Conversions, promotions
+            </div>
+            <p style="color: #10b981; margin: 10px 0 0;">✓ 90 posts scheduled • 3 platforms</p>
+          </div>
+        </div>
+      `;
+    },
     preview: `
       <div style="padding: 15px; width: 100%;">
         <h4 style="color: #ff3366; margin: 0 0 12px;">📅 30-Day Content Calendar</h4>
@@ -116,6 +167,7 @@ const AGENTS = {
     icon: '🔍',
     title: '🔍 LeadFinder Agent',
     description: 'Find businesses without websites',
+    fullPage: 'agents/leadfinder.html',
     steps: [
       'Connecting to Google Maps API...',
       'Scanning business listings...',
@@ -160,6 +212,31 @@ const AGENTS = {
         </select>
       </div>
     `,
+    getPreview: function(inputs) {
+      const location = inputs[0] || 'your area';
+      const radius = inputs[1] || '25';
+      return `
+        <div style="padding: 15px; width: 100%;">
+          <h4 style="color: #ff3366; margin: 0 0 12px;">🔍 Lead Report - ${location}</h4>
+          <p style="font-size: 11px; color: #888; margin-bottom: 12px;">${radius} mile radius</p>
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 1; background: rgba(16,185,129,0.1); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 20px; color: #10b981;">47</span>
+              <p style="font-size: 10px; color: #888; margin: 4px 0 0;">No Website</p>
+            </div>
+            <div style="flex: 1; background: rgba(59,130,246,0.1); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 20px; color: #3b82f6;">23</span>
+              <p style="font-size: 10px; color: #888; margin: 4px 0 0;">FB Only</p>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #888;">
+            <div style="padding: 6px 0; border-bottom: 1px solid #333;">Taco Haven - 512-555-0123</div>
+            <div style="padding: 6px 0; border-bottom: 1px solid #333;">BBQ Brothers - 512-555-0456</div>
+            <div style="padding: 6px 0;">Pho King Good - 512-555-0789</div>
+          </div>
+        </div>
+      `;
+    },
     preview: `
       <div style="padding: 15px; width: 100%;">
         <h4 style="color: #ff3366; margin: 0 0 12px;">🔍 Lead Report</h4>
@@ -186,6 +263,7 @@ const AGENTS = {
     icon: '🛒',
     title: '🛒 EcomScout Agent',
     description: 'Find stores without e-commerce',
+    fullPage: 'agents/ecomscout.html',
     steps: [
       'Discovering retail stores in area...',
       'Found 234 retail businesses...',
@@ -221,6 +299,29 @@ const AGENTS = {
         </select>
       </div>
     `,
+    getPreview: function(inputs) {
+      const location = inputs[0] || 'your area';
+      return `
+        <div style="padding: 15px; width: 100%;">
+          <h4 style="color: #ff3366; margin: 0 0 12px;">🛒 E-Commerce Opportunities - ${location}</h4>
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 1; background: rgba(16,185,129,0.1); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 20px; color: #10b981;">34</span>
+              <p style="font-size: 10px; color: #888; margin: 4px 0 0;">No E-Com</p>
+            </div>
+            <div style="flex: 1; background: rgba(139,92,246,0.1); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 20px; color: #8b5cf6;">$1.2M</span>
+              <p style="font-size: 10px; color: #888; margin: 4px 0 0;">Potential</p>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: #888;">
+            <div style="padding: 6px 0; border-bottom: 1px solid #333;">Chic Boutique - $45K potential</div>
+            <div style="padding: 6px 0; border-bottom: 1px solid #333;">Mountain Style - $62K potential</div>
+            <div style="padding: 6px 0;">Vintage Vibes - $38K potential</div>
+          </div>
+        </div>
+      `;
+    },
     preview: `
       <div style="padding: 15px; width: 100%;">
         <h4 style="color: #ff3366; margin: 0 0 12px;">🛒 E-Commerce Opportunities</h4>
@@ -336,7 +437,7 @@ function runLandingDemo(task) {
       terminal.scrollTop = terminal.scrollHeight;
       
       if (isLast) {
-        showLandingPreview();
+        showLandingPreview(task);
       }
     }, delay);
     delay += 500 + Math.random() * 300;
@@ -351,12 +452,20 @@ function addLandingTerminalLine(terminal, text, className) {
   terminal.appendChild(line);
 }
 
-// Show landing preview
-function showLandingPreview() {
+// Show landing preview - now uses task to customize
+function showLandingPreview(task) {
   const preview = document.getElementById('landing-preview-frame');
   const agent = AGENTS[landingActiveAgent];
-  if (preview && agent.preview) {
-    preview.innerHTML = agent.preview;
+  
+  if (preview && agent) {
+    // Try to use dynamic preview if available
+    if (agent.getPreview) {
+      // Extract inputs from task
+      const inputs = [task, '', '', ''];
+      preview.innerHTML = agent.getPreview(inputs);
+    } else if (agent.preview) {
+      preview.innerHTML = agent.preview;
+    }
   }
 }
 
@@ -372,8 +481,18 @@ function launchAgent(agentId) {
   // Set modal title
   document.getElementById('agent-modal-title').textContent = agent.title;
   
-  // Set form content
-  document.getElementById('agent-form-content').innerHTML = agent.form;
+  // Set form content with optional link to full page
+  let formHtml = agent.form;
+  if (agent.fullPage) {
+    formHtml += `
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <a href="${agent.fullPage}" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #0ea5e9; text-decoration: none; font-size: 0.9rem;">
+          🚀 Open Full ${agent.name} Agent →
+        </a>
+      </div>
+    `;
+  }
+  document.getElementById('agent-form-content').innerHTML = formHtml;
   
   // Reset terminal
   resetAgentTerminal();
@@ -411,8 +530,14 @@ function runAgent() {
   // Clear terminal
   terminal.innerHTML = '';
   
-  // Get first input value for personalization
-  const input1 = document.getElementById('agent-input-1')?.value || 'target';
+  // Get all input values for personalization
+  const inputs = [];
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById(`agent-input-${i}`);
+    inputs.push(el ? el.value : '');
+  }
+  
+  const input1 = inputs[0] || 'target';
   
   // Add starting message
   addTerminalLine(terminal, `Starting ${agent.name} for "${input1}"...`, '');
@@ -427,7 +552,7 @@ function runAgent() {
       terminal.scrollTop = terminal.scrollHeight;
       
       if (isLast) {
-        showAgentPreview();
+        showAgentPreview(inputs);
       }
     }, delay);
     delay += 600 + Math.random() * 400;
@@ -445,15 +570,20 @@ function addTerminalLine(terminal, text, className) {
   terminal.appendChild(line);
 }
 
-// Show preview based on agent type
-function showAgentPreview() {
+// Show preview based on agent type - now dynamic!
+function showAgentPreview(inputs) {
   const preview = document.getElementById('agent-preview-frame');
   const agent = AGENTS[currentAgent];
   
-  if (preview && agent && agent.preview) {
-    preview.innerHTML = agent.preview;
-  } else {
-    preview.innerHTML = '<p style="text-align:center;color:#888;">Preview not available</p>';
+  if (preview && agent) {
+    // Use dynamic preview if available
+    if (agent.getPreview) {
+      preview.innerHTML = agent.getPreview(inputs);
+    } else if (agent.preview) {
+      preview.innerHTML = agent.preview;
+    } else {
+      preview.innerHTML = '<p style="text-align:center;color:#888;">Preview not available</p>';
+    }
   }
 }
 
