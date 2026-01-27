@@ -31,6 +31,10 @@ build/
 .env.local
 .env.*.local
 
+# Local user credentials (never publish)
+js/local-users.js
+local-users.js
+
 # Backup files
 *.bak
 *.backup

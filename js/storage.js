@@ -18,37 +18,44 @@ const Storage = {
 
   /**
    * Initialize storage with default data
+   * Admin comes from local-users.js (gitignored) if present
+   * Demo user comes from config.js (public)
    */
   init() {
     // Initialize users
     if (!localStorage.getItem(this.KEYS.USERS)) {
       const users = {};
       
-      // Admin user
-      const admin = APP_CONFIG.defaultAdmin;
-      users[admin.username] = {
-        id: 'admin_001',
-        username: admin.username,
-        displayName: admin.displayName,
-        email: admin.email,
-        password: admin.password,
-        isAdmin: true,
-        createdAt: new Date().toISOString(),
-        settings: {}
-      };
+      // Admin user from LOCAL_USERS (js/local-users.js - gitignored)
+      if (typeof LOCAL_USERS !== 'undefined' && LOCAL_USERS.admin) {
+        const admin = LOCAL_USERS.admin;
+        users[admin.username] = {
+          id: 'admin_001',
+          username: admin.username,
+          displayName: admin.displayName,
+          email: admin.email,
+          password: admin.password,
+          isAdmin: true,
+          createdAt: new Date().toISOString(),
+          settings: {}
+        };
+        console.log('[Storage] Admin loaded from local-users.js');
+      }
       
-      // Demo user
+      // Demo user from config (public)
       const demo = APP_CONFIG.defaultDemo;
-      users[demo.username] = {
-        id: 'demo_001',
-        username: demo.username,
-        displayName: demo.displayName,
-        email: demo.email,
-        password: demo.password,
-        isAdmin: false,
-        createdAt: new Date().toISOString(),
-        settings: {}
-      };
+      if (demo && demo.username) {
+        users[demo.username] = {
+          id: 'demo_001',
+          username: demo.username,
+          displayName: demo.displayName,
+          email: demo.email,
+          password: demo.password,
+          isAdmin: false,
+          createdAt: new Date().toISOString(),
+          settings: {}
+        };
+      }
       
       localStorage.setItem(this.KEYS.USERS, JSON.stringify(users));
     }
