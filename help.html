@@ -189,35 +189,28 @@
 
       <!-- Sidebar -->
       <aside class="help-sidebar">
-        <!-- Ask a Question -->
-        <div class="ask-box">
-          <h3>✉️ Ask a Question</h3>
-          <form class="question-form" id="questionForm">
-            <div class="form-group">
-              <label>Email (optional)</label>
-              <input type="email" id="questionEmail" placeholder="your@email.com">
+        <!-- AI Chat Box -->
+        <div class="ai-chat-box">
+          <div class="ai-chat-header-inline">
+            <span>🤖</span>
+            <div>
+              <h3>AI Assistant</h3>
+              <p>Get instant answers about AIByJob</p>
             </div>
-            <div class="form-group">
-              <label>Topic</label>
-              <select id="questionTopic">
-                <option value="agents">AI Agents</option>
-                <option value="deployment">Deployment</option>
-                <option value="account">Account Issues</option>
-                <option value="templates">Templates</option>
-                <option value="bug">Bug Report</option>
-                <option value="feature">Feature Request</option>
-                <option value="other">Other</option>
-              </select>
+          </div>
+          <div class="ai-chat-inline">
+            <div class="ai-chat-messages-inline" id="ai-chat-messages-inline">
+              <div class="ai-message ai-message-ai">Hi! I'm the AIByJob assistant. Ask me about AI agents, deployment, templates, or anything else!</div>
             </div>
-            <div class="form-group">
-              <label>Your Question</label>
-              <textarea id="questionMessage" rows="4" placeholder="How can we help?" required></textarea>
+            <div class="ai-chat-quick-inline">
+              <button class="ai-quick-btn" data-question="What are AI agents?">What are agents?</button>
+              <button class="ai-quick-btn" data-question="How do I deploy a website?">Deploy help</button>
+              <button class="ai-quick-btn" data-question="How do I create a GitHub token?">GitHub token</button>
             </div>
-            <button type="submit" class="btn-primary full-width">Send Question</button>
-          </form>
-          <div class="question-success" id="questionSuccess" style="display: none;">
-            <span>✅</span>
-            <p>Thanks! We'll get back to you soon.</p>
+            <div class="ai-chat-input-inline">
+              <input type="text" id="ai-chat-input-inline" placeholder="Ask a question...">
+              <button id="ai-chat-send-inline">➤</button>
+            </div>
           </div>
         </div>
 
@@ -235,15 +228,11 @@
 
         <!-- Demo Accounts -->
         <div class="demo-box">
-          <h3>🔐 Demo Accounts</h3>
-          <p>Try AIByJob without signing up:</p>
-          <div class="demo-credentials">
-            <div class="demo-account">
-              <strong>Admin:</strong> admin / admin123
-            </div>
-            <div class="demo-account">
-              <strong>User:</strong> demo / demo123
-            </div>
+          <h3>🔐 Getting Access</h3>
+          <p>Create a free account or use the demo to explore:</p>
+          <div class="demo-actions">
+            <a href="index.html" class="btn-primary" style="display: block; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; margin-bottom: 8px;">Create Account</a>
+            <a href="index.html" class="btn-secondary" style="display: block; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2);">Try Demo Mode</a>
           </div>
         </div>
       </aside>
@@ -611,27 +600,269 @@
     .full-width {
       width: 100%;
     }
+
+    /* AI Chat Inline Box */
+    .ai-chat-box {
+      background: rgba(255,51,102,0.05);
+      border: 1px solid rgba(255,51,102,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .ai-chat-header-inline {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .ai-chat-header-inline > span {
+      font-size: 2rem;
+    }
+
+    .ai-chat-header-inline h3 {
+      margin: 0 0 4px 0;
+      font-size: 1.1rem;
+    }
+
+    .ai-chat-header-inline p {
+      margin: 0;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+
+    .ai-chat-messages-inline {
+      min-height: 180px;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      padding: 12px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .ai-chat-messages-inline .ai-message {
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .ai-chat-messages-inline .ai-message-user {
+      background: #ff3366;
+      color: #fff;
+      margin-left: 20%;
+      border-bottom-right-radius: 4px;
+    }
+
+    .ai-chat-messages-inline .ai-message-ai {
+      background: rgba(255,255,255,0.08);
+      color: var(--gray-light);
+      margin-right: 10%;
+      border-bottom-left-radius: 4px;
+    }
+
+    .ai-chat-messages-inline .ai-message-ai strong {
+      color: #fff;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .ai-chat-messages-inline .ai-message-ai code {
+      background: rgba(255,51,102,0.2);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      color: #ff3366;
+    }
+
+    .ai-chat-messages-inline .ai-message-ai a {
+      color: #ff3366;
+    }
+
+    .ai-chat-quick-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .ai-chat-input-inline {
+      display: flex;
+      gap: 8px;
+    }
+
+    .ai-chat-input-inline input {
+      flex: 1;
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .ai-chat-input-inline input:focus {
+      outline: none;
+      border-color: #ff3366;
+    }
+
+    .ai-chat-input-inline button {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #ff3366, #ff6b6b);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .ai-chat-input-inline button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Typing indicator */
+    .ai-typing-inline {
+      display: flex;
+      gap: 4px;
+      padding: 10px;
+    }
+
+    .ai-typing-inline span {
+      width: 6px;
+      height: 6px;
+      background: var(--gray);
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .ai-typing-inline span:nth-child(2) { animation-delay: 0.2s; }
+    .ai-typing-inline span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-3px); opacity: 1; }
+    }
   </style>
 
   <script>
-    // Question form submission
-    document.getElementById('questionForm')?.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Simulate submission
-      const form = this;
-      const success = document.getElementById('questionSuccess');
-      
-      form.style.display = 'none';
-      success.style.display = 'block';
-      
-      // Reset after 5 seconds
-      setTimeout(() => {
-        form.style.display = 'block';
-        success.style.display = 'none';
-        form.reset();
-      }, 5000);
-    });
+    // AI Chat Inline - Knowledge Base
+    const AIChat = {
+      knowledge: {
+        greeting: "Hi! I'm the AIByJob assistant. Ask me about AI agents, deployment, templates, or anything else!",
+        topics: {
+          'agents': {
+            keywords: ['agent', 'agents', 'what are', 'how do agents', 'autonomous'],
+            response: `<strong>AI Agents</strong> are autonomous tools that work for you 24/7:<br><br>• <strong>WebBuilder</strong> - Creates complete websites<br>• <strong>Promotion</strong> - Generates social media posts<br>• <strong>LeadFinder</strong> - Finds businesses without websites<br>• <strong>EcomScout</strong> - Finds stores without e-commerce<br>• <strong>MarketingPro</strong> - Handles SEO and campaigns`
+          },
+          'webbuilder': {
+            keywords: ['webbuilder', 'website', 'build site', 'create website', 'web builder'],
+            response: `<strong>WebBuilder Agent</strong> creates complete websites:<br><br>1. Go to <a href="agents/webbuilder.html">WebBuilder Agent</a><br>2. Enter your business name and description<br>3. Choose a style (Modern, Minimal, Bold, Elegant)<br>4. Click "Build Website"<br>5. Preview and deploy to GitHub Pages!`
+          },
+          'deploy': {
+            keywords: ['deploy', 'github', 'publish', 'host', 'live', 'github pages'],
+            response: `<strong>Deploying to GitHub Pages:</strong><br><br>1. Build your site with WebBuilder<br>2. Get a GitHub Personal Access Token<br>3. Enter your token and repository name<br>4. Click "Deploy"<br><br>Your site will be live at: <code>yourusername.github.io/repo-name</code>`
+          },
+          'token': {
+            keywords: ['token', 'pat', 'personal access', 'ghp_', 'github token'],
+            response: `<strong>Creating a GitHub Token:</strong><br><br>1. Go to <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank">GitHub Token Settings</a><br>2. Set expiration (90 days recommended)<br>3. Check the <strong>"repo"</strong> checkbox<br>4. Click "Generate token"<br>5. Copy the token (starts with <code>ghp_</code>)<br><br>⚠️ Save it somewhere safe!`
+          },
+          'templates': {
+            keywords: ['template', 'templates', 'prompts', 'workflows'],
+            response: `<strong>AI Templates</strong> are pre-built prompts by profession:<br><br>• <strong>Sales</strong> - Cold emails, proposals, follow-ups<br>• <strong>Marketing</strong> - Social posts, ad copy, campaigns<br>• <strong>Developer</strong> - Code reviews, documentation<br>• <strong>HR</strong> - Job descriptions, interviews<br><br>Templates are coming soon!`
+          },
+          'free': {
+            keywords: ['free', 'cost', 'price', 'pay', 'pricing'],
+            response: `<strong>AIByJob Pricing:</strong><br><br>Currently in <strong>demo/pre-launch</strong> mode - everything is free to try!<br><br>When we launch:<br>• <strong>Free tier</strong> - Basic agents, limited runs<br>• <strong>Pro tier</strong> - Unlimited agents<br>• <strong>Team tier</strong> - Collaboration features`
+          },
+          'data': {
+            keywords: ['data', 'storage', 'backup', 'privacy', 'local'],
+            response: `<strong>Your Data:</strong><br><br>• All data stored locally in your browser<br>• Nothing sent to external servers<br>• Use Settings → Backup to download your data<br>• Use Settings → Restore to import data<br><br>We recommend regular backups!`
+          }
+        },
+        fallback: "I'm not sure about that. Try asking about:<br>• AI Agents (WebBuilder, Promotion, LeadFinder)<br>• Deploying websites<br>• GitHub tokens<br>• Templates and workflows"
+      },
+
+      getResponse(message) {
+        const lower = message.toLowerCase();
+        if (/^(hi|hello|hey|help|start)/.test(lower)) {
+          return this.knowledge.greeting;
+        }
+        let bestMatch = null;
+        let bestScore = 0;
+        for (const [topic, data] of Object.entries(this.knowledge.topics)) {
+          let score = 0;
+          for (const keyword of data.keywords) {
+            if (lower.includes(keyword)) score += keyword.length;
+          }
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = data.response;
+          }
+        }
+        return bestMatch || this.knowledge.fallback;
+      },
+
+      init() {
+        this.messages = document.getElementById('ai-chat-messages-inline');
+        this.input = document.getElementById('ai-chat-input-inline');
+        this.sendBtn = document.getElementById('ai-chat-send-inline');
+        
+        if (!this.messages) return;
+        
+        this.sendBtn?.addEventListener('click', () => this.send());
+        this.input?.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') this.send();
+        });
+        
+        document.querySelectorAll('.ai-quick-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.input.value = btn.dataset.question;
+            this.send();
+          });
+        });
+      },
+
+      send() {
+        const text = this.input?.value.trim();
+        if (!text) return;
+        
+        this.addMessage(text, 'user');
+        this.input.value = '';
+        this.showTyping();
+        
+        setTimeout(() => {
+          this.hideTyping();
+          this.addMessage(this.getResponse(text), 'ai');
+        }, 400 + Math.random() * 400);
+      },
+
+      addMessage(text, type) {
+        const div = document.createElement('div');
+        div.className = `ai-message ai-message-${type}`;
+        div.innerHTML = text;
+        this.messages.appendChild(div);
+        this.messages.scrollTop = this.messages.scrollHeight;
+      },
+
+      showTyping() {
+        const div = document.createElement('div');
+        div.className = 'ai-message ai-message-ai ai-typing-inline';
+        div.id = 'ai-typing-inline';
+        div.innerHTML = '<span></span><span></span><span></span>';
+        this.messages.appendChild(div);
+        this.messages.scrollTop = this.messages.scrollHeight;
+      },
+
+      hideTyping() {
+        document.getElementById('ai-typing-inline')?.remove();
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => AIChat.init());
   </script>
 </body>
 </html>
