@@ -11,7 +11,7 @@ const APP_CONFIG = {
   tagline: 'The Right AI for Your Job',
   description: 'Discover the best AI tools for your profession. Curated recommendations for every career.',
   icon: '💼',
-  version: '1.0.0',
+  version: '1.4.0',
   
   logoHtml: 'AI<span>ByJob</span>',
   headline: 'Find AI Tools<br><span class="gradient-text">For Your Job.</span>',

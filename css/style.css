@@ -1355,7 +1355,7 @@ h1 { font-size: 3rem; } h2 { font-size: 2rem; } h3 { font-size: 1.25rem; } h4 { 
 /* ==================== AI Chat Widget ==================== */
 .ai-chat-container {
   position: fixed;
-  bottom: 24px;
+  bottom: 80px; /* Above the Help/Feedback button */
   right: 24px;
   z-index: 9999;
 }
@@ -1575,7 +1575,7 @@ h1 { font-size: 3rem; } h2 { font-size: 2rem; } h3 { font-size: 1.25rem; } h4 { 
   }
   
   .ai-chat-container {
-    bottom: 16px;
+    bottom: 70px;
     right: 16px;
   }
 }

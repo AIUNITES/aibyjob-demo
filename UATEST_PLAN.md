@@ -7,8 +7,8 @@
 | **Repository** | aibyjob-demo |
 | **Live URL** | https://aiunites.github.io/aibyjob-demo/ |
 | **Local Path** | C:/Users/Tom/Documents/GitHub/aibyjob-demo |
-| **Last Updated** | January 26, 2026 |
-| **Version** | 1.3.1 |
+| **Last Updated** | January 27, 2026 |
+| **Version** | 1.4.0 |
 | **Based On** | DemoTemplate |
 | **Tagline** | The Right AI for Your Job |
 
@@ -19,6 +19,7 @@
 | Page | File | Description | Status |
 |------|------|-------------|--------|
 | Main App | index.html | All screens (SPA) | ✅ Active |
+| Help Center | help.html | FAQ, guides, support | ✅ Active |
 | Agent Templates | agents/templates/index.html | Browse agent templates | ✅ Active |
 | Lead Qualification | agents/templates/lead-qualification.html | Lead qual template | ✅ Active |
 
@@ -330,6 +331,22 @@
 - [ ] Agent status grid shows online/offline
 - [ ] New Chain button opens builder modal
 
+### Help & AI Chat Tests
+- [ ] Help link in nav goes to help.html
+- [ ] Help page loads with all sections
+- [ ] Getting Started steps display
+- [ ] Agent guide cards show all agents
+- [ ] Token guide box links to GitHub
+- [ ] FAQ items expand/collapse
+- [ ] Ask a Question form submits
+- [ ] Quick links work
+- [ ] AI Chat toggle button visible
+- [ ] AI Chat opens on click
+- [ ] Quick question buttons work
+- [ ] Chat responds to questions
+- [ ] Typing indicator animates
+- [ ] Chat closes with X button
+
 ---
 
 ## Known Issues / TODO
@@ -352,7 +369,8 @@
 | 1.2.0 | Jan 26, 2026 | Added 5 working agent chains with real outputs |
 | 1.3.0 | Jan 26, 2026 | Added Google Maps Scanner & E-commerce Scanner chains |
 | 1.3.1 | Jan 26, 2026 | Added Project Plans tab to Admin Panel |
+| 1.4.0 | Jan 27, 2026 | Added Help page, AI Chat widget, WebBuilder v3 with GitHub deploy |
 
 ---
 
-*Last tested: January 26, 2026*
+*Last tested: January 27, 2026*
