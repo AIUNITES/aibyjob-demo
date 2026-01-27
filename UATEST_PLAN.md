@@ -234,6 +234,15 @@
 | sql-database.js | SQL database panel | ✅ |
 | cloud-database.js | Cloud sync module | ✅ |
 
+### Backend Files (backend/)
+| File | Purpose | Status |
+|------|---------|--------|
+| app.py | Python Flask API | ✅ |
+| google-apps-script.js | Google Apps Script API | ✅ |
+| requirements.txt | Python dependencies | ✅ |
+| SETUP.md | Backend setup guide | ✅ |
+| .env.example | Environment template | ✅ |
+
 ---
 
 ## localStorage Keys
