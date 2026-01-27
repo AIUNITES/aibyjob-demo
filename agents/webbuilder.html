@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebBuilder Agent - AI Website Creation | AIByJob</title>
-  <meta name="description" content="AI agent that builds complete websites from a description. SEO-optimized, mobile-ready.">
+  <meta name="description" content="AI agent that builds complete websites from a description. SEO-optimized, mobile-ready. Deploy instantly to Cloudsion.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
@@ -19,6 +19,7 @@
         <a href="../index.html">Home</a>
         <a href="promotion.html">Promotion</a>
         <a href="leadfinder.html">LeadFinder</a>
+        <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="nav-cta">☁️ Cloudsion</a>
       </div>
     </div>
   </nav>
@@ -32,17 +33,18 @@
             <span class="agent-status-large online"></span>
           </div>
           <div>
-            <span class="agent-version">v2.0 • Online</span>
+            <span class="agent-version">v3.0 • Online • Cloudsion Integration</span>
             <h1>WebBuilder Agent</h1>
-            <p class="agent-tagline">Autonomous Website Creation</p>
+            <p class="agent-tagline">Build & Deploy Websites Instantly</p>
           </div>
         </div>
         <p class="agent-hero-desc">
           Transform your ideas into fully-functional websites. WebBuilder analyzes your requirements, 
-          designs layouts, writes code, optimizes for SEO, and deploys—all autonomously.
+          designs layouts, writes code, optimizes for SEO, and <strong>deploys to Cloudsion</strong>—all autonomously.
         </p>
         <div class="agent-hero-actions">
           <a href="#workspace" class="btn btn-primary btn-large">⚡ Launch Agent</a>
+          <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="btn btn-secondary btn-large">☁️ About Cloudsion</a>
         </div>
       </div>
     </div>
@@ -51,10 +53,24 @@
   <section class="agent-stats">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-card"><span class="stat-icon">⚡</span><span class="stat-value">~2 hrs</span><span class="stat-label">Build Time</span></div>
-        <div class="stat-card"><span class="stat-icon">✅</span><span class="stat-value">98%</span><span class="stat-label">Success Rate</span></div>
+        <div class="stat-card"><span class="stat-icon">⚡</span><span class="stat-value">~5 min</span><span class="stat-label">Build Time</span></div>
+        <div class="stat-card"><span class="stat-icon">☁️</span><span class="stat-value">1-click</span><span class="stat-label">Deploy</span></div>
         <div class="stat-card"><span class="stat-icon">📱</span><span class="stat-value">100%</span><span class="stat-label">Mobile Ready</span></div>
         <div class="stat-card"><span class="stat-icon">🔍</span><span class="stat-value">90+</span><span class="stat-label">SEO Score</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Banner -->
+  <section class="integration-banner">
+    <div class="container">
+      <div class="integration-content">
+        <span class="integration-icon">☁️</span>
+        <div class="integration-text">
+          <h3>Powered by Cloudsion</h3>
+          <p>WebBuilder deploys directly to Cloudsion for free hosting on GitHub Pages</p>
+        </div>
+        <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="btn btn-outline">Learn More →</a>
       </div>
     </div>
   </section>
@@ -74,21 +90,42 @@
             <input type="text" id="businessName" placeholder="e.g., Joe's Plumbing">
           </div>
           <div class="form-group">
-            <label>Industry</label>
-            <select id="industry">
-              <option value="restaurant">Restaurant / Cafe</option>
-              <option value="retail">Retail Store</option>
-              <option value="services" selected>Professional Services</option>
-              <option value="healthcare">Healthcare</option>
-              <option value="construction">Construction / Trades</option>
-              <option value="beauty">Beauty / Salon</option>
+            <label>Site Type</label>
+            <select id="siteType">
+              <option value="landing">Landing Page</option>
+              <option value="portfolio">Portfolio</option>
+              <option value="business" selected>Business Website</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="blog">Blog</option>
+              <option value="docs">Documentation</option>
             </select>
           </div>
           <div class="form-group">
             <label>Description</label>
-            <textarea id="description" placeholder="Tell us about your business, services, and target customers..."></textarea>
+            <textarea id="description" placeholder="Describe your business, what you offer, and who your customers are..."></textarea>
           </div>
-          <button class="btn btn-primary btn-large btn-full" onclick="buildSite()">🏗️ Build Website</button>
+          <div class="form-group">
+            <label>Style Preference</label>
+            <div class="style-options">
+              <label class="style-option">
+                <input type="radio" name="style" value="modern" checked>
+                <span>🎨 Modern</span>
+              </label>
+              <label class="style-option">
+                <input type="radio" name="style" value="minimal">
+                <span>✨ Minimal</span>
+              </label>
+              <label class="style-option">
+                <input type="radio" name="style" value="bold">
+                <span>💪 Bold</span>
+              </label>
+              <label class="style-option">
+                <input type="radio" name="style" value="elegant">
+                <span>👔 Elegant</span>
+              </label>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-large btn-full" id="buildBtn" onclick="buildSite()">🏗️ Build Website</button>
         </div>
 
         <div class="workspace-output">
@@ -98,10 +135,65 @@
               <span class="terminal-title">WebBuilder Output</span>
             </div>
             <div class="terminal-body" id="buildOutput">
-              <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">WebBuilder Agent ready...</span></div>
+              <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">WebBuilder Agent v3.0 ready...</span></div>
               <div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Enter your business details and click "Build Website"</span></div>
             </div>
           </div>
+          
+          <!-- Deploy Section (hidden until site is built) -->
+          <div class="deploy-section" id="deploySection" style="display:none;">
+            <h4>🚀 Ready to Deploy</h4>
+            <p>Your website is built! Deploy it to Cloudsion for free hosting.</p>
+            <div class="deploy-options">
+              <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="btn btn-primary">
+                ☁️ Deploy to Cloudsion
+              </a>
+              <button class="btn btn-secondary" onclick="downloadSite()">
+                📥 Download Files
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Capabilities</span>
+        <h2>What WebBuilder Creates</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon">📄</span>
+          <h3>Complete HTML</h3>
+          <p>Semantic, accessible HTML5 with proper structure and SEO tags</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🎨</span>
+          <h3>Custom CSS</h3>
+          <p>Beautiful, responsive styles with dark/light themes</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">⚡</span>
+          <h3>JavaScript</h3>
+          <p>Interactive elements, animations, and form handling</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📱</span>
+          <h3>Mobile Ready</h3>
+          <p>Fully responsive design that works on all devices</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🔍</span>
+          <h3>SEO Optimized</h3>
+          <p>Meta tags, structured data, and fast loading</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">☁️</span>
+          <h3>Cloudsion Deploy</h3>
+          <p>One-click deployment to free GitHub Pages hosting</p>
         </div>
       </div>
     </div>
@@ -110,9 +202,9 @@
   <section class="cta">
     <div class="container">
       <div class="cta-content">
-        <h2>Ready for Your New Website?</h2>
-        <p>Join the waitlist for early access</p>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob" target="_blank" class="btn btn-primary btn-large">🚀 Join Waitlist</a>
+        <h2>Build Your Website in Minutes</h2>
+        <p>Join the waitlist for early access to full AI-powered website creation</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob-WebBuilder" target="_blank" class="btn btn-primary btn-large">🚀 Join Waitlist</a>
       </div>
     </div>
   </section>
@@ -124,23 +216,145 @@
     </div>
   </footer>
 
+  <style>
+    .integration-banner {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+      border-top: 1px solid rgba(14, 165, 233, 0.2);
+      border-bottom: 1px solid rgba(14, 165, 233, 0.2);
+      padding: 1.5rem 0;
+    }
+    .integration-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .integration-icon {
+      font-size: 2.5rem;
+    }
+    .integration-text {
+      flex: 1;
+      min-width: 200px;
+    }
+    .integration-text h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+    .integration-text p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin: 0;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+    .style-options {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .style-option {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.75rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .style-option:has(input:checked) {
+      border-color: var(--primary);
+      background: rgba(14, 165, 233, 0.1);
+    }
+    .style-option input {
+      display: none;
+    }
+    .deploy-section {
+      margin-top: 1rem;
+      padding: 1.25rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+    }
+    .deploy-section h4 {
+      margin-bottom: 0.5rem;
+    }
+    .deploy-section p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
+    .deploy-options {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .nav-cta {
+      padding: 0.4rem 0.75rem;
+      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+  </style>
+
   <script>
+    let siteBuilt = false;
+    
     function buildSite() {
       const output = document.getElementById('buildOutput');
+      const deploySection = document.getElementById('deploySection');
+      const buildBtn = document.getElementById('buildBtn');
       const name = document.getElementById('businessName').value || 'Your Business';
-      const industry = document.getElementById('industry').value;
+      const siteType = document.getElementById('siteType').value;
+      const style = document.querySelector('input[name="style"]:checked').value;
       
-      output.innerHTML = `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing WebBuilder Agent...</span></div>`;
+      buildBtn.disabled = true;
+      buildBtn.textContent = '⏳ Building...';
+      deploySection.style.display = 'none';
       
-      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Business: ${name}</span></div>`; }, 300);
-      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Analyzing industry requirements...</span></div>`; }, 800);
-      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Generating design layout...</span></div>`; }, 1500);
-      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">Writing HTML/CSS/JS...</span></div>`; }, 2200);
-      setTimeout(() => { output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#f59e0b;">Optimizing for SEO...</span></div>`; }, 2900);
-      setTimeout(() => { 
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#10b981;">✓ Website ready! (Demo)</span></div>`;
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text dim">Join waitlist for full access.</span></div>`;
-      }, 3600);
+      output.innerHTML = `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing WebBuilder Agent v3.0...</span></div>`;
+      
+      const steps = [
+        { time: 500, text: `Business: ${name}`, color: '#fff' },
+        { time: 1000, text: `Site Type: ${siteType}`, color: '#fff' },
+        { time: 1500, text: `Style: ${style}`, color: '#fff' },
+        { time: 2000, text: 'Analyzing requirements...', color: '#10b981' },
+        { time: 2800, text: 'Generating layout structure...', color: '#10b981' },
+        { time: 3600, text: 'Writing HTML components...', color: '#10b981' },
+        { time: 4400, text: 'Creating CSS styles...', color: '#10b981' },
+        { time: 5200, text: 'Adding JavaScript interactions...', color: '#f59e0b' },
+        { time: 6000, text: 'Optimizing for SEO...', color: '#f59e0b' },
+        { time: 6800, text: 'Testing responsive design...', color: '#f59e0b' },
+        { time: 7600, text: '✓ Website built successfully!', color: '#10b981' },
+      ];
+      
+      steps.forEach(step => {
+        setTimeout(() => {
+          output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:${step.color}">${step.text}</span></div>`;
+          output.scrollTop = output.scrollHeight;
+        }, step.time);
+      });
+      
+      setTimeout(() => {
+        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#0ea5e9">Ready to deploy to Cloudsion! ☁️</span></div>`;
+        deploySection.style.display = 'block';
+        buildBtn.disabled = false;
+        buildBtn.textContent = '🏗️ Build Another';
+        siteBuilt = true;
+      }, 8400);
+    }
+    
+    function downloadSite() {
+      alert('In the full version, this will download a ZIP file with:\n\n• index.html\n• css/style.css\n• js/main.js\n• images/\n\nJoin the waitlist for early access!');
     }
   </script>
 </body>
