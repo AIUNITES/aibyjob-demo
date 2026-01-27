@@ -74,6 +74,7 @@
           <a href="#agents-section">🤖 Agents</a>
           <a href="#templates-section">📋 Templates</a>
           <a href="#control-section">🎬 Director</a>
+          <a href="help.html">❓ Help</a>
         </div>
         <button class="btn-primary" id="landing-login-btn">Log In</button>
       </nav>
@@ -164,7 +165,7 @@
         </div>
         
         <button class="btn-primary btn-large" id="landing-agents-btn">⚡ Try AI Agents</button>
-        <a href="agents/webbuilder.html" class="btn-secondary btn-large" style="margin-left: 1rem; display: inline-block; padding: 0.875rem 1.5rem; border: 1px solid var(--gray-dark); border-radius: 8px; color: var(--gray-light); text-decoration: none; background: linear-gradient(135deg, rgba(14,165,233,0.2), rgba(139,92,246,0.2));">🏗️ WebBuilder + ☁️ Cloudsion</a>
+        <a href="agents/webbuilder.html" class="btn-secondary btn-large" style="margin-left: 1rem; display: inline-block; padding: 0.875rem 1.5rem; border: 1px solid var(--gray-dark); border-radius: 8px; color: var(--gray-light); text-decoration: none;">🏗️ WebBuilder</a>
         <a href="agents/promotion.html" class="btn-secondary btn-large" style="margin-left: 1rem; display: inline-block; padding: 0.875rem 1.5rem; border: 1px solid var(--gray-dark); border-radius: 8px; color: var(--gray-light); text-decoration: none;">📣 Promotion Agent</a>
         <a href="agents/leadfinder.html" class="btn-secondary btn-large" style="margin-left: 1rem; display: inline-block; padding: 0.875rem 1.5rem; border: 1px solid var(--gray-dark); border-radius: 8px; color: var(--gray-light); text-decoration: none;">🔍 LeadFinder</a>
       </section>
@@ -433,16 +434,13 @@
                 </div>
                 <div class="agent-badge">v3.0</div>
               </div>
-              <p class="agent-desc">Builds complete websites from a description. Deploys to Cloudsion for free hosting.</p>
+              <p class="agent-desc">Builds complete websites from a description. Deploys to GitHub Pages for free hosting.</p>
               <div class="agent-capabilities">
                 <span class="cap-tag">✓ HTML/CSS/JS</span>
                 <span class="cap-tag">✓ SEO</span>
-                <span class="cap-tag">✓ Cloudsion</span>
+                <span class="cap-tag">✓ Deploy</span>
               </div>
-              <div style="display: flex; gap: 8px;">
-                <button class="btn-agent" style="flex: 1;" onclick="launchAgent('webbuilder')">⚡ Quick</button>
-                <a href="agents/webbuilder.html" class="btn-agent" style="flex: 1; text-decoration: none; text-align: center; background: linear-gradient(135deg, #0ea5e9, #8b5cf6);">☁️ Full Agent</a>
-              </div>
+              <a href="agents/webbuilder.html" class="btn-agent" style="text-decoration: none; text-align: center; display: block;">⚡ Launch Agent</a>
             </div>
             <!-- MarketingPro Agent -->
             <div class="agent-card featured" data-agent="marketing">
@@ -1012,6 +1010,30 @@
     <div id="loading-overlay" class="loading-overlay"><div class="loading-spinner"></div><p id="loading-message">Loading...</p></div>
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- AI Chat Widget -->
+    <div id="ai-chat-container" class="ai-chat-container">
+      <button id="ai-chat-toggle" class="ai-chat-toggle">
+        <span class="ai-chat-icon">🤖</span>
+        <span class="ai-chat-label">AI Help</span>
+      </button>
+      <div class="ai-chat-window">
+        <div class="ai-chat-header">
+          <span>🤖 AIByJob Assistant</span>
+          <button id="ai-chat-close">×</button>
+        </div>
+        <div class="ai-chat-messages" id="ai-chat-messages"></div>
+        <div class="ai-chat-quick">
+          <button class="ai-quick-btn" data-question="What are AI agents?">What are agents?</button>
+          <button class="ai-quick-btn" data-question="How do I deploy a website?">Deploy help</button>
+          <button class="ai-quick-btn" data-question="Is this free?">Pricing?</button>
+        </div>
+        <div class="ai-chat-input-area">
+          <input type="text" id="ai-chat-input" placeholder="Ask a question...">
+          <button id="ai-chat-send">➤</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Floating Feature Request Button -->
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQUi49AdTBRjetz5MDFQgMIkm9-vOMb_ARKwYEz41j_Nfiwg/viewform?usp=pp_url&entry.2053726945=AIByJob" target="_blank" class="feature-request-btn">
       <span class="feature-btn-icon">💬</span>
@@ -1031,6 +1053,7 @@
   <script src="js/chain-runner.js"></script>
   <script src="js/chain-visualizer.js"></script>
   <script src="js/project-plans.js"></script>
+  <script src="js/ai-chat.js"></script>
   <script>
     // Agent Chain Builder
     function showChainBuilder() {

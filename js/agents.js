@@ -68,7 +68,6 @@ const AGENTS = {
             <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Contact</div>
           </div>
           <p style="color: #10b981; font-size: 11px; margin: 10px 0 0;">✓ 4 pages • SEO optimized • Mobile-ready</p>
-          <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" style="display: block; margin-top: 10px; padding: 8px 12px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); color: #fff; text-align: center; border-radius: 6px; text-decoration: none; font-size: 11px;">☁️ Deploy to Cloudsion</a>
         </div>
       `;
     },
@@ -86,7 +85,6 @@ const AGENTS = {
           <div style="background: rgba(255,51,102,0.1); padding: 10px; border-radius: 6px; text-align: center;">Contact</div>
         </div>
         <p style="color: #10b981; font-size: 11px; margin: 10px 0 0;">✓ 4 pages • SEO optimized • Mobile-ready</p>
-        <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" style="display: block; margin-top: 10px; padding: 8px 12px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); color: #fff; text-align: center; border-radius: 6px; text-decoration: none; font-size: 11px;">☁️ Deploy to Cloudsion</a>
       </div>
     `
   },

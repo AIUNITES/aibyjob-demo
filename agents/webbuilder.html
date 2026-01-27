@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebBuilder Agent - AI Website Creation | AIByJob</title>
-  <meta name="description" content="AI agent that builds complete websites from a description. SEO-optimized, mobile-ready. Deploy instantly to Cloudsion.">
+  <meta name="description" content="AI agent that builds complete websites from a description. SEO-optimized, mobile-ready.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
@@ -19,7 +19,6 @@
         <a href="../index.html">Home</a>
         <a href="promotion.html">Promotion</a>
         <a href="leadfinder.html">LeadFinder</a>
-        <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="nav-cta">☁️ Cloudsion</a>
       </div>
     </div>
   </nav>
@@ -33,18 +32,17 @@
             <span class="agent-status-large online"></span>
           </div>
           <div>
-            <span class="agent-version">v3.0 • Online • Cloudsion Integration</span>
+            <span class="agent-version">v3.0 • Online</span>
             <h1>WebBuilder Agent</h1>
             <p class="agent-tagline">Build & Deploy Websites Instantly</p>
           </div>
         </div>
         <p class="agent-hero-desc">
           Transform your ideas into fully-functional websites. WebBuilder analyzes your requirements, 
-          designs layouts, writes code, optimizes for SEO, and <strong>deploys to Cloudsion</strong>—all autonomously.
+          designs layouts, writes code, optimizes for SEO, and deploys to GitHub Pages—all autonomously.
         </p>
         <div class="agent-hero-actions">
           <a href="#workspace" class="btn btn-primary btn-large">⚡ Launch Agent</a>
-          <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="btn btn-secondary btn-large">☁️ About Cloudsion</a>
         </div>
       </div>
     </div>
@@ -54,23 +52,9 @@
     <div class="container">
       <div class="stats-grid">
         <div class="stat-card"><span class="stat-icon">⚡</span><span class="stat-value">~5 min</span><span class="stat-label">Build Time</span></div>
-        <div class="stat-card"><span class="stat-icon">☁️</span><span class="stat-value">1-click</span><span class="stat-label">Deploy</span></div>
+        <div class="stat-card"><span class="stat-icon">🚀</span><span class="stat-value">1-click</span><span class="stat-label">Deploy</span></div>
         <div class="stat-card"><span class="stat-icon">📱</span><span class="stat-value">100%</span><span class="stat-label">Mobile Ready</span></div>
         <div class="stat-card"><span class="stat-icon">🔍</span><span class="stat-value">90+</span><span class="stat-label">SEO Score</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Integration Banner -->
-  <section class="integration-banner">
-    <div class="container">
-      <div class="integration-content">
-        <span class="integration-icon">☁️</span>
-        <div class="integration-text">
-          <h3>Powered by Cloudsion</h3>
-          <p>WebBuilder deploys directly to Cloudsion for free hosting on GitHub Pages</p>
-        </div>
-        <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="btn btn-outline">Learn More →</a>
       </div>
     </div>
   </section>
@@ -140,17 +124,30 @@
             </div>
           </div>
           
+          <!-- Preview Section -->
+          <div class="preview-section" id="previewSection" style="display:none;">
+            <h4>📱 Live Preview</h4>
+            <div class="preview-frame" id="previewFrame"></div>
+          </div>
+          
           <!-- Deploy Section (hidden until site is built) -->
           <div class="deploy-section" id="deploySection" style="display:none;">
             <h4>🚀 Ready to Deploy</h4>
-            <p>Your website is built! Deploy it to Cloudsion for free hosting.</p>
-            <div class="deploy-options">
-              <a href="https://aiunites.github.io/cloudsion-site/" target="_blank" class="btn btn-primary">
-                ☁️ Deploy to Cloudsion
-              </a>
-              <button class="btn btn-secondary" onclick="downloadSite()">
-                📥 Download Files
-              </button>
+            <p>Your website is built! Deploy it to GitHub Pages for free hosting.</p>
+            <div class="deploy-form">
+              <div class="form-group">
+                <label>GitHub Token</label>
+                <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx">
+                <small style="color: #6b7280; font-size: 0.75rem;">
+                  <a href="https://github.com/settings/tokens/new?scopes=repo&description=WebBuilder%20Deploy" target="_blank" style="color: #0ea5e9;">Create token →</a>
+                </small>
+              </div>
+              <div class="form-group">
+                <label>Repository Name</label>
+                <input type="text" id="repoName" placeholder="my-website">
+              </div>
+              <button class="btn btn-primary" onclick="deploySite()">🚀 Deploy to GitHub Pages</button>
+              <button class="btn btn-secondary" onclick="downloadSite()">📥 Download Files</button>
             </div>
           </div>
         </div>
@@ -191,8 +188,8 @@
           <p>Meta tags, structured data, and fast loading</p>
         </div>
         <div class="feature-card">
-          <span class="feature-icon">☁️</span>
-          <h3>Cloudsion Deploy</h3>
+          <span class="feature-icon">🚀</span>
+          <h3>GitHub Deploy</h3>
           <p>One-click deployment to free GitHub Pages hosting</p>
         </div>
       </div>
@@ -217,43 +214,6 @@
   </footer>
 
   <style>
-    .integration-banner {
-      background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
-      border-top: 1px solid rgba(14, 165, 233, 0.2);
-      border-bottom: 1px solid rgba(14, 165, 233, 0.2);
-      padding: 1.5rem 0;
-    }
-    .integration-content {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .integration-icon {
-      font-size: 2.5rem;
-    }
-    .integration-text {
-      flex: 1;
-      min-width: 200px;
-    }
-    .integration-text h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.25rem;
-    }
-    .integration-text p {
-      font-size: 0.9rem;
-      color: var(--gray);
-      margin: 0;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-    }
-    .btn-outline:hover {
-      background: var(--primary);
-      color: white;
-    }
     .style-options {
       display: flex;
       gap: 0.5rem;
@@ -273,10 +233,27 @@
     }
     .style-option:has(input:checked) {
       border-color: var(--primary);
-      background: rgba(14, 165, 233, 0.1);
+      background: rgba(255,51,102,0.1);
     }
     .style-option input {
       display: none;
+    }
+    .preview-section {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+    }
+    .preview-section h4 {
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+    .preview-frame {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      min-height: 200px;
     }
     .deploy-section {
       margin-top: 1rem;
@@ -287,38 +264,43 @@
     }
     .deploy-section h4 {
       margin-bottom: 0.5rem;
+      color: #10b981;
     }
     .deploy-section p {
       font-size: 0.9rem;
       color: var(--gray);
       margin-bottom: 1rem;
     }
-    .deploy-options {
+    .deploy-form {
       display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 1rem;
     }
-    .nav-cta {
-      padding: 0.4rem 0.75rem;
-      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-      border-radius: 6px;
-      font-size: 0.85rem;
+    .deploy-form .form-group {
+      margin-bottom: 0;
+    }
+    .deploy-form .btn {
+      width: 100%;
     }
   </style>
 
   <script>
     let siteBuilt = false;
+    let generatedSite = null;
     
     function buildSite() {
       const output = document.getElementById('buildOutput');
+      const previewSection = document.getElementById('previewSection');
       const deploySection = document.getElementById('deploySection');
       const buildBtn = document.getElementById('buildBtn');
       const name = document.getElementById('businessName').value || 'Your Business';
       const siteType = document.getElementById('siteType').value;
       const style = document.querySelector('input[name="style"]:checked').value;
+      const description = document.getElementById('description').value || 'A professional business';
       
       buildBtn.disabled = true;
       buildBtn.textContent = '⏳ Building...';
+      previewSection.style.display = 'none';
       deploySection.style.display = 'none';
       
       output.innerHTML = `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text">Initializing WebBuilder Agent v3.0...</span></div>`;
@@ -345,7 +327,14 @@
       });
       
       setTimeout(() => {
-        output.innerHTML += `<div class="terminal-line"><span class="terminal-prompt">▶</span><span class="terminal-text" style="color:#0ea5e9">Ready to deploy to Cloudsion! ☁️</span></div>`;
+        // Generate preview
+        generatedSite = generateSitePreview(name, siteType, style, description);
+        document.getElementById('previewFrame').innerHTML = generatedSite;
+        previewSection.style.display = 'block';
+        
+        // Set default repo name
+        document.getElementById('repoName').value = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+        
         deploySection.style.display = 'block';
         buildBtn.disabled = false;
         buildBtn.textContent = '🏗️ Build Another';
@@ -353,8 +342,53 @@
       }, 8400);
     }
     
+    function generateSitePreview(name, type, style, desc) {
+      const colors = {
+        modern: { primary: '#ff3366', bg: '#0f0f1a' },
+        minimal: { primary: '#333', bg: '#fafafa' },
+        bold: { primary: '#f59e0b', bg: '#1a1a2e' },
+        elegant: { primary: '#8b5cf6', bg: '#0a0a0f' }
+      };
+      const c = colors[style] || colors.modern;
+      
+      return `
+        <div style="font-family: system-ui, sans-serif; background: ${c.bg}; color: ${c.bg === '#fafafa' ? '#333' : '#fff'}; min-height: 200px;">
+          <header style="background: ${c.primary}; padding: 1rem; text-align: center;">
+            <h1 style="margin: 0; font-size: 1.25rem; color: #fff;">${name}</h1>
+            <p style="margin: 0.25rem 0 0; font-size: 0.75rem; color: rgba(255,255,255,0.8);">${desc.substring(0, 50)}${desc.length > 50 ? '...' : ''}</p>
+          </header>
+          <nav style="display: flex; justify-content: center; gap: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.1); font-size: 0.7rem;">
+            <a style="color: ${c.bg === '#fafafa' ? '#333' : '#fff'}; text-decoration: none;">Home</a>
+            <a style="color: ${c.bg === '#fafafa' ? '#333' : '#fff'}; text-decoration: none;">Services</a>
+            <a style="color: ${c.bg === '#fafafa' ? '#333' : '#fff'}; text-decoration: none;">About</a>
+            <a style="color: ${c.bg === '#fafafa' ? '#333' : '#fff'}; text-decoration: none;">Contact</a>
+          </nav>
+          <main style="padding: 1rem; text-align: center;">
+            <p style="font-size: 0.75rem; color: ${c.bg === '#fafafa' ? '#666' : '#9ca3af'};">Your professional website is ready!</p>
+            <button style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: ${c.primary}; color: #fff; border: none; border-radius: 4px; font-size: 0.7rem; cursor: pointer;">Get Started</button>
+          </main>
+        </div>
+      `;
+    }
+    
+    function deploySite() {
+      const token = document.getElementById('githubToken').value;
+      const repo = document.getElementById('repoName').value;
+      
+      if (!token) {
+        alert('Please enter your GitHub token');
+        return;
+      }
+      if (!repo) {
+        alert('Please enter a repository name');
+        return;
+      }
+      
+      alert(`🚀 Deploying to GitHub Pages...\n\nRepository: ${repo}\n\nThis is a demo - in the full version, your site would be deployed to:\nhttps://yourusername.github.io/${repo}/\n\nJoin the waitlist for full deployment!`);
+    }
+    
     function downloadSite() {
-      alert('In the full version, this will download a ZIP file with:\n\n• index.html\n• css/style.css\n• js/main.js\n• images/\n\nJoin the waitlist for early access!');
+      alert('📥 Download Site\n\nIn the full version, this will download a ZIP file with:\n\n• index.html\n• css/style.css\n• js/main.js\n• images/\n\nJoin the waitlist for early access!');
     }
   </script>
 </body>

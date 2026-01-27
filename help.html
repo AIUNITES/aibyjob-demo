@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Center - AIByJob</title>
+  <meta name="description" content="Get help with AIByJob AI agents, templates, and deployment.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="landing-nav" style="position: relative;">
+    <a href="index.html" class="logo">AI<span>ByJob</span></a>
+    <div class="nav-links-landing">
+      <a href="index.html">Home</a>
+      <a href="index.html#agents-section">Agents</a>
+      <a href="help.html" class="active">Help</a>
+    </div>
+  </nav>
+
+  <main class="help-page">
+    <div class="help-layout">
+      <!-- Main Content -->
+      <div class="help-main">
+        <div class="help-header">
+          <h1>🤖 Help Center</h1>
+          <p>Everything you need to know about AIByJob</p>
+        </div>
+
+        <!-- Getting Started -->
+        <section class="help-section">
+          <h2>🚀 Getting Started</h2>
+          <div class="steps-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h3>Create an Account</h3>
+                <p>Click "Get Started Free" and sign up with a username and password. Or click "Try Demo" to explore without signing up.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h3>Choose an Agent</h3>
+                <p>Browse the Agents tab to find the right AI agent for your task - WebBuilder, Promotion, LeadFinder, and more.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h3>Run Your Task</h3>
+                <p>Configure the agent with your requirements and click "Run Agent". Watch it work autonomously!</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Agents Guide -->
+        <section class="help-section">
+          <h2>🤖 AI Agents Guide</h2>
+          
+          <div class="agent-guide-card">
+            <div class="agent-guide-icon">🏗️</div>
+            <div class="agent-guide-content">
+              <h3>WebBuilder</h3>
+              <p>Creates complete websites from a description. Enter your business name, choose a style, and get a fully functional website with HTML, CSS, and JavaScript.</p>
+              <a href="agents/webbuilder.html" class="btn-small">Launch WebBuilder →</a>
+            </div>
+          </div>
+          
+          <div class="agent-guide-card">
+            <div class="agent-guide-icon">📣</div>
+            <div class="agent-guide-content">
+              <h3>Promotion</h3>
+              <p>Generates social media posts for LinkedIn, Twitter, and Facebook. Perfect for marketing AIUNITES products or your own projects.</p>
+              <a href="agents/promotion.html" class="btn-small">Launch Promotion →</a>
+            </div>
+          </div>
+          
+          <div class="agent-guide-card">
+            <div class="agent-guide-icon">🔍</div>
+            <div class="agent-guide-content">
+              <h3>LeadFinder</h3>
+              <p>Discovers businesses without websites in any location. Great for web developers and agencies looking for new clients.</p>
+              <a href="agents/leadfinder.html" class="btn-small">Launch LeadFinder →</a>
+            </div>
+          </div>
+          
+          <div class="agent-guide-card">
+            <div class="agent-guide-icon">📈</div>
+            <div class="agent-guide-content">
+              <h3>MarketingPro</h3>
+              <p>Handles SEO, social media scheduling, email campaigns, and analytics. Your complete digital marketing automation.</p>
+              <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+          </div>
+          
+          <div class="agent-guide-card">
+            <div class="agent-guide-icon">🛒</div>
+            <div class="agent-guide-content">
+              <h3>EcomScout</h3>
+              <p>Finds retail stores without e-commerce capabilities. Identifies digital transformation opportunities.</p>
+              <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- GitHub Token Guide -->
+        <section class="help-section">
+          <h2>🔑 GitHub Token Guide</h2>
+          <p>To deploy websites, you need a GitHub Personal Access Token (PAT).</p>
+          
+          <div class="token-guide-box">
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=AIByJob%20Deploy" target="_blank" class="btn-primary">
+              🔑 Create GitHub Token
+            </a>
+            <p class="token-tip">Opens GitHub with correct settings pre-filled</p>
+          </div>
+          
+          <ol class="token-steps">
+            <li>Click the button above or go to GitHub → Settings → Developer Settings → Personal Access Tokens</li>
+            <li>Set a name like "AIByJob Deploy"</li>
+            <li>Set expiration (90 days recommended)</li>
+            <li>Check the <strong>"repo"</strong> checkbox (required for deployment)</li>
+            <li>Click "Generate token"</li>
+            <li>Copy the token (starts with <code>ghp_</code>) - you won't see it again!</li>
+          </ol>
+          
+          <div class="security-note">
+            <strong>🔒 Security Note:</strong> Your token is only stored in your browser's localStorage. We never send it to our servers.
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="help-section">
+          <h2>💬 Frequently Asked Questions</h2>
+          
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>What is AIByJob?</summary>
+              <p>AIByJob is a platform for AI agents that work autonomously for your profession. Instead of generic AI tools, we provide specialized agents for specific tasks like building websites, finding leads, and creating marketing content.</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>Is AIByJob free?</summary>
+              <p>Yes! AIByJob is currently in demo/pre-launch mode. All features are free to try. When we launch, there will be free and paid tiers.</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>Where is my data stored?</summary>
+              <p>All your data is stored locally in your browser's localStorage. We don't collect or store your data on external servers. This means your data is private but also means clearing your browser data will delete it. Use the backup feature regularly!</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>What's the difference between Agents and Templates?</summary>
+              <p><strong>Agents</strong> are autonomous AI tools that complete entire workflows - like building a website or finding leads. <strong>Templates</strong> are pre-built prompts for specific tasks - like writing a cold email or job description. Agents do the work; templates help you do the work.</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>Do the agents actually work?</summary>
+              <p>This is a demo/preview version. Some agents (like Promotion) are fully functional. Others (like WebBuilder) show simulated output. Join the waitlist for full functionality when we launch!</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>How do I deploy a website?</summary>
+              <p>Use the WebBuilder agent to create your site, then connect your GitHub token and click Deploy. Your site will be published to GitHub Pages for free at <code>yourusername.github.io/repo-name</code>.</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>What is the AI Director?</summary>
+              <p>The AI Director is your command center for managing all agents. View status, launch agents, see task history, and export data. Access it from the "🎬 Director" tab after logging in.</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>How do I backup my data?</summary>
+              <p>Go to Settings → Backup & Restore → Download Backup. This saves all your data as a JSON file. To restore, use the "Restore from Backup" option and select your file.</p>
+            </details>
+            
+            <details class="faq-item">
+              <summary>I found a bug. How do I report it?</summary>
+              <p>Use the "Help / Feedback" button in the bottom-right corner, or report issues directly on our <a href="https://github.com/AIUNITES/aibyjob-demo/issues" target="_blank">GitHub Issues page</a>.</p>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="help-sidebar">
+        <!-- Ask a Question -->
+        <div class="ask-box">
+          <h3>✉️ Ask a Question</h3>
+          <form class="question-form" id="questionForm">
+            <div class="form-group">
+              <label>Email (optional)</label>
+              <input type="email" id="questionEmail" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Topic</label>
+              <select id="questionTopic">
+                <option value="agents">AI Agents</option>
+                <option value="deployment">Deployment</option>
+                <option value="account">Account Issues</option>
+                <option value="templates">Templates</option>
+                <option value="bug">Bug Report</option>
+                <option value="feature">Feature Request</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Your Question</label>
+              <textarea id="questionMessage" rows="4" placeholder="How can we help?" required></textarea>
+            </div>
+            <button type="submit" class="btn-primary full-width">Send Question</button>
+          </form>
+          <div class="question-success" id="questionSuccess" style="display: none;">
+            <span>✅</span>
+            <p>Thanks! We'll get back to you soon.</p>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links-box">
+          <h3>🔗 Quick Links</h3>
+          <ul>
+            <li><a href="https://github.com/settings/tokens" target="_blank">GitHub Token Management</a></li>
+            <li><a href="https://github.com/AIUNITES" target="_blank">AIUNITES on GitHub</a></li>
+            <li><a href="https://github.com/AIUNITES/aibyjob-demo/issues" target="_blank">Report an Issue</a></li>
+            <li><a href="index.html#agents-section">Browse Agents</a></li>
+            <li><a href="agents/templates/index.html">View Templates</a></li>
+          </ul>
+        </div>
+
+        <!-- Demo Accounts -->
+        <div class="demo-box">
+          <h3>🔐 Demo Accounts</h3>
+          <p>Try AIByJob without signing up:</p>
+          <div class="demo-credentials">
+            <div class="demo-account">
+              <strong>Admin:</strong> admin / admin123
+            </div>
+            <div class="demo-account">
+              <strong>User:</strong> demo / demo123
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="landing-footer" style="margin-top: 60px;">
+    <div class="logo">AI<span>ByJob</span></div>
+    <p>AI Agents for Your Profession</p>
+    <p>© 2026 AIByJob. A product of <a href="https://aiunites.github.io/aiunites-site">AIUNITES</a></p>
+  </footer>
+
+  <style>
+    .help-page {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .help-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 40px;
+    }
+
+    .help-header {
+      margin-bottom: 40px;
+    }
+
+    .help-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .help-header p {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .help-section {
+      margin-bottom: 48px;
+    }
+
+    .help-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Steps */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #ff3366, #ff6b6b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .step-content p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Agent Guide Cards */
+    .agent-guide-card {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .agent-guide-icon {
+      font-size: 2rem;
+      width: 50px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .agent-guide-content h3 {
+      margin-bottom: 8px;
+    }
+
+    .agent-guide-content p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .btn-small {
+      display: inline-block;
+      padding: 6px 12px;
+      background: rgba(255,51,102,0.1);
+      border: 1px solid rgba(255,51,102,0.3);
+      border-radius: 6px;
+      color: #ff3366;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .btn-small:hover {
+      background: rgba(255,51,102,0.2);
+    }
+
+    .coming-soon-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(107,114,128,0.2);
+      border-radius: 4px;
+      color: #9ca3af;
+      font-size: 0.8rem;
+    }
+
+    /* Token Guide */
+    .token-guide-box {
+      background: rgba(255,51,102,0.05);
+      border: 1px solid rgba(255,51,102,0.2);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .token-tip {
+      margin-top: 8px;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+
+    .token-steps {
+      padding-left: 24px;
+      margin-bottom: 20px;
+    }
+
+    .token-steps li {
+      margin-bottom: 12px;
+      color: var(--gray-light);
+      line-height: 1.5;
+    }
+
+    .token-steps code {
+      background: rgba(255,51,102,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #ff3366;
+      font-size: 0.9rem;
+    }
+
+    .security-note {
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.9rem;
+      color: #10b981;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      padding: 16px 20px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      color: var(--gray);
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      padding: 0 20px 16px;
+      color: var(--gray);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .faq-item a {
+      color: #ff3366;
+    }
+
+    /* Sidebar */
+    .help-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .ask-box, .quick-links-box, .demo-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .ask-box h3, .quick-links-box h3, .demo-box h3 {
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+
+    .question-form .form-group {
+      margin-bottom: 16px;
+    }
+
+    .question-form label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      color: var(--gray-light);
+    }
+
+    .question-form input,
+    .question-form select,
+    .question-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.9rem;
+      box-sizing: border-box;
+    }
+
+    .question-form input:focus,
+    .question-form select:focus,
+    .question-form textarea:focus {
+      outline: none;
+      border-color: #ff3366;
+    }
+
+    .question-success {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .question-success span {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .quick-links-box ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .quick-links-box li {
+      margin-bottom: 10px;
+    }
+
+    .quick-links-box a {
+      color: var(--gray-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .quick-links-box a:hover {
+      color: #ff3366;
+    }
+
+    .demo-box p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .demo-credentials {
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .demo-account {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      padding: 6px 0;
+      color: var(--gray-light);
+    }
+
+    .demo-account:first-child {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .help-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .help-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .ask-box, .quick-links-box, .demo-box {
+        margin-bottom: 0;
+      }
+    }
+
+    .nav-links-landing a.active {
+      color: #ff3366;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+  </style>
+
+  <script>
+    // Question form submission
+    document.getElementById('questionForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simulate submission
+      const form = this;
+      const success = document.getElementById('questionSuccess');
+      
+      form.style.display = 'none';
+      success.style.display = 'block';
+      
+      // Reset after 5 seconds
+      setTimeout(() => {
+        form.style.display = 'block';
+        success.style.display = 'none';
+        form.reset();
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
