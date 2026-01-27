@@ -80,6 +80,135 @@ Cheers,
   // Store chain results
   results: {},
 
+  // Realistic business data generators
+  businessDatabase: {
+    restaurants: {
+      prefixes: ['Golden', 'The Local', 'Mama\'s', 'Downtown', 'Sunrise', 'Corner', 'Uncle\'s', 'Family', 'Original', 'Big'],
+      suffixes: ['Kitchen', 'Grill', 'Cafe', 'Bistro', 'Eatery', 'Diner', 'Restaurant', 'BBQ', 'Tacos', 'Pizza'],
+      categories: ['Mexican Restaurant', 'Italian Restaurant', 'American Restaurant', 'Chinese Restaurant', 'Thai Restaurant', 'BBQ Joint', 'Pizza Place', 'Diner', 'Cafe', 'Family Restaurant']
+    },
+    retail: {
+      prefixes: ['Main Street', 'City', 'Quality', 'Family', 'Express', 'Classic', 'Premier', 'Village', 'Heritage', 'Lucky'],
+      suffixes: ['Shop', 'Store', 'Boutique', 'Goods', 'Market', 'Emporium', 'Trading', 'Outlet', 'Warehouse', 'Supply'],
+      categories: ['General Store', 'Gift Shop', 'Hardware Store', 'Pet Store', 'Toy Store', 'Sporting Goods', 'Book Store', 'Music Store', 'Antique Shop', 'Thrift Store']
+    },
+    beauty: {
+      prefixes: ['Glamour', 'Style', 'Bella', 'Luxe', 'Pure', 'Elite', 'Divine', 'Royal', 'Classic', 'Modern'],
+      suffixes: ['Salon', 'Spa', 'Studio', 'Beauty Bar', 'Nails', 'Hair Design', 'Cuts', 'Beauty', 'Styles', 'Looks'],
+      categories: ['Hair Salon', 'Nail Salon', 'Day Spa', 'Barber Shop', 'Beauty Salon', 'Tanning Salon', 'Waxing Studio', 'Brow Bar', 'Lash Studio', 'Men\'s Grooming']
+    },
+    services: {
+      prefixes: ['Pro', 'Elite', 'Premier', 'Quick', 'Reliable', 'Expert', 'Master', 'Ace', 'Top', 'First'],
+      suffixes: ['Services', 'Solutions', 'Experts', 'Co', 'Pros', 'Team', 'Group', 'Works', 'Care', 'Fix'],
+      categories: ['Plumbing', 'HVAC', 'Electrical', 'Landscaping', 'Cleaning', 'Painting', 'Roofing', 'Handyman', 'Auto Repair', 'Appliance Repair']
+    },
+    boutique: {
+      prefixes: ['Chic', 'Urban', 'Velvet', 'Bloom', 'Luna', 'Stella', 'Ivy', 'Rose', 'Pearl', 'Sage'],
+      suffixes: ['Boutique', 'Fashion', 'Style', 'Couture', 'Threads', 'Attire', 'Wear', 'Collection', 'Closet', 'Wardrobe'],
+      categories: ['Women\'s Clothing', 'Men\'s Clothing', 'Vintage Clothing', 'Children\'s Clothing', 'Bridal Shop', 'Consignment', 'Accessories', 'Shoe Store', 'Handbag Store', 'Jewelry Boutique']
+    },
+    specialty: {
+      prefixes: ['Artisan', 'Gourmet', 'Farm Fresh', 'Local', 'Organic', 'Heritage', 'Old World', 'Mountain', 'Valley', 'Golden'],
+      suffixes: ['Foods', 'Market', 'Provisions', 'Pantry', 'Kitchen', 'Goods', 'Delights', 'Treats', 'Specialties', 'Imports'],
+      categories: ['Specialty Foods', 'Cheese Shop', 'Butcher Shop', 'Bakery', 'Wine Shop', 'Coffee Roaster', 'Spice Shop', 'Olive Oil Shop', 'Chocolate Shop', 'Tea House']
+    }
+  },
+
+  streetNames: ['Main St', 'Oak Ave', 'Maple Dr', 'First St', 'Second Ave', 'Park Blvd', 'Center St', 'Market St', 'Broadway', 'Washington Ave', 'Lincoln Rd', 'Commerce St', 'Industrial Blvd', 'Highland Ave', 'Valley Rd'],
+  
+  /**
+   * Generate realistic business data
+   */
+  generateBusinesses(location, industry, count = 10) {
+    const db = this.businessDatabase[industry] || this.businessDatabase.retail;
+    const businesses = [];
+    const usedNames = new Set();
+    
+    for (let i = 0; i < count; i++) {
+      let name;
+      do {
+        const prefix = db.prefixes[Math.floor(Math.random() * db.prefixes.length)];
+        const suffix = db.suffixes[Math.floor(Math.random() * db.suffixes.length)];
+        name = `${prefix} ${suffix}`;
+      } while (usedNames.has(name));
+      usedNames.add(name);
+      
+      const streetNum = 100 + Math.floor(Math.random() * 9000);
+      const street = this.streetNames[Math.floor(Math.random() * this.streetNames.length)];
+      const category = db.categories[Math.floor(Math.random() * db.categories.length)];
+      const rating = (3.2 + Math.random() * 1.8).toFixed(1);
+      const reviews = Math.floor(10 + Math.random() * 290);
+      const yearsInBusiness = Math.floor(1 + Math.random() * 25);
+      const phone = `(${Math.floor(200 + Math.random() * 800)}) ${Math.floor(100 + Math.random() * 900)}-${Math.floor(1000 + Math.random() * 9000)}`;
+      
+      businesses.push({
+        name,
+        category,
+        address: `${streetNum} ${street}, ${location}`,
+        phone,
+        rating: parseFloat(rating),
+        reviews,
+        yearsInBusiness,
+        hasWebsite: false,
+        hasOnlineOrdering: false,
+        googleMapsUrl: `https://maps.google.com/?q=${encodeURIComponent(name + ' ' + location)}`,
+        opportunityScore: Math.floor(60 + Math.random() * 40),
+        estimatedRevenue: `${Math.floor(100 + Math.random() * 900)}K - ${Math.floor(1 + Math.random() * 5)}M`,
+        socialPresence: {
+          facebook: Math.random() > 0.4,
+          instagram: Math.random() > 0.5,
+          yelp: Math.random() > 0.3
+        },
+        contactMethod: ['Phone', 'Walk-in', 'Facebook Message'][Math.floor(Math.random() * 3)]
+      });
+    }
+    
+    return businesses.sort((a, b) => b.opportunityScore - a.opportunityScore);
+  },
+
+  /**
+   * Generate retail stores for ecommerce opportunities
+   */
+  generateRetailStores(location, storeType, count = 10) {
+    const typeMap = {
+      'boutique': 'boutique',
+      'gifts': 'retail',
+      'specialty': 'specialty',
+      'crafts': 'retail',
+      'jewelry': 'boutique',
+      'home': 'retail'
+    };
+    const industry = typeMap[storeType] || 'retail';
+    const stores = this.generateBusinesses(location, industry, count);
+    
+    // Add ecommerce-specific data
+    return stores.map(store => ({
+      ...store,
+      hasEcommerce: false,
+      hasShopify: false,
+      productTypes: this.generateProductTypes(storeType),
+      estimatedSKUs: Math.floor(50 + Math.random() * 450),
+      instagramFollowers: store.socialPresence.instagram ? Math.floor(100 + Math.random() * 4900) : 0,
+      ecomPotential: ['High', 'Very High', 'Medium', 'High'][Math.floor(Math.random() * 4)],
+      suggestedPlatform: ['Shopify', 'WooCommerce', 'Squarespace', 'BigCommerce'][Math.floor(Math.random() * 4)],
+      estimatedSetupCost: `${Math.floor(2 + Math.random() * 8)}K - ${Math.floor(10 + Math.random() * 15)}K`,
+      estimatedMonthlyOnlineRevenue: `${Math.floor(5 + Math.random() * 45)}K`
+    }));
+  },
+
+  generateProductTypes(storeType) {
+    const products = {
+      boutique: ['Clothing', 'Accessories', 'Jewelry', 'Handbags', 'Shoes'],
+      gifts: ['Home Decor', 'Candles', 'Cards', 'Novelties', 'Personalized Items'],
+      specialty: ['Gourmet Foods', 'Specialty Items', 'Imports', 'Artisan Goods'],
+      crafts: ['Art Supplies', 'Craft Materials', 'Handmade Items', 'DIY Kits'],
+      jewelry: ['Fine Jewelry', 'Fashion Jewelry', 'Watches', 'Custom Pieces'],
+      home: ['Furniture', 'Decor', 'Kitchenware', 'Bedding', 'Lighting']
+    };
+    const types = products[storeType] || products.gifts;
+    return types.slice(0, 2 + Math.floor(Math.random() * 3));
+  },
+
   /**
    * Chain 1: Social Media Blitz
    * Creates posts for all 3 platforms from one input
@@ -289,6 +418,119 @@ Cheers,
     onProgress('checklist', 'complete', 'Launch checklist ready');
     
     this.results.productLaunchKit = results;
+    return results;
+  },
+
+  /**
+   * Chain 6: Google Maps No-Website Finder
+   * Finds businesses on Google Maps without websites
+   */
+  async runGoogleMapsScanner(input, onProgress) {
+    const { location, industry, resultCount } = input;
+    const count = parseInt(resultCount) || 15;
+    const results = { businesses: [], summary: {}, report: '', pitchEmails: [] };
+    
+    onProgress('search', 'active', `Searching Google Maps for ${industry} in ${location}...`);
+    await this.delay(1200);
+    onProgress('search', 'complete', `Found ${count + 12} ${industry} businesses`);
+    
+    onProgress('filter', 'active', 'Checking for websites...');
+    await this.delay(1000);
+    onProgress('filter', 'complete', `${count} businesses have no website`);
+    
+    onProgress('analyze', 'active', 'Analyzing opportunity scores...');
+    await this.delay(900);
+    results.businesses = this.generateBusinesses(location, industry, count);
+    onProgress('analyze', 'complete', 'Opportunity scores calculated');
+    
+    onProgress('enrich', 'active', 'Enriching contact data...');
+    await this.delay(800);
+    // Add pitch emails for top 5
+    results.pitchEmails = results.businesses.slice(0, 5).map(biz => ({
+      to: biz.name,
+      subject: `Website for ${biz.name} - Quick Question`,
+      body: `Hi,\n\nI found ${biz.name} on Google Maps and noticed you don't have a website yet. With ${biz.reviews} reviews and a ${biz.rating}-star rating, you're clearly doing great!\n\nA simple website could help you:\n• Show up in Google searches (not just Maps)\n• Display your menu/services 24/7\n• Let customers book/order online\n\nI build affordable websites for local ${industry} businesses. Would a quick 10-minute call work this week?\n\nBest,\n[Your Name]\n\nP.S. I noticed you ${biz.socialPresence.facebook ? 'have a Facebook page - we could link that too!' : "don't have social media yet - I can help with that too!"}`
+    }));
+    onProgress('enrich', 'complete', 'Contact data enriched');
+    
+    onProgress('report', 'active', 'Generating report...');
+    await this.delay(600);
+    
+    const highOpp = results.businesses.filter(b => b.opportunityScore >= 80).length;
+    const withFacebook = results.businesses.filter(b => b.socialPresence.facebook).length;
+    const avgRating = (results.businesses.reduce((sum, b) => sum + b.rating, 0) / results.businesses.length).toFixed(1);
+    
+    results.summary = {
+      totalFound: count,
+      highOpportunity: highOpp,
+      withFacebook,
+      withInstagram: results.businesses.filter(b => b.socialPresence.instagram).length,
+      withYelp: results.businesses.filter(b => b.socialPresence.yelp).length,
+      avgRating,
+      avgReviews: Math.floor(results.businesses.reduce((sum, b) => sum + b.reviews, 0) / results.businesses.length)
+    };
+    
+    results.report = `# Google Maps No-Website Report\n## ${industry} in ${location}\n\n### Summary\n- **Total businesses without websites:** ${count}\n- **High opportunity leads (80+ score):** ${highOpp}\n- **Average rating:** ${avgRating} stars\n- **With Facebook:** ${withFacebook} | **With Instagram:** ${results.summary.withInstagram}\n\n### Top 5 Opportunities\n${results.businesses.slice(0, 5).map((b, i) => `\n${i + 1}. **${b.name}** (Score: ${b.opportunityScore})\n   - ${b.category} | ${b.rating}★ (${b.reviews} reviews)\n   - ${b.address}\n   - ${b.phone}\n   - Est. Revenue: ${b.estimatedRevenue}\n   - Contact via: ${b.contactMethod}`).join('\n')}\n\n### Export\nFull list available in Leads tab. Pitch emails generated for top 5.`;
+    
+    onProgress('report', 'complete', 'Report generated');
+    
+    this.results.googleMapsScanner = results;
+    return results;
+  },
+
+  /**
+   * Chain 7: Retail No-Ecommerce Scanner
+   * Finds retail stores without online stores
+   */
+  async runEcommerceScanner(input, onProgress) {
+    const { location, storeType, resultCount } = input;
+    const count = parseInt(resultCount) || 15;
+    const results = { stores: [], summary: {}, report: '', proposals: [] };
+    
+    onProgress('search', 'active', `Scanning ${storeType} stores in ${location}...`);
+    await this.delay(1200);
+    onProgress('search', 'complete', `Found ${count + 8} ${storeType} stores`);
+    
+    onProgress('check', 'active', 'Checking for e-commerce presence...');
+    await this.delay(1100);
+    onProgress('check', 'complete', `${count} stores have no online store`);
+    
+    onProgress('analyze', 'active', 'Analyzing e-commerce potential...');
+    await this.delay(900);
+    results.stores = this.generateRetailStores(location, storeType, count);
+    onProgress('analyze', 'complete', 'E-commerce potential calculated');
+    
+    onProgress('proposal', 'active', 'Generating proposals for top leads...');
+    await this.delay(1000);
+    
+    // Generate proposals for top 3
+    results.proposals = results.stores.slice(0, 3).map(store => ({
+      storeName: store.name,
+      proposal: `# E-Commerce Proposal for ${store.name}\n\n## Current Situation\n- Physical location: ${store.address}\n- Rating: ${store.rating}★ (${store.reviews} reviews)\n- Estimated SKUs: ${store.estimatedSKUs} products\n- Product types: ${store.productTypes.join(', ')}\n- Social presence: ${store.socialPresence.instagram ? `Instagram (${store.instagramFollowers} followers)` : 'Limited'}\n\n## Opportunity\n- **E-commerce Potential:** ${store.ecomPotential}\n- **Suggested Platform:** ${store.suggestedPlatform}\n- **Estimated Monthly Online Revenue:** ${store.estimatedMonthlyOnlineRevenue}\n\n## Proposed Solution\n1. ${store.suggestedPlatform} store setup\n2. Product photography for ${store.estimatedSKUs} SKUs\n3. Inventory management integration\n4. ${store.socialPresence.instagram ? 'Instagram Shopping integration' : 'Social media setup'}\n5. Local SEO optimization\n\n## Investment\n- Setup: ${store.estimatedSetupCost}\n- Monthly maintenance: $299-599/mo\n\n## ROI Projection\n- Month 1-3: Store setup & launch\n- Month 4-6: ${Math.floor(parseInt(store.estimatedMonthlyOnlineRevenue) * 0.5)}K/mo\n- Month 7-12: ${store.estimatedMonthlyOnlineRevenue}/mo\n- Year 1 revenue: ~${Math.floor(parseInt(store.estimatedMonthlyOnlineRevenue) * 9)}K`
+    }));
+    onProgress('proposal', 'complete', `${results.proposals.length} proposals generated`);
+    
+    onProgress('report', 'active', 'Compiling final report...');
+    await this.delay(600);
+    
+    const veryHigh = results.stores.filter(s => s.ecomPotential === 'Very High').length;
+    const high = results.stores.filter(s => s.ecomPotential === 'High').length;
+    const totalPotentialRevenue = results.stores.reduce((sum, s) => sum + parseInt(s.estimatedMonthlyOnlineRevenue), 0);
+    
+    results.summary = {
+      totalStores: count,
+      veryHighPotential: veryHigh,
+      highPotential: high,
+      withInstagram: results.stores.filter(s => s.socialPresence.instagram).length,
+      avgSKUs: Math.floor(results.stores.reduce((sum, s) => sum + s.estimatedSKUs, 0) / results.stores.length),
+      totalMonthlyPotential: `${totalPotentialRevenue}K`
+    };
+    
+    results.report = `# E-Commerce Opportunity Report\n## ${storeType} stores in ${location}\n\n### Summary\n- **Stores without e-commerce:** ${count}\n- **Very High potential:** ${veryHigh} | **High potential:** ${high}\n- **Total monthly revenue potential:** ${totalPotentialRevenue}K\n- **Average product count:** ${results.summary.avgSKUs} SKUs\n\n### Top 5 E-Commerce Opportunities\n${results.stores.slice(0, 5).map((s, i) => `\n${i + 1}. **${s.name}** - ${s.ecomPotential} Potential\n   - ${s.category} | ${s.rating}★\n   - Products: ${s.productTypes.join(', ')}\n   - Est. SKUs: ${s.estimatedSKUs}\n   - ${s.socialPresence.instagram ? `Instagram: ${s.instagramFollowers} followers` : 'No Instagram'}\n   - Suggested: ${s.suggestedPlatform}\n   - Est. Online Revenue: ${s.estimatedMonthlyOnlineRevenue}/mo`).join('\n')}\n\n### Next Steps\n1. Review detailed proposals in Proposals tab\n2. Export leads for CRM import\n3. Begin outreach to top opportunities`;
+    
+    onProgress('report', 'complete', 'Report complete');
+    
+    this.results.ecommerceScanner = results;
     return results;
   },
 

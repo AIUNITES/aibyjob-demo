@@ -1149,6 +1149,89 @@ h1 { font-size: 3rem; } h2 { font-size: 2rem; } h3 { font-size: 1.25rem; } h4 { 
   font-size: 0.9rem;
 }
 
+/* Lead/Business Item Enhancements */
+.lead-item.high-opportunity {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.lead-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.lead-category {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.opportunity-score {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.ecom-potential {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.ecom-potential.potential-very-high {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+}
+
+.ecom-potential.potential-high {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.ecom-potential.potential-medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.lead-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.social-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.social-badge.fb {
+  background: rgba(66, 103, 178, 0.2);
+  color: #4267b2;
+}
+
+.social-badge.ig {
+  background: rgba(225, 48, 108, 0.2);
+  color: #e1306c;
+}
+
+.social-badge.yelp {
+  background: rgba(255, 77, 59, 0.2);
+  color: #ff4d3b;
+}
+
+.social-badge.none {
+  background: rgba(156, 163, 175, 0.2);
+  color: #9ca3af;
+}
+
 /* Output status error */
 .output-status.error {
   background: rgba(239, 68, 68, 0.2);

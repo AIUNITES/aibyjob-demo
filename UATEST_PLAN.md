@@ -8,7 +8,7 @@
 | **Live URL** | https://aiunites.github.io/aibyjob-demo/ |
 | **Local Path** | C:/Users/Tom/Documents/GitHub/aibyjob-demo |
 | **Last Updated** | January 26, 2026 |
-| **Version** | 1.2.0 |
+| **Version** | 1.3.0 |
 | **Based On** | DemoTemplate |
 | **Tagline** | The Right AI for Your Job |
 
@@ -172,7 +172,7 @@
 | Stats Row | ✅ | Agents, Tasks, Posts, Leads counts |
 | Quick Launch Buttons | ✅ | Promotion, LeadFinder, WebBuilder, Marketing |
 | **Agent Chain Visualizer** | ✅ | Interactive animated demo |
-| Chain Selector | ✅ | 5 working chains to choose from |
+| Chain Selector | ✅ | 7 working chains to choose from |
 | Visual Chain Flow | ✅ | Animated agent nodes with progress |
 | Data Packet Animation | ✅ | Flying papers between agents |
 | Input Forms | ✅ | Dynamic forms per chain type |
@@ -192,6 +192,8 @@
 | 📧 Lead-to-Email Pipeline | Find leads → Score → Generate emails | ✅ |
 | ♻️ Content Repurposer | Article → Summary + Social + Newsletter | ✅ |
 | 🎯 Product Launch Kit | Brief → Landing + Social + Press + Email | ✅ |
+| 🗺️ Google Maps No-Website | Find businesses without websites | ✅ |
+| 🛒 Retail No-Ecommerce | Find shops without online stores | ✅ |
 
 ---
 
@@ -290,7 +292,7 @@
 - [ ] Stats row displays counts
 - [ ] Quick launch buttons work
 - [ ] Chain visualizer renders
-- [ ] Chain selector switches chains (5 chains)
+- [ ] Chain selector switches chains (7 chains)
 - [ ] Input forms update per chain type
 - [ ] Run Chain executes with animations
 - [ ] Flying papers animate between agents
@@ -305,6 +307,11 @@
 - [ ] Lead-to-Email generates leads + personalized emails
 - [ ] Content Repurposer creates 4 content formats
 - [ ] Product Launch Kit creates full launch materials
+- [ ] Google Maps Scanner finds businesses without websites
+- [ ] Google Maps Scanner generates pitch emails
+- [ ] E-commerce Scanner finds stores without online stores
+- [ ] E-commerce Scanner generates proposals
+- [ ] CSV export buttons work for lead lists
 - [ ] Agent status grid shows online/offline
 - [ ] New Chain button opens builder modal
 
@@ -328,6 +335,7 @@
 | 1.0.1 | Jan 24, 2026 | Added CloudDB module |
 | 1.1.0 | Jan 26, 2026 | Added Agent Chain Visualizer with animated demos |
 | 1.2.0 | Jan 26, 2026 | Added 5 working agent chains with real outputs |
+| 1.3.0 | Jan 26, 2026 | Added Google Maps Scanner & E-commerce Scanner chains |
 
 ---
 

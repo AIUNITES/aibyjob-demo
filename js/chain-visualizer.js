@@ -91,6 +91,40 @@ const ChainVisualizer = {
         { id: 'price', label: 'Price (optional)', type: 'text', placeholder: 'e.g., $29/month' }
       ],
       runner: 'runProductLaunchKit'
+    },
+    'gmaps-scanner': {
+      name: '🗺️ Google Maps No-Website',
+      description: 'Find businesses without websites on Google Maps',
+      agents: [
+        { id: 'search', icon: '🔍', name: 'Search Maps', color: '#4285f4', action: 'Searching Google Maps...' },
+        { id: 'filter', icon: '🌐', name: 'Check Sites', color: '#ea4335', action: 'Checking for websites...' },
+        { id: 'analyze', icon: '📊', name: 'Analyze', color: '#fbbc05', action: 'Scoring opportunities...' },
+        { id: 'enrich', icon: '📞', name: 'Enrich', color: '#34a853', action: 'Getting contact info...' },
+        { id: 'report', icon: '📋', name: 'Report', color: '#8b5cf6', action: 'Generating report...' }
+      ],
+      inputs: [
+        { id: 'location', label: 'Location', type: 'text', placeholder: 'e.g., Austin, TX or 78701' },
+        { id: 'industry', label: 'Industry', type: 'select', options: ['restaurants', 'retail', 'beauty', 'services'] },
+        { id: 'resultCount', label: 'Max Results', type: 'select', options: ['10', '15', '25', '50'] }
+      ],
+      runner: 'runGoogleMapsScanner'
+    },
+    'ecom-scanner': {
+      name: '🛒 Retail No-Ecommerce',
+      description: 'Find shops without online stores',
+      agents: [
+        { id: 'search', icon: '🔍', name: 'Scan Retail', color: '#8b5cf6', action: 'Scanning retail directories...' },
+        { id: 'check', icon: '🛍️', name: 'Check Ecom', color: '#ec4899', action: 'Checking for online stores...' },
+        { id: 'analyze', icon: '📈', name: 'Analyze', color: '#f59e0b', action: 'Calculating potential...' },
+        { id: 'proposal', icon: '📝', name: 'Proposals', color: '#10b981', action: 'Generating proposals...' },
+        { id: 'report', icon: '📊', name: 'Report', color: '#06b6d4', action: 'Compiling report...' }
+      ],
+      inputs: [
+        { id: 'location', label: 'Location', type: 'text', placeholder: 'e.g., Denver, CO' },
+        { id: 'storeType', label: 'Store Type', type: 'select', options: ['boutique', 'gifts', 'specialty', 'crafts', 'jewelry', 'home'] },
+        { id: 'resultCount', label: 'Max Results', type: 'select', options: ['10', '15', '25', '50'] }
+      ],
+      runner: 'runEcommerceScanner'
     }
   },
 
@@ -450,6 +484,7 @@ const ChainVisualizer = {
    * Get result tabs based on chain type
    */
   getResultTabs(results) {
+    // Social chains (LinkedIn, Twitter, Facebook)
     if (results.linkedin !== undefined && results.twitter !== undefined && results.facebook !== undefined) {
       const tabs = [
         { key: 'linkedin', icon: '🔗', label: 'LinkedIn' },
@@ -461,6 +496,25 @@ const ChainVisualizer = {
       return tabs;
     }
     
+    // Google Maps Scanner
+    if (results.businesses !== undefined && results.pitchEmails !== undefined) {
+      return [
+        { key: 'report', icon: '📋', label: 'Report' },
+        { key: 'businesses', icon: '🏢', label: 'Leads' },
+        { key: 'pitchEmails', icon: '📧', label: 'Pitch Emails' }
+      ];
+    }
+    
+    // Ecommerce Scanner
+    if (results.stores !== undefined && results.proposals !== undefined) {
+      return [
+        { key: 'report', icon: '📊', label: 'Report' },
+        { key: 'stores', icon: '🛍️', label: 'Stores' },
+        { key: 'proposals', icon: '📝', label: 'Proposals' }
+      ];
+    }
+    
+    // Lead-to-Email
     if (results.leads !== undefined) {
       return [
         { key: 'leads', icon: '🔍', label: 'Leads' },
@@ -469,6 +523,7 @@ const ChainVisualizer = {
       ];
     }
     
+    // Content Repurposer
     if (results.twitterThread !== undefined) {
       return [
         { key: 'summary', icon: '📝', label: 'Summary' },
@@ -478,6 +533,7 @@ const ChainVisualizer = {
       ];
     }
     
+    // Product Launch Kit
     if (results.landing !== undefined) {
       return [
         { key: 'landing', icon: '🏠', label: 'Landing' },
@@ -515,6 +571,7 @@ const ChainVisualizer = {
     
     // Handle arrays
     if (Array.isArray(content)) {
+      // Lead list (original)
       if (key === 'leads') {
         return `
           <div class="result-section">
@@ -533,6 +590,109 @@ const ChainVisualizer = {
           </div>
         `;
       }
+      
+      // Businesses (Google Maps Scanner)
+      if (key === 'businesses') {
+        const csvData = content.map(b => `"${b.name}","${b.category}","${b.address}","${b.phone}",${b.rating},${b.reviews},${b.opportunityScore}`).join('\n');
+        return `
+          <div class="result-section">
+            <div class="result-section-header">
+              <span>Found ${content.length} Businesses Without Websites</span>
+              <button class="copy-section-btn" data-content="Name,Category,Address,Phone,Rating,Reviews,Score\n${this.escapeHtml(csvData)}">📋 Export CSV</button>
+            </div>
+            <div class="leads-list">
+              ${content.map((biz, i) => `
+                <div class="lead-item ${biz.opportunityScore >= 80 ? 'high-opportunity' : ''}">
+                  <div class="lead-header">
+                    <strong>${i + 1}. ${biz.name}</strong>
+                    <span class="opportunity-score">Score: ${biz.opportunityScore}</span>
+                  </div>
+                  <div class="lead-category">${biz.category}</div>
+                  <div class="lead-details">
+                    <span>★${biz.rating} (${biz.reviews} reviews)</span> • 
+                    <span>${biz.yearsInBusiness} yrs in business</span>
+                  </div>
+                  <div class="lead-details">${biz.address}</div>
+                  <div class="lead-details">📞 ${biz.phone} • Contact via: ${biz.contactMethod}</div>
+                  <div class="lead-social">
+                    ${biz.socialPresence.facebook ? '<span class="social-badge fb">📘 Facebook</span>' : ''}
+                    ${biz.socialPresence.instagram ? '<span class="social-badge ig">📷 Instagram</span>' : ''}
+                    ${biz.socialPresence.yelp ? '<span class="social-badge yelp">⭐ Yelp</span>' : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      // Stores (Ecommerce Scanner)
+      if (key === 'stores') {
+        const csvData = content.map(s => `"${s.name}","${s.category}","${s.address}","${s.phone}",${s.estimatedSKUs},"${s.ecomPotential}","${s.suggestedPlatform}"`).join('\n');
+        return `
+          <div class="result-section">
+            <div class="result-section-header">
+              <span>Found ${content.length} Stores Without E-Commerce</span>
+              <button class="copy-section-btn" data-content="Name,Category,Address,Phone,Est SKUs,Potential,Platform\n${this.escapeHtml(csvData)}">📋 Export CSV</button>
+            </div>
+            <div class="leads-list">
+              ${content.map((store, i) => `
+                <div class="lead-item ${store.ecomPotential === 'Very High' ? 'high-opportunity' : ''}">
+                  <div class="lead-header">
+                    <strong>${i + 1}. ${store.name}</strong>
+                    <span class="ecom-potential potential-${store.ecomPotential.toLowerCase().replace(' ', '-')}">${store.ecomPotential}</span>
+                  </div>
+                  <div class="lead-category">${store.category}</div>
+                  <div class="lead-details">★${store.rating} (${store.reviews} reviews) • ${store.address}</div>
+                  <div class="lead-details">
+                    <strong>Products:</strong> ${store.productTypes.join(', ')} • 
+                    <strong>Est. SKUs:</strong> ${store.estimatedSKUs}
+                  </div>
+                  <div class="lead-details">
+                    <strong>Suggested:</strong> ${store.suggestedPlatform} • 
+                    <strong>Setup:</strong> ${store.estimatedSetupCost} • 
+                    <strong>Monthly Rev:</strong> ${store.estimatedMonthlyOnlineRevenue}
+                  </div>
+                  <div class="lead-social">
+                    ${store.socialPresence.instagram ? `<span class="social-badge ig">📷 ${store.instagramFollowers} followers</span>` : '<span class="social-badge none">No Instagram</span>'}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      // Pitch Emails
+      if (key === 'pitchEmails') {
+        return content.map((email, i) => `
+          <div class="result-section">
+            <div class="result-section-header">
+              <span>Email ${i + 1}: ${email.to}</span>
+              <button class="copy-section-btn" data-content="${this.escapeHtml(`Subject: ${email.subject}\n\n${email.body}`)}">📋 Copy</button>
+            </div>
+            <div class="email-preview">
+              <div class="email-subject"><strong>Subject:</strong> ${email.subject}</div>
+              <pre class="result-text">${this.escapeHtml(email.body)}</pre>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // Proposals (Ecommerce)
+      if (key === 'proposals') {
+        return content.map((prop, i) => `
+          <div class="result-section">
+            <div class="result-section-header">
+              <span>Proposal ${i + 1}: ${prop.storeName}</span>
+              <button class="copy-section-btn" data-content="${this.escapeHtml(prop.proposal)}">📋 Copy</button>
+            </div>
+            <pre class="result-text">${this.escapeHtml(prop.proposal)}</pre>
+          </div>
+        `).join('');
+      }
+      
+      // Original emails
       if (key === 'emails') {
         return content.map((email, i) => `
           <div class="result-section">
@@ -547,6 +707,8 @@ const ChainVisualizer = {
           </div>
         `).join('');
       }
+      
+      // Hashtags
       if (key === 'hashtags') {
         return `
           <div class="result-section">
@@ -558,6 +720,7 @@ const ChainVisualizer = {
           </div>
         `;
       }
+      
       content = content.join('\n');
     }
     
