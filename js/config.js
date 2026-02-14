@@ -20,6 +20,24 @@ const APP_CONFIG = {
   ctaDescription: 'Browse AI tools curated for your profession.',
 
   // ============================================
+  // DEFAULT USERS
+  // ============================================
+  defaultAdmin: {
+    username: 'admin',
+    password: 'admin123',
+    displayName: 'Admin',
+    email: 'admin@aibyjob.com',
+    isAdmin: true
+  },
+  defaultDemo: {
+    username: 'demo',
+    password: 'demo123',
+    displayName: 'Demo User',
+    email: 'demo@aibyjob.com',
+    isAdmin: false
+  },
+
+  // ============================================
   // STORAGE KEYS
   // ============================================
   storagePrefix: 'aibyjob',
