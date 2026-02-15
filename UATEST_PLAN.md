@@ -359,10 +359,21 @@
 
 ---
 
+## Legal Compliance Tests
+- [ ] Single footer displayed (no duplicates)
+- [ ] Footer disclaimer text visible
+- [ ] Footer copyright with AIUNITES link
+- [ ] Privacy Policy link → aiunites-site/legal.html#privacy
+- [ ] Terms of Service link → aiunites-site/legal.html#terms
+- [ ] Signup form Terms/Privacy links open legal.html in new tab
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.5.0 | Feb 15, 2026 | Legal compliance: centralized legal.html, removed dup footer, updated all legal links |
 | 1.0.0 | Jan 2026 | Initial release with agents |
 | 1.0.1 | Jan 24, 2026 | Added CloudDB module |
 | 1.1.0 | Jan 26, 2026 | Added Agent Chain Visualizer with animated demos |
