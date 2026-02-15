@@ -381,7 +381,8 @@
 | 1.3.0 | Jan 26, 2026 | Added Google Maps Scanner & E-commerce Scanner chains |
 | 1.3.1 | Jan 26, 2026 | Added Project Plans tab to Admin Panel |
 | 1.4.0 | Jan 27, 2026 | Added Help page, AI Chat widget, WebBuilder v3 with GitHub deploy |
+| 1.5.0 | Feb 15, 2026 | Legal compliance: centralized legal.html, removed dup footer, updated all legal links |
 
 ---
 
-*Last tested: January 27, 2026*
+*Last tested: February 15, 2026*
