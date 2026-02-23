@@ -382,7 +382,8 @@
 | 1.3.1 | Jan 26, 2026 | Added Project Plans tab to Admin Panel |
 | 1.4.0 | Jan 27, 2026 | Added Help page, AI Chat widget, WebBuilder v3 with GitHub deploy |
 | 1.5.0 | Feb 15, 2026 | Legal compliance: centralized legal.html, removed dup footer, updated all legal links |
+| 1.5.1 | Feb 22, 2026 | Webring highlight fix: standardized to .aiunites-bar-active class with white (#fff) + underline styling |
 
 ---
 
-*Last tested: February 15, 2026*
+*Last tested: February 22, 2026*
