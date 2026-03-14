@@ -202,18 +202,19 @@ const Auth = {
   },
 
   /**
-   * Demo login
-   * Tries SQL database first for demo user, then creates local demo
+   * Demo login — always succeeds by resetting or creating the demo user
    */
   async loginDemo() {
     const demo = APP_CONFIG.defaultDemo;
-    
-    // Try to login (will check SQL database too)
+    // If demo user already exists with a different password, fix it
+    const existing = Storage.getUserByUsername(demo.username);
+    if (existing) {
+      Storage.updateUser(demo.username, { password: demo.password });
+    }
     try {
       return await this.login(demo.username, demo.password);
     } catch (e) {
-      // If demo user doesn't exist anywhere, create it locally
-      console.log('[Auth] Creating local demo user');
+      // User didn't exist — create it
       const user = Storage.createUser({
         displayName: demo.displayName,
         username: demo.username,
