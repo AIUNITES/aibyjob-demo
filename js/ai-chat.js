@@ -101,7 +101,7 @@ Your site will be live at: \`yourusername.github.io/repo-name\``
 • **Developer** - Code reviews, documentation
 • **HR** - Job descriptions, interviews
 
-Templates are coming soon! Join the waitlist for early access.`
+Browse all templates in the [Templates section](agents/templates/index.html).`
       },
       
       'director': {
@@ -112,7 +112,7 @@ Templates are coming soon! Join the waitlist for early access.`
 • Quick launch any agent
 • See task history and results
 • Export data (CSV, JSON)
-• Create agent chains (coming soon)
+• Create and save agent chains
 
 Access it from the "🎬 Director" tab after logging in.`
       },
@@ -121,14 +121,14 @@ Access it from the "🎬 Director" tab after logging in.`
         keywords: ['free', 'cost', 'price', 'pay', 'pricing'],
         response: `**AIByJob Pricing:**
 
-Currently in **demo/pre-launch** mode - everything is free to try!
+AIByJob is free to use — sign up and start running agents today.
 
-When we launch:
-• **Free tier** - Basic agents, limited runs
-• **Pro tier** - Unlimited agents, priority support
-• **Team tier** - Collaboration features
+Upcoming tiers:
+• **Free** - Core agents, standard runs
+• **Pro** - Unlimited agents, priority support
+• **Team** - Collaboration and sharing
 
-Join the waitlist to lock in early-bird pricing!`
+Sign up now to get started!`
       },
       
       'account': {
