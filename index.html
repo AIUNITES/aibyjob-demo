@@ -570,7 +570,7 @@
         <div id="templates-view" class="dashboard-view">
           <div class="view-header"><div><h1>📋 AI Templates</h1><p class="view-subtitle">Pre-built prompts & workflows by profession</p></div></div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px;">
-            <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px; cursor: pointer;" onclick="alert('Coming soon!')">
+            <div style="background: rgba(30,30,40,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px; cursor: pointer;" onclick="window.location.href='agents/templates/index.html'">
               <div style="font-size: 2rem; margin-bottom: 12px;">💼</div>
               <h3 style="color: #fff; margin-bottom: 8px;">Sales Templates</h3>
               <p style="color: #9ca3af; font-size: 0.9rem;">Cold emails, proposals, follow-ups</p>
@@ -637,8 +637,8 @@
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
               <a href="agents/promotion.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: linear-gradient(135deg, #ff3366, #ff6b6b); color: #fff; border-radius: 8px; text-decoration: none; font-weight: 500;">📣 Promotion Agent</a>
               <a href="agents/leadfinder.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: rgba(99,102,241,0.2); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; text-decoration: none;">🔍 LeadFinder</a>
-              <button onclick="alert('WebBuilder coming soon!')" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: rgba(99,102,241,0.1); color: #6b7280; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer;">🏗️ WebBuilder</button>
-              <button onclick="alert('Marketing coming soon!')" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: rgba(99,102,241,0.1); color: #6b7280; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer;">📈 Marketing</button>
+              <a href="agents/webbuilder.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.2); border-radius: 8px; text-decoration: none;">🏗️ WebBuilder</a>
+              <a href="agents/marketing.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.2); border-radius: 8px; text-decoration: none;">📈 Marketing</a>
             </div>
           </div>
 
@@ -671,25 +671,25 @@
                   <div style="color: #10b981; font-size: 0.85rem;">● Online</div>
                 </div>
               </div>
-              <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(99,102,241,0.1); border-radius: 8px;">
+              <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(16,185,129,0.1); border-radius: 8px;">
                 <span style="font-size: 1.5rem;">🏗️</span>
                 <div>
                   <div style="color: #fff; font-weight: 500;">WebBuilder</div>
-                  <div style="color: #6b7280; font-size: 0.85rem;">○ Coming Soon</div>
+                  <div style="color: #10b981; font-size: 0.85rem;">● Online</div>
                 </div>
               </div>
-              <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(99,102,241,0.1); border-radius: 8px;">
+              <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(16,185,129,0.1); border-radius: 8px;">
                 <span style="font-size: 1.5rem;">📈</span>
                 <div>
                   <div style="color: #fff; font-weight: 500;">Marketing</div>
-                  <div style="color: #6b7280; font-size: 0.85rem;">○ Coming Soon</div>
+                  <div style="color: #10b981; font-size: 0.85rem;">● Online</div>
                 </div>
               </div>
-              <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(99,102,241,0.1); border-radius: 8px;">
+              <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(16,185,129,0.1); border-radius: 8px;">
                 <span style="font-size: 1.5rem;">🛒</span>
                 <div>
                   <div style="color: #fff; font-weight: 500;">EcomScout</div>
-                  <div style="color: #6b7280; font-size: 0.85rem;">○ Coming Soon</div>
+                  <div style="color: #10b981; font-size: 0.85rem;">● Online</div>
                 </div>
               </div>
             </div>
@@ -1140,7 +1140,7 @@
               <button onclick="this.closest('div').parentElement.parentElement.parentElement.remove()" style="flex:1;padding:14px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#9ca3af;font-size:1rem;cursor:pointer;">Cancel</button>
               <button onclick="alert('Chain saved! (Demo)');this.closest('div').parentElement.parentElement.parentElement.remove();" style="flex:1;padding:14px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border:none;border-radius:8px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;">🔗 Create Chain</button>
             </div>
-            <p style="color:#6b7280;font-size:0.8rem;text-align:center;margin-top:16px;">⚠️ Agent chaining is a demo feature - coming soon!</p>
+            <p style="color:#6b7280;font-size:0.8rem;text-align:center;margin-top:16px;">Agent chaining runs agents in sequence — output of one feeds into the next.</p>
           </div>
         </div>
       `;

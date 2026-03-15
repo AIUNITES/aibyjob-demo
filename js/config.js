@@ -60,9 +60,9 @@ const APP_CONFIG = {
   itemsSectionSubtitle: 'Popular picks across all professions',
   
   heroCards: [
-    { icon: '👨‍⚕️', name: 'Healthcare', subtitle: '🏥 Coming Soon', color: '#10b981' },
-    { icon: '📊', name: 'Finance', subtitle: '💰 Coming Soon', color: '#3b82f6' },
-    { icon: '💻', name: 'Developers', subtitle: '⚡ Coming Soon', color: '#8b5cf6' }
+    { icon: '👨‍⚕️', name: 'Healthcare', subtitle: '🏥 Explore Tools', color: '#10b981' },
+    { icon: '📊', name: 'Finance', subtitle: '💰 Explore Tools', color: '#3b82f6' },
+    { icon: '💻', name: 'Developers', subtitle: '⚡ Explore Tools', color: '#8b5cf6' }
   ],
   
   features: [
