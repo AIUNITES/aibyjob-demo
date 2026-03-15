@@ -133,7 +133,7 @@ const Storage = {
       username: username,
       displayName: userData.displayName,
       email: userData.email || '',
-      password: userData.password,
+      passwordHash: userData.passwordHash, // set by Auth.signup after hashing
       isAdmin: userData.isAdmin || false,
       createdAt: new Date().toISOString(),
       settings: {}
