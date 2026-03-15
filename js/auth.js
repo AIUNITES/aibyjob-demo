@@ -42,13 +42,8 @@ const Auth = {
       throw new Error('Username already taken');
     }
 
-    // Create user in localStorage
-    const user = Storage.createUser({
-      displayName,
-      username,
-      email,
-      password
-    });
+    const passwordHash = await PasswordUtils.hash(password);
+    const user = Storage.createUser({ displayName, username, email, passwordHash });
 
     // Also save to SQL database if available (tagged with this site)
     await this.saveUserToSQL(user, password);
@@ -158,11 +153,12 @@ const Auth = {
           }
           
           // Create localStorage user from DB user for session
+          const passwordHash = await PasswordUtils.hash(password);
           const user = Storage.createUser({
             displayName: dbUser.display_name || dbUser.displayName || username,
             username: dbUser.username,
             email: dbUser.email || '',
-            password: password,
+            passwordHash,
             isAdmin: dbUser.role === 'admin'
           });
           
@@ -190,12 +186,19 @@ const Auth = {
     let user = Storage.getUserByUsername(username);
     
     if (user) {
-      // Found in localStorage - check password
-      if (user.password !== password) {
-        throw new Error('Incorrect password');
+      let valid = false;
+      if (user.passwordHash) {
+        valid = await PasswordUtils.verify(password, user.passwordHash);
+      } else if (user.password) {
+        valid = (user.password === password);
+        if (valid) {
+          const migrated = await PasswordUtils.migrate(user, password);
+          Storage.updateUser(user.username, migrated);
+        }
       }
+      if (!valid) throw new Error('Incorrect password');
       Storage.setCurrentUser(user.username);
-      return user;
+      return Storage.getUserByUsername(user.username);
     }
     
     throw new Error('User not found');
@@ -206,24 +209,16 @@ const Auth = {
    */
   async loginDemo() {
     const demo = APP_CONFIG.defaultDemo;
-    // If demo user already exists with a different password, fix it
-    const existing = Storage.getUserByUsername(demo.username);
-    if (existing) {
-      Storage.updateUser(demo.username, { password: demo.password });
-    }
     try {
       return await this.login(demo.username, demo.password);
     } catch (e) {
-      // User didn't exist — create it
-      const user = Storage.createUser({
-        displayName: demo.displayName,
-        username: demo.username,
-        email: demo.email,
-        password: demo.password,
-        isAdmin: demo.isAdmin
-      });
-      Storage.setCurrentUser(user.username);
-      return user;
+      if (e.message === 'User not found') {
+        const passwordHash = await PasswordUtils.hash(demo.password);
+        const user = Storage.createUser({ displayName: demo.displayName, username: demo.username, email: demo.email, passwordHash, isAdmin: demo.isAdmin });
+        Storage.setCurrentUser(user.username);
+        return user;
+      }
+      throw e;
     }
   },
 
