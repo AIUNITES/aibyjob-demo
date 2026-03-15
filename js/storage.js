@@ -272,10 +272,16 @@ const Storage = {
   },
 
   exportData() {
+    const rawUsers = this.getAll(this.KEYS.USERS);
+    const safeUsers = {};
+    Object.entries(rawUsers).forEach(([k, u]) => {
+      const { password, passwordHash, ...safe } = u;
+      safeUsers[k] = safe;
+    });
     return {
       version: APP_CONFIG.version,
       app: APP_CONFIG.name,
-      users: this.getAll(this.KEYS.USERS),
+      users: safeUsers,
       items: this.getAll(this.KEYS.ITEMS),
       settings: this.getAll(this.KEYS.SETTINGS),
       favorites: this.getAll(this.KEYS.FAVORITES),
