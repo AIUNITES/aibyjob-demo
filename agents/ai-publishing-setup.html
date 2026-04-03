@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Publishing Setup - Director Agent Pattern | AIByJob</title>
+  <meta name="description" content="Build an AI-powered publishing workflow using the Director Agent Pattern. Prompt templates for Research, Writer, SEO, Editor, and Publisher agents.">
+  <meta name="keywords" content="AI publishing, agent chains, director pattern, prompt templates, content automation, AI workflow">
+  <link rel="canonical" href="https://aibyjob.com/agents/ai-publishing-setup.html">
+  <meta property="og:title" content="AI Publishing Setup - Director Agent Pattern">
+  <meta property="og:description" content="Build your AI content machine. Copy-paste prompt templates for every agent in your publishing chain.">
+  <meta property="og:url" content="https://aibyjob.com/agents/ai-publishing-setup.html">
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VP15KRLV6P"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-VP15KRLV6P');</script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4573596965267859" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+
+  <style>
+    /* Webring */
+    .aiunites-bar{position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#0a0a0f,#1a1a2e);border-bottom:1px solid rgba(99,102,241,.3);padding:8px 0;font-size:12px}
+    .aiunites-bar-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none}
+    .aiunites-bar-content::-webkit-scrollbar{display:none}
+    .aiunites-bar a{color:rgba(255,255,255,.7);text-decoration:none;white-space:nowrap;transition:color .2s}
+    .aiunites-bar a:hover{color:#fff}
+    .aiunites-bar-brand{color:#6366f1!important;font-weight:600}
+    body{padding-top:36px}
+
+    /* Page vars */
+    :root{--director:#ff3366;--research:#6366f1;--writer:#10b981;--seo:#f59e0b;--editor:#8b5cf6;--publisher:#22d3ee;}
+
+    /* Nav */
+    .nav{background:rgba(10,10,10,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);padding:1rem 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:36px;z-index:100}
+    .nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.9rem;margin-left:1.5rem;transition:color .2s}
+    .nav-links a:hover{color:#ff3366}
+
+    /* Hero */
+    .hero{padding:5rem 5% 4rem;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(255,51,102,.12) 0%,transparent 60%)}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,51,102,.1);border:1px solid rgba(255,51,102,.3);border-radius:20px;padding:.4rem 1rem;font-size:.8rem;font-weight:700;color:#ff3366;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:.05em}
+    .hero h1{font-size:clamp(2.2rem,5vw,3.8rem);margin-bottom:1rem;line-height:1.1}
+    .hero h1 span{background:linear-gradient(135deg,#ff3366,#ff6b35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-sub{font-size:1.15rem;color:#888;max-width:680px;margin:0 auto 2.5rem;line-height:1.7}
+    .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+    /* Stats */
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;max-width:800px;margin:3rem auto 0;padding:0 5%}
+    .stat-pill{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1rem;text-align:center}
+    .stat-pill .num{font-size:1.8rem;font-weight:800;display:block}
+    .stat-pill .lbl{font-size:.75rem;color:#666;text-transform:uppercase;letter-spacing:.05em}
+
+    /* Section */
+    .section{padding:5rem 5%}
+    .section-tag{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#ff3366;margin-bottom:.75rem}
+    .section-title{font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:.75rem}
+    .section-sub{color:#888;max-width:640px;line-height:1.7;margin-bottom:3rem}
+
+    /* Director diagram */
+    .director-diagram{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:2.5rem;max-width:800px;margin:0 auto}
+    .dir-node{background:rgba(255,51,102,.12);border:2px solid #ff3366;border-radius:12px;padding:1.2rem 1.8rem;display:inline-block;font-weight:700;color:#ff3366;font-size:1rem;text-align:center}
+    .dir-desc{font-size:.82rem;color:#888;margin-top:.4rem}
+    .dir-arrow{color:#444;font-size:1.5rem;display:flex;justify-content:center;margin:.8rem 0}
+    .agent-nodes{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.75rem;margin-top:.5rem}
+    .agent-node{border-radius:10px;padding:.9rem .7rem;text-align:center;border:1px solid;font-size:.78rem;font-weight:700}
+    .agent-node .icon{font-size:1.4rem;margin-bottom:.3rem;display:block}
+    .node-research{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.4);color:#818cf8}
+    .node-writer{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.4);color:#10b981}
+    .node-seo{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.4);color:#f59e0b}
+    .node-editor{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.4);color:#8b5cf6}
+    .node-publisher{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.4);color:#22d3ee}
+
+    /* Agent cards */
+    .agents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+    .agent-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.8rem;transition:transform .2s,border-color .2s}
+    .agent-card:hover{transform:translateY(-3px)}
+    .agent-card.director{border-color:rgba(255,51,102,.3)}
+    .agent-card.research{border-color:rgba(99,102,241,.3)}
+    .agent-card.writer{border-color:rgba(16,185,129,.3)}
+    .agent-card.seo{border-color:rgba(245,158,11,.3)}
+    .agent-card.editor{border-color:rgba(139,92,246,.3)}
+    .agent-card.publisher{border-color:rgba(34,211,238,.3)}
+    .agent-card-header{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+    .agent-icon{font-size:2rem}
+    .agent-role{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem}
+    .agent-card.director .agent-role{color:#ff3366}
+    .agent-card.research .agent-role{color:#818cf8}
+    .agent-card.writer .agent-role{color:#10b981}
+    .agent-card.seo .agent-role{color:#f59e0b}
+    .agent-card.editor .agent-role{color:#8b5cf6}
+    .agent-card.publisher .agent-role{color:#22d3ee}
+    .agent-name{font-size:1.1rem;font-weight:700}
+    .agent-desc{font-size:.85rem;color:#888;line-height:1.6;margin-bottom:1.2rem}
+    .prompt-box{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:1rem;font-family:'Space Mono',monospace;font-size:.72rem;line-height:1.7;color:#ccc;white-space:pre-wrap;word-break:break-word;max-height:160px;overflow-y:auto;cursor:text;transition:border-color .2s}
+    .prompt-box:hover{border-color:rgba(255,51,102,.3)}
+    .copy-btn{width:100%;margin-top:.75rem;padding:.5rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#888;font-family:inherit;font-size:.78rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+    .copy-btn:hover{background:rgba(255,51,102,.1);border-color:#ff3366;color:#ff3366}
+    .copy-btn.copied{background:rgba(16,185,129,.1);border-color:#10b981;color:#10b981}
+
+    /* Chain walkthrough */
+    .chain-steps{display:flex;flex-direction:column;gap:0}
+    .chain-step{display:grid;grid-template-columns:48px 1fr;gap:1rem;align-items:start}
+    .chain-left{display:flex;flex-direction:column;align-items:center}
+    .chain-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;border:2px solid}
+    .chain-line{width:2px;flex:1;min-height:40px;margin:4px auto}
+    .chain-content{padding:.6rem 0 2rem}
+    .chain-step-num{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;color:#666}
+    .chain-step-title{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+    .chain-step-desc{font-size:.85rem;color:#888;line-height:1.6}
+    .chain-output{background:rgba(0,0,0,.3);border-left:3px solid;border-radius:0 8px 8px 0;padding:.7rem 1rem;margin-top:.75rem;font-size:.78rem;font-family:'Space Mono',monospace;color:#aaa;line-height:1.6}
+
+    /* Setup workspace */
+    .workspace-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2.5rem;max-width:760px;margin:0 auto}
+    .workspace-box h3{font-size:1.3rem;margin-bottom:.5rem}
+    .workspace-box .sub{color:#888;font-size:.88rem;margin-bottom:2rem}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+    @media(max-width:600px){.form-row{grid-template-columns:1fr}}
+    .field label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888;margin-bottom:.4rem}
+    .field select,.field input{width:100%;background:#111;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:.7rem 1rem;color:#fff;font-family:inherit;font-size:.9rem;outline:none;transition:border-color .2s}
+    .field select:focus,.field input:focus{border-color:#ff3366}
+    .generate-btn{width:100%;margin-top:1.5rem;padding:1rem;background:linear-gradient(135deg,#ff3366,#ff6b35);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s}
+    .generate-btn:hover{opacity:.9}
+    .output-panel{display:none;margin-top:2rem;border-top:1px solid rgba(255,255,255,.08);padding-top:2rem}
+    .output-panel.show{display:block}
+    .output-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#ff3366;margin-bottom:1rem}
+    .output-agent{margin-bottom:1.2rem}
+    .output-agent-name{font-size:.85rem;font-weight:700;margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem}
+    .output-prompt{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:1rem;font-family:'Space Mono',monospace;font-size:.71rem;line-height:1.7;color:#ccc;white-space:pre-wrap;word-break:break-word}
+    .copy-all-btn{width:100%;margin-top:1.5rem;padding:.85rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#888;font-family:inherit;font-size:.9rem;cursor:pointer;transition:all .2s}
+    .copy-all-btn:hover{background:rgba(16,185,129,.1);border-color:#10b981;color:#10b981}
+
+    /* Case study */
+    .case-study{background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.2);border-radius:20px;padding:2.5rem;max-width:900px;margin:0 auto}
+    .case-study-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+    .case-study-badge{background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.4);border-radius:8px;padding:.4rem .9rem;font-size:.72rem;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:.05em}
+    .case-study h3{font-size:1.3rem;margin-top:.3rem}
+    .case-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;margin:1.5rem 0}
+    .case-stat{text-align:center}
+    .case-stat .n{font-size:1.8rem;font-weight:800;color:#818cf8}
+    .case-stat .l{font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.04em}
+    .case-desc{font-size:.88rem;color:#aaa;line-height:1.8}
+    .case-chain{background:rgba(0,0,0,.3);border-radius:10px;padding:1.2rem;margin-top:1.2rem;font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa;line-height:2}
+    .case-chain .d{color:#ff3366;font-weight:700}
+    .case-chain .r{color:#818cf8}
+    .case-chain .w{color:#10b981}
+    .case-chain .s{color:#f59e0b}
+    .case-chain .p{color:#22d3ee}
+
+    /* Toast */
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:#1a1a2e;border:1px solid rgba(16,185,129,.4);border-radius:10px;padding:.7rem 1.5rem;font-size:.85rem;color:#10b981;transition:transform .25s;z-index:9999;pointer-events:none}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+
+    /* Responsive */
+    @media(max-width:768px){.hero h1{font-size:2.2rem}.section{padding:3.5rem 5%}.chain-step{grid-template-columns:36px 1fr}.chain-dot{width:32px;height:32px;font-size:.9rem}}
+  </style>
+</head>
+<body>
+
+<!-- Webring -->
+<div class="aiunites-bar"><div class="aiunites-bar-content"><a href="https://aiunites.github.io/aiunites-site/" class="aiunites-bar-brand">◆ AIUNITES</a><span style="color:rgba(255,255,255,.2)">|</span><a href="https://aiunites.github.io/aizines-app/">AIZines</a><a href="https://aiunites.github.io/aibyjob-demo/">AIByJob</a><a href="https://aiunites.github.io/redomy-demo/">Redomy</a><a href="https://aiunites.github.io/videobate-site/">VideoBate</a><a href="https://aiunites.github.io/voicestry-site/">VoiceStry</a><a href="https://aiunites.github.io/furnishthings-site/">FurnishThings</a><a href="https://aiunites.github.io/bizstry-site/">BizStry</a><a href="https://cloudsion.com/">Cloudsion</a><a href="https://aiunites.github.io/gameatica-site/">Gameatica</a><a href="https://aiunites.github.io/uptownit-site/">UptownIT</a><a href="https://aiunites.github.io/erpise-site/">ERPise</a><a href="https://aiunites.github.io/erpize-site/">ERPize</a></div></div>
+
+<nav class="nav">
+  <a href="../index.html" class="logo">AI<span>ByJob</span></a>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="webbuilder.html">WebBuilder</a>
+    <a href="leadfinder.html">LeadFinder</a>
+    <a href="../help.html">Help</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">🎬 Director Agent Pattern</div>
+  <h1>Build Your <span>AI Publishing Machine</span></h1>
+  <p class="hero-sub">One Director agent. A team of specialists. A publishing workflow that runs itself — researching, writing, optimizing, and deploying content at scale.</p>
+  <div class="hero-actions">
+    <a href="#setup" class="btn-primary btn-large">⚡ Get My Agent Prompts</a>
+    <a href="#pattern" class="btn-secondary btn-large">Learn the Pattern</a>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill"><span class="num" style="color:#ff3366">22</span><span class="lbl">Sites powered by this pattern</span></div>
+    <div class="stat-pill"><span class="num" style="color:#10b981">5</span><span class="lbl">Agent roles in the chain</span></div>
+    <div class="stat-pill"><span class="num" style="color:#6366f1">10min</span><span class="lbl">Auto-publish cycle</span></div>
+    <div class="stat-pill"><span class="num" style="color:#f59e0b">0</span><span class="lbl">Manual deploys needed</span></div>
+  </div>
+</section>
+
+<!-- Director Pattern -->
+<section class="section" id="pattern">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-tag">The Director Pattern</div>
+    <h2 class="section-title">One Director. Many Specialists.</h2>
+    <p class="section-sub">Instead of one AI doing everything badly, the Director Pattern assigns each job to a specialist agent. The Director holds the plan, delegates tasks, and reviews the output — just like a real editorial team.</p>
+
+    <div class="director-diagram">
+      <div style="text-align:center;margin-bottom:1.2rem">
+        <div class="dir-node">
+          🎬 Director Agent
+          <div class="dir-desc">Receives the goal. Breaks it into tasks. Delegates. Reviews.</div>
+        </div>
+      </div>
+      <div class="dir-arrow">↓ delegates to ↓</div>
+      <div class="agent-nodes">
+        <div class="agent-node node-research"><span class="icon">🔍</span>Research<br>Agent</div>
+        <div class="agent-node node-writer"><span class="icon">✍️</span>Writer<br>Agent</div>
+        <div class="agent-node node-seo"><span class="icon">📈</span>SEO<br>Agent</div>
+        <div class="agent-node node-editor"><span class="icon">🔎</span>Editor<br>Agent</div>
+        <div class="agent-node node-publisher"><span class="icon">🚀</span>Publisher<br>Agent</div>
+      </div>
+      <div class="dir-arrow">↑ returns output ↑</div>
+      <div style="text-align:center;color:#555;font-size:.8rem">Each agent is a separate conversation or function call — specialized, focused, and replaceable</div>
+    </div>
+  </div>
+</section>
+
+<!-- Agent Cards -->
+<section class="section" style="background:rgba(255,255,255,.01);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)">
+  <div class="section-tag">Your Agent Team</div>
+  <h2 class="section-title">Copy-Paste Prompt Templates</h2>
+  <p class="section-sub">Each card below is one agent in your publishing chain. Click the copy button to grab the system prompt — paste it into Claude, ChatGPT, or any AI model to create that agent.</p>
+
+  <div class="agents-grid">
+
+    <div class="agent-card director">
+      <div class="agent-card-header">
+        <span class="agent-icon">🎬</span>
+        <div>
+          <div class="agent-role">Director Agent</div>
+          <div class="agent-name">The Orchestrator</div>
+        </div>
+      </div>
+      <p class="agent-desc">Receives high-level publishing goals and breaks them into a sequenced task list for each specialist agent. Reviews all outputs before publishing.</p>
+      <div class="prompt-box" id="prompt-director">You are a Publishing Director AI. Your job is to take a publishing goal and produce a structured task plan for a team of specialist agents.
+
+When given a goal (e.g. "publish 3 SEO articles about home renovation this week"), you must:
+1. Break it into specific articles or content pieces
+2. For each piece, define: topic, target keyword, target audience, desired word count, tone, and platform
+3. Output a JSON task list with fields: id, title, keyword, audience, wordcount, tone, platform, agents_needed
+4. After each agent completes their task, review the output against the original goal and either approve or request revision with specific notes
+
+Always prioritize: accuracy, SEO potential, audience relevance, and brand consistency.
+Output format: structured JSON task list.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-director',this)">📋 Copy Director Prompt</button>
+    </div>
+
+    <div class="agent-card research">
+      <div class="agent-card-header">
+        <span class="agent-icon">🔍</span>
+        <div>
+          <div class="agent-role">Research Agent</div>
+          <div class="agent-name">Topic Finder</div>
+        </div>
+      </div>
+      <p class="agent-desc">Given a topic and keyword, finds the angles competitors are missing, identifies related subtopics, and surfaces statistics and sources worth citing.</p>
+      <div class="prompt-box" id="prompt-research">You are a Research Agent for a publishing team. You receive a topic and target keyword from the Director.
+
+Your job:
+1. Identify 3-5 angles or subtopics that would make this article stand out
+2. Find common questions people ask about this topic (for FAQ sections)
+3. Suggest 3-5 statistics, studies, or facts that would strengthen the article
+4. List 2-3 related keywords to include naturally
+5. Note what competitor articles are likely covering and what they are probably missing
+
+Output format:
+- Angles: [list]
+- FAQ questions: [list]
+- Key facts/stats: [list with source type]
+- Related keywords: [list]
+- Competitor gaps: [paragraph]
+
+Be specific. No generic filler. Every item must be directly useful to a writer.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-research',this)">📋 Copy Research Prompt</button>
+    </div>
+
+    <div class="agent-card writer">
+      <div class="agent-card-header">
+        <span class="agent-icon">✍️</span>
+        <div>
+          <div class="agent-role">Writer Agent</div>
+          <div class="agent-name">Content Creator</div>
+        </div>
+      </div>
+      <p class="agent-desc">Takes the Director's brief and Research Agent's notes and writes the full article — structured, on-brand, and ready for the SEO Agent to review.</p>
+      <div class="prompt-box" id="prompt-writer">You are a Writer Agent for a publishing team. You receive a brief from the Director and research notes from the Research Agent.
+
+Your job:
+1. Write the full article matching the specified word count, tone, and audience
+2. Use the research notes to add substance — cite facts, address the FAQ questions, cover the identified angles
+3. Structure the article with: headline, introduction, H2 subheadings, body paragraphs, and a conclusion with a clear call to action
+4. Write naturally — no keyword stuffing, no robotic phrasing
+5. Vary sentence length. Use active voice. Keep paragraphs short (3-4 sentences max)
+
+Do not add HTML tags. Output clean markdown.
+Do not add a meta description — the SEO Agent handles that.
+Flag any sections where you had to make assumptions with [VERIFY: assumption made].</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-writer',this)">📋 Copy Writer Prompt</button>
+    </div>
+
+    <div class="agent-card seo">
+      <div class="agent-card-header">
+        <span class="agent-icon">📈</span>
+        <div>
+          <div class="agent-role">SEO Agent</div>
+          <div class="agent-name">Search Optimizer</div>
+        </div>
+      </div>
+      <p class="agent-desc">Receives the draft article and optimizes it for search without making it feel optimized — title, meta, headings, internal links, keyword density.</p>
+      <div class="prompt-box" id="prompt-seo">You are an SEO Agent for a publishing team. You receive a draft article and target keyword from the Director.
+
+Your job:
+1. Write an SEO-optimized page title (under 60 characters, keyword near the front)
+2. Write a meta description (under 155 characters, includes keyword, compelling reason to click)
+3. Review all H2/H3 headings — rewrite any that don't include target or related keywords naturally
+4. Identify 2-3 places to add internal link placeholders: [INTERNAL LINK: topic]
+5. Check keyword density — the primary keyword should appear roughly once per 200-300 words
+6. Add an FAQ section if none exists (minimum 3 questions from the research brief)
+7. Suggest an image alt text for the hero image: [ALT TEXT: description]
+
+Output: revised article with your changes clearly marked, plus a separate SEO summary block at the top listing: title, meta description, primary keyword, keyword count, suggested slug.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-seo',this)">📋 Copy SEO Prompt</button>
+    </div>
+
+    <div class="agent-card editor">
+      <div class="agent-card-header">
+        <span class="agent-icon">🔎</span>
+        <div>
+          <div class="agent-role">Editor Agent</div>
+          <div class="agent-name">Quality Gate</div>
+        </div>
+      </div>
+      <p class="agent-desc">The final human-style review before publishing. Checks for tone consistency, factual flags, readability, and brand voice. Returns approve or revise.</p>
+      <div class="prompt-box" id="prompt-editor">You are an Editor Agent and the final quality gate before an article is published. You receive the SEO-optimized draft.
+
+Your job:
+1. Check tone — does it match the specified audience and brand voice?
+2. Check for any [VERIFY: ...] flags left by the Writer — list them for the Director
+3. Check for factual overreach — flag any claim that sounds made up or unverifiable
+4. Check readability — flag sentences over 30 words, passive voice overuse, or jargon without explanation
+5. Check the call to action — is it specific and actionable?
+6. Do NOT rewrite — only flag issues with location and suggested fix
+
+Output format:
+VERDICT: APPROVED / NEEDS REVISION
+ISSUES: [numbered list — location, issue, suggested fix]
+VERIFIED FLAGS: [list of [VERIFY] items to resolve]
+NOTES: [any other observations for the Director]</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-editor',this)">📋 Copy Editor Prompt</button>
+    </div>
+
+    <div class="agent-card publisher">
+      <div class="agent-card-header">
+        <span class="agent-icon">🚀</span>
+        <div>
+          <div class="agent-role">Publisher Agent</div>
+          <div class="agent-name">Deploy Specialist</div>
+        </div>
+      </div>
+      <p class="agent-desc">Takes the approved article and formats it for the target platform — HTML for GitHub Pages, markdown for Hugo/Jekyll, or JSON for a headless CMS.</p>
+      <div class="prompt-box" id="prompt-publisher">You are a Publisher Agent. You receive an approved, SEO-optimized article and format it for deployment.
+
+Your job depends on the target platform specified by the Director:
+
+FOR GITHUB PAGES (HTML):
+- Wrap in a valid HTML5 document with the meta tags from the SEO summary
+- Add GA4 script placeholder: [GA4_SCRIPT]
+- Add AdSense script placeholder: [ADSENSE_SCRIPT]
+- Use semantic HTML: article, header, h1, h2, h3, p, ul, ol, blockquote
+- Replace [INTERNAL LINK: topic] with <a href="[LINK_topic]">topic</a>
+- Output complete .html file content
+
+FOR MARKDOWN (Jekyll/Hugo/Ghost):
+- Add frontmatter: title, date, description, slug, tags, author
+- Clean markdown formatting with proper heading hierarchy
+- Output complete .md file content
+
+FOR JSON (Headless CMS):
+- Output structured JSON: {title, slug, meta_description, body_html, tags, publish_date, author}
+
+Always output the complete file — no truncation.</div>
+      <button class="copy-btn" onclick="copyPrompt('prompt-publisher',this)">📋 Copy Publisher Prompt</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- Chain Walkthrough -->
+<section class="section">
+  <div style="max-width:680px;margin:0 auto">
+    <div class="section-tag">How It Runs</div>
+    <h2 class="section-title">A Full Publishing Chain</h2>
+    <p class="section-sub">Here's what happens when you give the Director a single goal: "Publish an article about cable chest fly technique."</p>
+
+    <div class="chain-steps">
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-dot" style="background:rgba(255,51,102,.15);border-color:#ff3366;color:#ff3366">🎬</div>
+          <div class="chain-line" style="background:rgba(255,51,102,.2)"></div>
+        </div>
+        <div class="chain-content">
+          <div class="chain-step-num">Step 1 — Director Agent</div>
+          <div class="chain-step-title">Receives the goal and creates the task plan</div>
+          <div class="chain-step-desc">The Director breaks "write about cable chest fly" into a structured brief: keyword = "cable chest fly technique", audience = intermediate gym-goers, word count = 1,200, tone = authoritative-but-approachable, platform = GitHub Pages.</div>
+          <div class="chain-output" style="border-color:#ff3366">OUTPUT → Task JSON sent to Research Agent</div>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-dot" style="background:rgba(99,102,241,.15);border-color:#818cf8;color:#818cf8">🔍</div>
+          <div class="chain-line" style="background:rgba(99,102,241,.2)"></div>
+        </div>
+        <div class="chain-content">
+          <div class="chain-step-num">Step 2 — Research Agent</div>
+          <div class="chain-step-title">Finds the angles competitors miss</div>
+          <div class="chain-step-desc">Research Agent identifies the internal rotation angle (25° IR) as underreported, surfaces EMG study data showing sternal vs clavicular pec activation differences, and flags that most articles miss the cable height and vector angle setup.</div>
+          <div class="chain-output" style="border-color:#818cf8">OUTPUT → Research brief sent to Writer Agent</div>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-dot" style="background:rgba(16,185,129,.15);border-color:#10b981;color:#10b981">✍️</div>
+          <div class="chain-line" style="background:rgba(16,185,129,.2)"></div>
+        </div>
+        <div class="chain-content">
+          <div class="chain-step-num">Step 3 — Writer Agent</div>
+          <div class="chain-step-title">Writes the full draft</div>
+          <div class="chain-step-desc">Writer produces a 1,240-word article with 5 H2 sections, the EMG data cited, IR angle setup explained, and a troubleshooting section on compensation patterns. Flags two claims for verification.</div>
+          <div class="chain-output" style="border-color:#10b981">OUTPUT → Draft markdown sent to SEO Agent</div>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-dot" style="background:rgba(245,158,11,.15);border-color:#f59e0b;color:#f59e0b">📈</div>
+          <div class="chain-line" style="background:rgba(245,158,11,.2)"></div>
+        </div>
+        <div class="chain-content">
+          <div class="chain-step-num">Step 4 — SEO Agent</div>
+          <div class="chain-step-title">Optimizes without ruining the writing</div>
+          <div class="chain-step-desc">SEO Agent writes the title tag, meta description, rewrites two headings to include the target keyword, adds a 4-question FAQ, and suggests a slug: /cable-chest-fly-technique-guide.</div>
+          <div class="chain-output" style="border-color:#f59e0b">OUTPUT → SEO-optimized draft sent to Editor Agent</div>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-dot" style="background:rgba(139,92,246,.15);border-color:#8b5cf6;color:#8b5cf6">🔎</div>
+          <div class="chain-line" style="background:rgba(139,92,246,.2)"></div>
+        </div>
+        <div class="chain-content">
+          <div class="chain-step-num">Step 5 — Editor Agent</div>
+          <div class="chain-step-title">Quality gate — approve or revise</div>
+          <div class="chain-step-desc">Editor flags one sentence over 35 words, resolves both [VERIFY] flags (marks as factually supportable), and returns VERDICT: APPROVED. Director reviews and signs off.</div>
+          <div class="chain-output" style="border-color:#8b5cf6">OUTPUT → APPROVED — sent to Publisher Agent</div>
+        </div>
+      </div>
+
+      <div class="chain-step">
+        <div class="chain-left">
+          <div class="chain-dot" style="background:rgba(34,211,238,.15);border-color:#22d3ee;color:#22d3ee">🚀</div>
+          <div class="chain-line" style="background:transparent"></div>
+        </div>
+        <div class="chain-content">
+          <div class="chain-step-num">Step 6 — Publisher Agent</div>
+          <div class="chain-step-title">Formats and deploys</div>
+          <div class="chain-step-desc">Publisher wraps the article in a complete HTML5 document, inserts GA4 and AdSense script placeholders, converts markdown to semantic HTML, and outputs the complete .html file ready to commit to GitHub Pages.</div>
+          <div class="chain-output" style="border-color:#22d3ee">OUTPUT → cable-chest-fly-technique-guide.html ✅ Ready to push</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Setup Workspace -->
+<section class="section" id="setup" style="background:rgba(255,255,255,.01);border-top:1px solid rgba(255,255,255,.05)">
+  <div class="section-tag">Setup Wizard</div>
+  <h2 class="section-title">Get Your Custom Prompt Package</h2>
+  <p class="section-sub">Enter your publishing setup and get a tailored Director prompt that matches your niche, platform, and content goals — ready to paste.</p>
+
+  <div class="workspace-box">
+    <h3>Your Publishing Setup</h3>
+    <p class="sub">Takes 30 seconds. Gets you a full agent team configured for your needs.</p>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Your Niche</label>
+        <select id="niche">
+          <option value="fitness">Fitness &amp; Health</option>
+          <option value="finance">Finance &amp; Investing</option>
+          <option value="tech">Technology &amp; Software</option>
+          <option value="ecommerce">E-commerce &amp; Retail</option>
+          <option value="realestate">Real Estate</option>
+          <option value="food">Food &amp; Recipes</option>
+          <option value="travel">Travel &amp; Lifestyle</option>
+          <option value="legal">Legal &amp; Professional Services</option>
+          <option value="education">Education &amp; Courses</option>
+          <option value="general">General / Multi-topic</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Target Platform</label>
+        <select id="platform">
+          <option value="github">GitHub Pages (HTML)</option>
+          <option value="wordpress">WordPress</option>
+          <option value="jekyll">Jekyll / Hugo (Markdown)</option>
+          <option value="ghost">Ghost CMS</option>
+          <option value="webflow">Webflow</option>
+          <option value="notion">Notion / Headless CMS (JSON)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Publishing Frequency</label>
+        <select id="frequency">
+          <option value="daily">Daily (high volume)</option>
+          <option value="weekly">2-3x per week</option>
+          <option value="weekly1">Once a week</option>
+          <option value="monthly">Monthly (long-form)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Content Type</label>
+        <select id="contenttype">
+          <option value="articles">SEO Articles / Blog Posts</option>
+          <option value="product">Product Pages / Reviews</option>
+          <option value="news">News &amp; Updates</option>
+          <option value="tutorials">Tutorials &amp; How-Tos</option>
+          <option value="mixed">Mixed (multiple types)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Your Site / Brand Name</label>
+      <input type="text" id="brandname" placeholder="e.g. FitPulse Blog, TechDive Weekly...">
+    </div>
+
+    <button class="generate-btn" onclick="generatePrompts()">⚡ Generate My Agent Prompts</button>
+
+    <div class="output-panel" id="outputPanel">
+      <div class="output-title">Your Custom Director Prompt</div>
+
+      <div class="output-agent">
+        <div class="output-agent-name"><span>🎬</span> Director Agent — paste this as your system prompt</div>
+        <div class="output-prompt" id="outputDirector"></div>
+      </div>
+
+      <div class="output-agent">
+        <div class="output-agent-name"><span>🚀</span> Publisher Agent — platform-specific formatting instructions</div>
+        <div class="output-prompt" id="outputPublisher"></div>
+      </div>
+
+      <button class="copy-all-btn" onclick="copyAll()">📋 Copy Both Prompts</button>
+    </div>
+  </div>
+</section>
+
+<!-- Case Study -->
+<section class="section">
+  <div class="section-tag">Real-World Proof</div>
+  <h2 class="section-title">How AIUNITES Runs 22 Sites</h2>
+  <p class="section-sub">The AIUNITES network runs this exact pattern at scale — without a human publish button. Here's how the director chain maps to real infrastructure.</p>
+
+  <div class="case-study">
+    <div class="case-study-header">
+      <div>
+        <div class="case-study-badge">Live Case Study</div>
+        <h3>AIUNITES Network — Turnkey AI Publishing</h3>
+      </div>
+    </div>
+
+    <div class="case-stats">
+      <div class="case-stat"><div class="n">22</div><div class="l">Active Sites</div></div>
+      <div class="case-stat"><div class="n">10min</div><div class="l">Publish Cycle</div></div>
+      <div class="case-stat"><div class="l" style="font-size:1rem;margin-top:.5rem">AdSense</div><div class="l">Scanning</div></div>
+      <div class="case-stat"><div class="n">0</div><div class="l">Manual Deploys</div></div>
+    </div>
+
+    <p class="case-desc">The AIUNITES auto-publish pipeline is the Director. It runs every 10 minutes via Windows Task Scheduler and orchestrates a chain of specialist operations — exactly like the agent pattern above, but implemented in PowerShell and Cowork AI tasks.</p>
+
+    <div class="case-chain">
+<span class="d">Director (auto-publish.ps1)</span>
+  → receives: "check all 22 repos for changes"
+  → delegates:
+
+  <span class="r">Git Agent (git push loop)</span>
+    → checks each repo for uncommitted changes
+    → commits and pushes if changed
+    → output: push log per repo
+
+  <span class="s">Quality Agent (code scanner)</span>
+    → scans HTML for AdSense policy violations
+    → scans JS for pre-launch language
+    → output: fix-queue.md entries
+
+  <span class="w">Stats Agent (publish-stats.json)</span>
+    → counts repos, pushes, clean/flagged sites
+    → writes JSON to cloudsion-site/data/
+    → triggers second push for live stats panel
+
+  <span class="p">Publisher Agent (IndexNow + Backup)</span>
+    → submits changed URLs to Bing/Google
+    → backs up scripts/ to GitHub
+    → output: submit confirmation log
+
+<span class="d">Director reviews:</span> all agents complete → "0 errors" → cycle ends
+    </div>
+
+    <p class="case-desc" style="margin-top:1.2rem">The Cowork AI tasks extend this with higher-level agents: a daily Fix Queue agent (reads flagged items, applies fixes, marks done) and a weekly Code Review agent (checks webring consistency, broken links, stale items). Each is a separate AI session with a specific system prompt — exactly the pattern described on this page.</p>
+
+    <div style="margin-top:1.5rem;text-align:center">
+      <a href="https://cloudsion.com/turnkey-ai-web-publishing.html" target="_blank" class="btn-secondary" style="display:inline-flex;align-items:center;gap:.5rem">📊 See the Live Stats Panel →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="landing-footer" style="border-top:1px solid rgba(255,255,255,.08);padding:2.5rem 5%;text-align:center">
+  <a href="../index.html" class="logo" style="display:inline-block;margin-bottom:.5rem">AI<span>ByJob</span></a>
+  <p class="footer-slogan">AI tools for every profession</p>
+  <div class="footer-links" style="margin-top:1rem">
+    <a href="../index.html">Home</a>
+    <span>·</span>
+    <a href="webbuilder.html">WebBuilder</a>
+    <span>·</span>
+    <a href="leadfinder.html">LeadFinder</a>
+    <span>·</span>
+    <a href="../help.html">Help</a>
+    <span>·</span>
+    <a href="https://cloudsion.com/" target="_blank">Cloudsion</a>
+  </div>
+  <p style="color:#555;font-size:.75rem;margin-top:1rem">© 2026 AIUNITES LLC · Part of the AIUNITES network</p>
+</footer>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+// Copy individual prompt
+function copyPrompt(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    showToast('Prompt copied!');
+    setTimeout(() => {
+      btn.textContent = '📋 Copy ' + btn.textContent.replace('✅ Copied!','').trim();
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// Generate custom prompts
+function generatePrompts() {
+  const niche     = document.getElementById('niche').value;
+  const platform  = document.getElementById('platform').value;
+  const frequency = document.getElementById('frequency').value;
+  const ctype     = document.getElementById('contenttype').value;
+  const brand     = document.getElementById('brandname').value.trim() || 'My Publishing Site';
+
+  const nicheLabels = {fitness:'Fitness & Health',finance:'Finance & Investing',tech:'Technology & Software',ecommerce:'E-commerce & Retail',realestate:'Real Estate',food:'Food & Recipes',travel:'Travel & Lifestyle',legal:'Legal & Professional Services',education:'Education & Courses',general:'General / Multi-topic'};
+  const freqLabels  = {daily:'daily (high volume)',weekly:'2-3 articles per week',weekly1:'one article per week',monthly:'one long-form piece per month'};
+  const ctypeLabels = {articles:'SEO blog articles',product:'product pages and reviews',news:'news updates and announcements',tutorials:'tutorials and how-to guides',mixed:'a mix of articles, tutorials, and updates'};
+  const platformLabels = {github:'GitHub Pages (HTML output)',wordpress:'WordPress (HTML/shortcode output)',jekyll:'Jekyll or Hugo (Markdown with frontmatter)',ghost:'Ghost CMS (Markdown)',webflow:'Webflow (structured content)',notion:'Headless CMS (JSON output)'};
+
+  const directorPrompt = `You are the Publishing Director for ${brand}, a ${nicheLabels[niche]} website.
+
+Your job is to manage a content publishing workflow that produces ${freqLabels[frequency]}, focused on ${ctypeLabels[ctype]}.
+
+When given a publishing goal, you must:
+1. Break it into specific content pieces with clear titles and target keywords
+2. For each piece, specify: title, target keyword, audience intent (informational/commercial/navigational), word count (${ctype === 'articles' ? '800-1,500' : ctype === 'product' ? '600-1,000' : '500-1,200'} words), tone (${niche === 'legal' || niche === 'finance' ? 'authoritative and precise' : niche === 'fitness' || niche === 'food' ? 'motivating and practical' : niche === 'tech' ? 'clear and technically credible' : 'helpful and direct'}), and platform (${platformLabels[platform]})
+3. Output a JSON task list with fields: id, title, keyword, audience_intent, wordcount, tone, platform, priority
+4. After each specialist agent completes their task, review against brand standards and either approve or return with specific revision notes
+
+Brand standards for ${brand}:
+- Niche: ${nicheLabels[niche]}
+- Tone: consistent, never clickbait, always deliver on the headline
+- Quality bar: every article must be usable and specific — no generic filler
+- SEO: target one primary keyword per piece, support with 2-3 related terms
+
+Always end your planning output with: TASK LIST READY — send to Research Agent.`;
+
+  const platformInstructions = {
+    github: `Format the approved article as a complete HTML5 document:
+- DOCTYPE, html, head, body tags
+- Meta tags from SEO summary (title, description, og:title, og:description, canonical)
+- GA4 placeholder: <!-- GA4_SCRIPT -->
+- AdSense placeholder: <!-- ADSENSE_SCRIPT -->
+- Semantic HTML: <article>, <header>, <h1>, <h2>, <h3>, <p>, <ul>, <ol>
+- Clean slug-based filename: keyword-slug.html`,
+    wordpress: `Format the approved article for WordPress:
+- HTML body content only (no full document wrapper)
+- Use WordPress-compatible HTML: <h2>, <h3>, <p>, <ul>, <ol>, <blockquote>
+- Add [CATEGORY: ...] and [TAGS: ...] at the top
+- Add [FEATURED_IMAGE: alt text description]
+- Output the excerpt separately at the top`,
+    jekyll: `Format the approved article as a Jekyll/Hugo markdown file with frontmatter:
+---
+title: "[exact SEO title]"
+date: [YYYY-MM-DD]
+description: "[exact meta description]"
+slug: "[url-slug]"
+tags: [tag1, tag2, tag3]
+author: "${brand}"
+---
+[article body in clean markdown]`,
+    ghost: `Format for Ghost CMS:
+- Clean markdown with frontmatter
+- Title, slug, excerpt, tags
+- No HTML — markdown only`,
+    webflow: `Format as structured HTML sections matching Webflow collection schema:
+- Title field, body (rich text HTML), excerpt, SEO title, SEO description, slug`,
+    notion: `Format as JSON for headless CMS import:
+{
+  "title": "",
+  "slug": "",
+  "meta_title": "",
+  "meta_description": "",
+  "body_html": "",
+  "tags": [],
+  "publish_date": "",
+  "author": "${brand}",
+  "status": "ready"
+}`
+  };
+
+  const publisherPrompt = `You are the Publisher Agent for ${brand}. You receive approved, SEO-optimized articles from the Director.
+
+Your job: format the article for ${platformLabels[platform]}.
+
+${platformInstructions[platform]}
+
+Rules:
+- Never truncate the article — output the complete file
+- Replace all [INTERNAL LINK: topic] placeholders with appropriate anchor tags or link notes
+- Double-check: title tag and meta description match the SEO summary exactly
+- Output the complete file content only — no commentary, no explanation`;
+
+  document.getElementById('outputDirector').textContent = directorPrompt;
+  document.getElementById('outputPublisher').textContent = publisherPrompt;
+  document.getElementById('outputPanel').classList.add('show');
+  document.getElementById('outputPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// Copy all generated prompts
+function copyAll() {
+  const d = document.getElementById('outputDirector').textContent;
+  const p = document.getElementById('outputPublisher').textContent;
+  const combined = '=== DIRECTOR AGENT PROMPT ===\n\n' + d + '\n\n\n=== PUBLISHER AGENT PROMPT ===\n\n' + p;
+  navigator.clipboard.writeText(combined).then(() => showToast('Both prompts copied!'));
+}
+</script>
+</body>
+</html>
